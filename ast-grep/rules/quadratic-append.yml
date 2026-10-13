@@ -1,0 +1,65 @@
+id: quadratic-append
+language: agentica
+severity: warning
+message: Growing a value by reassignment inside a loop copies it on every iteration.
+note: |
+  `xs = xs.push(y)` and `s += t` on a String build a new value each time, so
+  the loop is quadratic. Collect the parts and build the result once, for
+  example with `map`/`join`, or restructure the loop.
+rule:
+  all:
+    - inside:
+        stopBy: end
+        any:
+          - kind: while
+          - kind: for
+    - any:
+        - pattern: $X = $X.push($Y)
+        - all:
+            - pattern: $S += $T
+            - any:
+                - has:
+                    field: right
+                    any:
+                      - kind: string
+                      - kind: binary
+                        has:
+                          stopBy: end
+                          kind: string
+                - inside:
+                    kind: function_definition
+                    stopBy: end
+                    has:
+                      stopBy: end
+                      any:
+                        - pattern: $S = $INIT
+                        - pattern: $S += $INIT
+                      has:
+                        field: right
+                        kind: string
+                - inside:
+                    kind: function_definition
+                    stopBy: end
+                    has:
+                      stopBy: end
+                      kind: assignment
+                      all:
+                        - has:
+                            field: left
+                            pattern: $S
+                        - has:
+                            field: type
+                            regex: ^String$
+                - inside:
+                    kind: function_definition
+                    stopBy: end
+                    has:
+                      stopBy: end
+                      kind: parameter
+                      all:
+                        - has:
+                            field: name
+                            pattern: $S
+                        - has:
+                            field: type
+                            regex: ^String$

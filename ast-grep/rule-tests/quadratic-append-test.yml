@@ -1,0 +1,58 @@
+id: quadratic-append
+valid:
+  - |
+    def f(xs: List[Int]) -> List[Int]
+      xs = xs.push(1)
+      return xs
+    end
+  - |
+    def f(n: Int) -> Int
+      i = 0
+      while i < n
+        i += 1
+      end
+      return i
+    end
+  - |
+    def f(xs: List[Int]) -> List[Int]
+      ys = []
+      for x in xs
+        ys = xs.push(x)
+      end
+      return ys
+    end
+invalid:
+  - |
+    def f(xs: List[Int]) -> List[Int]
+      ys = []
+      for x in xs
+        ys = ys.push(x * 2)
+      end
+      return ys
+    end
+  - |
+    def f(n: Int) -> String
+      s = ""
+      while n > 0
+        s += "x"
+        n -= 1
+      end
+      return s
+    end
+  - |
+    def f(parts: List[String], acc: String) -> String
+      for p in parts do
+        acc += p
+      end
+      return acc
+    end
+  - |
+    def f(parts: List[String]) -> String
+      out: String = ""
+      for p in parts
+        if p != ""
+          out += p
+        end
+      end
+      return out
+    end

@@ -1,0 +1,9 @@
+ruleDirs:
+  - rules
+customLanguages:
+  agentica:
+    libraryPath: ../agentica.so
+    extensions: [agc]
+    expandoChar: µ
+testConfigs:
+  - testDir: rule-tests
