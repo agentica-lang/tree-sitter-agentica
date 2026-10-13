@@ -29,9 +29,8 @@ rule:
                       - kind: binary
                         has:
                           stopBy:
-                            any:
-                              - kind: call
-                              - kind: method_call
+                            not:
+                              kind: binary
                           kind: string
                 - inside:
                     kind: function_definition

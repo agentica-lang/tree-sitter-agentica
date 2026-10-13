@@ -22,11 +22,13 @@ valid:
       return ys
     end
   - |
-    def f(xs: List[String]) -> Int
+    def f(xs: List[String], m: Map[String, Int]) -> Int
       count = 0
       for x in xs
         count += List.size(String.split(x, ",")) + 1
         count += x.index_of("a") + 1
+        count += m["a"] + 1
+        count += "abc".size + 1
       end
       return count
     end
