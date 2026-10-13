@@ -3,6 +3,12 @@
 [
   (function_definition)
   (block)
+  (if)
+  (elsif)
+  (else)
+  (while)
+  (for)
+  (case_arm)
 ] @local.scope
 
 ; Definitions
