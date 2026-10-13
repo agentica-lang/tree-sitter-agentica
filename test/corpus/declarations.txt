@@ -1,0 +1,280 @@
+==================
+Import
+==================
+
+import "std/queue" as Queue
+import "../lib/util" as Util
+
+---
+
+(source_file
+  (import
+    (string
+      (string_content))
+    (type_identifier))
+  (import
+    (string
+      (string_content))
+    (type_identifier)))
+
+==================
+Function definition
+==================
+
+def add(a: Int, b: Int,) -> Int
+  return a + b
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)))
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (body
+      (return
+        (binary
+          (identifier)
+          (identifier))))))
+
+==================
+Empty function
+==================
+
+def main() -> Void
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))))
+
+==================
+Exported definitions
+==================
+
+export def greet(name: String) -> String
+  "hi #{name}"
+end
+
+export struct User
+  name: String
+end
+
+---
+
+(source_file
+  (export
+    (function_definition
+      (identifier)
+      (parameters
+        (parameter
+          (identifier)
+          (type
+            (type_identifier))))
+      (type
+        (type_identifier))
+      (body
+        (string
+          (string_content)
+          (interpolation
+            (identifier))))))
+  (export
+    (struct_definition
+      (type_identifier)
+      (field_declaration
+        (identifier)
+        (type
+          (type_identifier))))))
+
+==================
+Struct definition
+==================
+
+struct Point
+  x: Int
+  y: Int
+
+  tags: List[String]
+end
+
+---
+
+(source_file
+  (struct_definition
+    (type_identifier)
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)))
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)))
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)
+        (type_arguments
+          (type
+            (type_identifier)))))))
+
+==================
+Enum definition
+==================
+
+enum Shape
+  Circle(Float)
+  Rect(Float, Float)
+  Empty
+end
+
+enum Option[T]
+  Some(T)
+  None
+end
+
+---
+
+(source_file
+  (enum_definition
+    (type_identifier)
+    (enum_variant
+      (type_identifier)
+      (variant_payload
+        (type
+          (type_identifier))))
+    (enum_variant
+      (type_identifier)
+      (variant_payload
+        (type
+          (type_identifier))
+        (type
+          (type_identifier))))
+    (enum_variant
+      (type_identifier)))
+  (enum_definition
+    (type_identifier)
+    (type_parameters
+      (type_identifier))
+    (enum_variant
+      (type_identifier)
+      (variant_payload
+        (type
+          (type_identifier))))
+    (enum_variant
+      (type_identifier))))
+
+==================
+Types
+==================
+
+def f(a: Map[String, List[Int]], b: Models.User, c: Fn[Int, Bool]) -> Result[Domain.Option[Int]]
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)
+          (type_arguments
+            (type
+              (type_identifier))
+            (type
+              (type_identifier)
+              (type_arguments
+                (type
+                  (type_identifier)))))))
+      (parameter
+        (identifier)
+        (type
+          (scoped_type_identifier
+            (type_identifier)
+            (type_identifier))))
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)
+          (type_arguments
+            (type
+              (type_identifier))
+            (type
+              (type_identifier))))))
+    (type
+      (type_identifier)
+      (type_arguments
+        (type
+          (scoped_type_identifier
+            (type_identifier)
+            (type_identifier))
+          (type_arguments
+            (type
+              (type_identifier))))))))
+
+==================
+Name suffixes
+==================
+
+def empty?(xs: List[Int]) -> Bool
+  return xs.empty?
+end
+
+def read!(path: String) -> String
+  return Files.read!(path)
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)
+          (type_arguments
+            (type
+              (type_identifier))))))
+    (type
+      (type_identifier))
+    (body
+      (return
+        (field_access
+          (identifier)
+          (identifier)))))
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (body
+      (return
+        (call
+          (type_identifier)
+          (identifier)
+          (argument_list
+            (identifier)))))))

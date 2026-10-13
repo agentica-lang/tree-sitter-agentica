@@ -1,0 +1,89 @@
+==================
+Comments
+==================
+
+# file comment
+def main() -> Void # trailing
+  # alone
+  x = 1 # after
+
+  # before end
+end
+# last
+
+---
+
+(source_file
+  (comment)
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (comment)
+    (comment)
+    (body
+      (assignment
+        (identifier)
+        (integer))
+      (comment)
+      (comment)))
+  (comment))
+
+==================
+Blank and comment lines between declarations
+==================
+
+import "a" as A
+
+# section
+
+struct S
+  x: Int # field
+end
+
+
+def main() -> Void
+end
+
+---
+
+(source_file
+  (import
+    (string
+      (string_content))
+    (type_identifier))
+  (comment)
+  (struct_definition
+    (type_identifier)
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)))
+    (comment))
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))))
+
+==================
+CRLF line endings
+==================
+
+def main() -> Void
+  x = 1
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (integer)))))

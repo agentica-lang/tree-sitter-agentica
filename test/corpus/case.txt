@@ -1,0 +1,119 @@
+==================
+Case with patterns
+==================
+
+def main() -> Void
+  case shape do
+    Shape.Circle(r) -> puts(r)
+    Shape.Rect(w, _) ->
+      puts(w)
+      puts("rect")
+    M.Shape.Empty -> puts("empty")
+    1 -> 1
+    -2 -> 2
+    "s" -> 3
+    true -> 4
+    nil -> 5
+    ok(v) -> 6
+    error(_) -> 7
+    _ -> puts("other")
+  end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (case
+        (identifier)
+        (case_arm
+          (variant_pattern
+            (type_path
+              (type_identifier)
+              (type_identifier))
+            (pattern_bindings
+              (identifier)))
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (identifier)))))
+        (case_arm
+          (variant_pattern
+            (type_path
+              (type_identifier)
+              (type_identifier))
+            (pattern_bindings
+              (identifier)
+              (identifier)))
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (identifier)))
+            (call
+              (identifier)
+              (argument_list
+                (string
+                  (string_content))))))
+        (case_arm
+          (variant_pattern
+            (type_path
+              (type_identifier)
+              (type_identifier)
+              (type_identifier)))
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (string
+                  (string_content))))))
+        (case_arm
+          (integer)
+          (body
+            (integer)))
+        (case_arm
+          (negative_number
+            (integer))
+          (body
+            (integer)))
+        (case_arm
+          (string
+            (string_content))
+          (body
+            (integer)))
+        (case_arm
+          (true)
+          (body
+            (integer)))
+        (case_arm
+          (nil)
+          (body
+            (integer)))
+        (case_arm
+          (variant_pattern
+            (identifier)
+            (pattern_bindings
+              (identifier)))
+          (body
+            (integer)))
+        (case_arm
+          (variant_pattern
+            (identifier)
+            (pattern_bindings
+              (identifier)))
+          (body
+            (integer)))
+        (case_arm
+          (identifier)
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (string
+                  (string_content))))))))))

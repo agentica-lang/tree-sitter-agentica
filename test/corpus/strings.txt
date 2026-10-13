@@ -1,0 +1,100 @@
+==================
+Plain string and escapes
+==================
+
+def main() -> Void
+  puts("tab\there \"q\" \\ \#{not} # hash")
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (call
+        (identifier)
+        (argument_list
+          (string
+            (string_content)
+            (escape_sequence)
+            (string_content)
+            (escape_sequence)
+            (string_content)
+            (escape_sequence)
+            (string_content)
+            (escape_sequence)
+            (string_content)
+            (escape_sequence)
+            (string_content)))))))
+
+==================
+Interpolation
+==================
+
+def main() -> Void
+  puts("total: #{n} of #{xs.size}")
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (call
+        (identifier)
+        (argument_list
+          (string
+            (string_content)
+            (interpolation
+              (identifier))
+            (string_content)
+            (interpolation
+              (field_access
+                (identifier)
+                (identifier)))))))))
+
+==================
+Nested interpolation
+==================
+
+def main() -> Void
+  puts("a #{"b #{c} d"} e #{ {"k": 1}.size }")
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (call
+        (identifier)
+        (argument_list
+          (string
+            (string_content)
+            (interpolation
+              (string
+                (string_content)
+                (interpolation
+                  (identifier))
+                (string_content)))
+            (string_content)
+            (interpolation
+              (field_access
+                (map
+                  (pair
+                    (string
+                      (string_content))
+                    (integer)))
+                (identifier)))))))))
