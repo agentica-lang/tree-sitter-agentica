@@ -121,7 +121,8 @@ suit tools. Every superset known today:
   (`A.B.C.D`), not only two or three.
 - Positional and named arguments may mix in one call or constructor.
 - Bare names such as `elif` or `let` are accepted as expression statements.
-- `µ` is accepted in names; it is the ast-grep expando character.
+- `µ` is accepted in names, also before `!=`; it is the ast-grep expando
+  character.
 
 ## ast-grep
 
@@ -137,7 +138,8 @@ ast-grep test --skip-snapshot-tests     # check the rules against rule-tests/
 ```
 
 `sgconfig.yml` registers the `agentica` language for `.agc` files and uses
-`µ` as the expando character, since `$` is not valid in Agentica names.
+`µ` as the expando character, since `$` is not valid in Agentica names. The
+grammar accepts `µ` in names, so `$A!=$B` is the same pattern as `$A != $B`.
 
 Metavariables are names: `$X` can stand for an expression, a name or a
 statement, but not where the grammar needs a type name: `x: $T = 1` does not

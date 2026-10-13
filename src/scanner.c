@@ -23,12 +23,12 @@ static const char *const RESERVED[] = {
 };
 
 static bool is_word_start(int32_t c) {
-  return (c >= 'a' && c <= 'z') || c == '_';
+  return (c >= 'a' && c <= 'z') || c == '_' || c == 0xB5;
 }
 
 static bool is_word_char(int32_t c) {
   return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
-         (c >= '0' && c <= '9') || c == '_';
+         (c >= '0' && c <= '9') || c == '_' || c == 0xB5;
 }
 
 static bool is_reserved(const char *word) {
