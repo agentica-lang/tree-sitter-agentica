@@ -115,10 +115,6 @@
 
 (escape_sequence) @string.escape
 
-(interpolation
-  "#{" @punctuation.special
-  "}" @punctuation.special) @embedded
-
 (integer) @number
 
 (float) @number.float
@@ -176,3 +172,7 @@
   ":"
   "|"
 ] @punctuation.delimiter
+
+(interpolation
+  "#{" @punctuation.special
+  "}" @punctuation.special) @embedded
