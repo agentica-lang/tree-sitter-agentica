@@ -437,3 +437,18 @@ end
             (type_identifier)
             (identifier))
           (identifier))))))
+
+==================
+Expando names before not equal
+==================
+
+µa = µA!=µB
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (binary
+      (identifier)
+      (identifier))))

@@ -1,9 +1,11 @@
 ; Scopes
 
+(if
+  consequence: (body) @local.scope)
+
 [
   (function_definition)
   (block)
-  (if)
   (elsif)
   (else)
   (while)

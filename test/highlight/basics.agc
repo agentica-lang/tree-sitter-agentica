@@ -31,6 +31,8 @@ def area(shape: Shape, p: Point) -> Float
   label = "n: #{total}"
 #         ^ string
 #               ^ variable
+#             ^ punctuation.special
+#                    ^ punctuation.special
   xs = [1].map do |item| item * 2 end
 #          ^ function.method.call
 #                  ^ variable.parameter
