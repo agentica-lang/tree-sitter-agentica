@@ -1,0 +1,198 @@
+==================
+Block with parameters
+==================
+
+def main() -> Void
+  xs.each do |x|
+    puts(x)
+  end
+  total = xs.reduce(0) do |sum: Int, x: Int| sum + x end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (method_call
+        (identifier)
+        (identifier)
+        (block
+          (block_parameters
+            (block_parameter
+              (identifier)))
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (identifier))))))
+      (assignment
+        (identifier)
+        (method_call
+          (identifier)
+          (identifier)
+          (argument_list
+            (integer))
+          (block
+            (block_parameters
+              (block_parameter
+                (identifier)
+                (type
+                  (type_identifier)))
+              (block_parameter
+                (identifier)
+                (type
+                  (type_identifier))))
+            (body
+              (binary
+                (identifier)
+                (identifier)))))))))
+
+==================
+Block inside a call argument spanning lines
+==================
+
+def main() -> Void
+  ys = apply(xs.map do |x|
+    if x > 1
+      return x
+    end
+    x * 2
+  end, 3)
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (call
+          (identifier)
+          (argument_list
+            (method_call
+              (identifier)
+              (identifier)
+              (block
+                (block_parameters
+                  (block_parameter
+                    (identifier)))
+                (body
+                  (if
+                    (binary
+                      (identifier)
+                      (integer))
+                    (body
+                      (return
+                        (identifier))))
+                  (binary
+                    (identifier)
+                    (integer)))))
+            (integer)))))))
+
+==================
+Block after call and chained after end
+==================
+
+def main() -> Void
+  run() do
+    puts("x")
+  end
+  out = xs.filter do |c| c != "" end.push(last).join("\n")
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (call
+        (identifier)
+        (argument_list)
+        (block
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (string
+                  (string_content)))))))
+      (assignment
+        (identifier)
+        (method_call
+          (method_call
+            (method_call
+              (identifier)
+              (identifier)
+              (block
+                (block_parameters
+                  (block_parameter
+                    (identifier)))
+                (body
+                  (binary
+                    (identifier)
+                    (string)))))
+            (identifier)
+            (argument_list
+              (identifier)))
+          (identifier)
+          (argument_list
+            (string
+              (escape_sequence))))))))
+
+==================
+Loop do is not a block
+==================
+
+def main() -> Void
+  while xs.any? do
+    xs = xs.drop(1)
+  end
+  for c in s.chars do
+    puts(c)
+  end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (while
+        (field_access
+          (identifier)
+          (identifier))
+        (body
+          (assignment
+            (identifier)
+            (method_call
+              (identifier)
+              (identifier)
+              (argument_list
+                (integer))))))
+      (for
+        (identifier)
+        (field_access
+          (identifier)
+          (identifier))
+        (body
+          (call
+            (identifier)
+            (argument_list
+              (identifier))))))))

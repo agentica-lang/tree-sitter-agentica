@@ -1,0 +1,439 @@
+==================
+Operator precedence
+==================
+
+def main() -> Void
+  a = 1 + 2 * 3 - 4 / 5 % 6
+  b = x < y and y <= z or not done
+  c = !a && (b || c)
+  d = 0...n + 1
+  e = -x.abs
+  f = 1..5
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (binary
+          (binary
+            (integer)
+            (binary
+              (integer)
+              (integer)))
+          (binary
+            (binary
+              (integer)
+              (integer))
+            (integer))))
+      (assignment
+        (identifier)
+        (binary
+          (binary
+            (binary
+              (identifier)
+              (identifier))
+            (binary
+              (identifier)
+              (identifier)))
+          (unary
+            (identifier))))
+      (assignment
+        (identifier)
+        (binary
+          (unary
+            (identifier))
+          (parenthesized_expression
+            (binary
+              (identifier)
+              (identifier)))))
+      (assignment
+        (identifier)
+        (range
+          (integer)
+          (binary
+            (identifier)
+            (integer))))
+      (assignment
+        (identifier)
+        (unary
+          (field_access
+            (identifier)
+            (identifier))))
+      (assignment
+        (identifier)
+        (range
+          (integer)
+          (integer))))))
+
+==================
+Not equal versus bang
+==================
+
+def main() -> Void
+  a = b!=c
+  d = !e
+  f = g.h!=i
+  j = valid!(k) != !l
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (binary
+          (identifier)
+          (identifier)))
+      (assignment
+        (identifier)
+        (unary
+          (identifier)))
+      (assignment
+        (identifier)
+        (binary
+          (field_access
+            (identifier)
+            (identifier))
+          (identifier)))
+      (assignment
+        (identifier)
+        (binary
+          (call
+            (identifier)
+            (argument_list
+              (identifier)))
+          (unary
+            (identifier)))))))
+
+==================
+Calls and method calls
+==================
+
+def main() -> Void
+  puts("x")
+  IO.puts(IO.gets!)
+  xs.push(1).size
+  user.name
+  Util.reset
+  items[0].name
+  f.call(1, 2)
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (call
+        (identifier)
+        (argument_list
+          (string
+            (string_content))))
+      (call
+        (type_identifier)
+        (identifier)
+        (argument_list
+          (call
+            (type_identifier)
+            (identifier))))
+      (field_access
+        (method_call
+          (identifier)
+          (identifier)
+          (argument_list
+            (integer)))
+        (identifier))
+      (field_access
+        (identifier)
+        (identifier))
+      (call
+        (type_identifier)
+        (identifier))
+      (field_access
+        (index
+          (identifier)
+          (integer))
+        (identifier))
+      (method_call
+        (identifier)
+        (identifier)
+        (argument_list
+          (integer)
+          (integer))))))
+
+==================
+Constructors and variants
+==================
+
+def main() -> Void
+  p = Point(x: 1, y: 2)
+  u = Models.User(name: "Ana")
+  c = Shape.Circle(1.0)
+  n = Shape.Empty
+  o = Domain.Option.Some(1)
+  r = Result.Ok(1)
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (construct
+          (type_identifier)
+          (argument_list
+            (named_argument
+              (identifier)
+              (integer))
+            (named_argument
+              (identifier)
+              (integer)))))
+      (assignment
+        (identifier)
+        (construct
+          (type_path
+            (type_identifier)
+            (type_identifier))
+          (argument_list
+            (named_argument
+              (identifier)
+              (string
+                (string_content))))))
+      (assignment
+        (identifier)
+        (construct
+          (type_path
+            (type_identifier)
+            (type_identifier))
+          (argument_list
+            (float))))
+      (assignment
+        (identifier)
+        (type_path
+          (type_identifier)
+          (type_identifier)))
+      (assignment
+        (identifier)
+        (construct
+          (type_path
+            (type_identifier)
+            (type_identifier)
+            (type_identifier))
+          (argument_list
+            (integer))))
+      (assignment
+        (identifier)
+        (construct
+          (type_path
+            (type_identifier)
+            (type_identifier))
+          (argument_list
+            (integer)))))))
+
+==================
+Collections
+==================
+
+def main() -> Void
+  xs = [1, 2, 3,]
+  m = {"a": 1, "b": 2}
+  e = {}
+  l = []
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (list
+          (integer)
+          (integer)
+          (integer)))
+      (assignment
+        (identifier)
+        (map
+          (pair
+            (string
+              (string_content))
+            (integer))
+          (pair
+            (string
+              (string_content))
+            (integer))))
+      (assignment
+        (identifier)
+        (map))
+      (assignment
+        (identifier)
+        (list)))))
+
+==================
+Function references and try
+==================
+
+def main() -> Result[Int]
+  f = &double
+  g = &Util.helper
+  v = try parse(s)
+  return ok(v)
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier)
+      (type_arguments
+        (type
+          (type_identifier))))
+    (body
+      (assignment
+        (identifier)
+        (function_reference
+          (identifier)))
+      (assignment
+        (identifier)
+        (function_reference
+          (type_identifier)
+          (identifier)))
+      (assignment
+        (identifier)
+        (try
+          (call
+            (identifier)
+            (argument_list
+              (identifier)))))
+      (return
+        (call
+          (identifier)
+          (argument_list
+            (identifier)))))))
+
+==================
+Multi-line expressions inside delimiters
+==================
+
+def main() -> Void
+  total = (
+    base +
+    extra
+  )
+  names = [
+    "Ana",
+    "Luis",
+  ]
+  puts(
+    total,
+  )
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (parenthesized_expression
+          (binary
+            (identifier)
+            (identifier))))
+      (assignment
+        (identifier)
+        (list
+          (string
+            (string_content))
+          (string
+            (string_content))))
+      (call
+        (identifier)
+        (argument_list
+          (identifier))))))
+
+==================
+Not equal after literals and function references
+==================
+
+def main() -> Void
+  a = nil!=x
+  b = true!=x
+  c = false!=x
+  d = &f!=x
+  e = &Util.f!=x
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (binary
+          (nil)
+          (identifier)))
+      (assignment
+        (identifier)
+        (binary
+          (true)
+          (identifier)))
+      (assignment
+        (identifier)
+        (binary
+          (false)
+          (identifier)))
+      (assignment
+        (identifier)
+        (binary
+          (function_reference
+            (identifier))
+          (identifier)))
+      (assignment
+        (identifier)
+        (binary
+          (function_reference
+            (type_identifier)
+            (identifier))
+          (identifier))))))

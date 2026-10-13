@@ -1,0 +1,318 @@
+==================
+Assignment and compound assignment
+==================
+
+def main() -> Void
+  x = 1
+  y: Float = 2.5
+  x += 1
+  x -= 1
+  x *= 2
+  x /= 2
+  x %= 3
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (integer))
+      (assignment
+        (identifier)
+        (type
+          (type_identifier))
+        (float))
+      (compound_assignment
+        (identifier)
+        (integer))
+      (compound_assignment
+        (identifier)
+        (integer))
+      (compound_assignment
+        (identifier)
+        (integer))
+      (compound_assignment
+        (identifier)
+        (integer))
+      (compound_assignment
+        (identifier)
+        (integer)))))
+
+==================
+If elsif else
+==================
+
+def main() -> Void
+  if x > 1
+    puts("big")
+  elsif x == 1
+    puts("one")
+  else
+    puts("small")
+  end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (if
+        (binary
+          (identifier)
+          (integer))
+        (body
+          (call
+            (identifier)
+            (argument_list
+              (string
+                (string_content)))))
+        (elsif
+          (binary
+            (identifier)
+            (integer))
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (string
+                  (string_content))))))
+        (else
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (string
+                  (string_content))))))))))
+
+==================
+While and for
+==================
+
+def main() -> Void
+  while i < 10 do
+    i += 1
+  end
+  while !IO.eof?
+    break
+  end
+  for i in 0...n
+    next
+  end
+  for x in xs do
+    puts(x)
+  end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (while
+        (binary
+          (identifier)
+          (integer))
+        (body
+          (compound_assignment
+            (identifier)
+            (integer))))
+      (while
+        (unary
+          (call
+            (type_identifier)
+            (identifier)))
+        (body
+          (break)))
+      (for
+        (identifier)
+        (range
+          (integer)
+          (identifier))
+        (body
+          (next)))
+      (for
+        (identifier)
+        (identifier)
+        (body
+          (call
+            (identifier)
+            (argument_list
+              (identifier))))))))
+
+==================
+Loop control and names break and next
+==================
+
+def main() -> Void
+  while true
+    next # skip
+  end
+  next = 1
+  puts(next)
+  for b in xs
+    break
+  end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (while
+        (true)
+        (body
+          (next))
+        (comment))
+      (assignment
+        (identifier)
+        (integer))
+      (call
+        (identifier)
+        (argument_list
+          (identifier)))
+      (for
+        (identifier)
+        (identifier)
+        (body
+          (break))))))
+
+==================
+Return without value
+==================
+
+def main() -> Void
+  return
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (return))))
+
+==================
+Top-level statements for patterns
+==================
+
+xs = xs.push(y)
+s += "a"
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (method_call
+      (identifier)
+      (identifier)
+      (argument_list
+        (identifier))))
+  (compound_assignment
+    (identifier)
+    (string
+      (string_content))))
+
+==================
+Bodies with only blank and comment lines have no body node
+==================
+
+def main() -> Void
+
+  # nothing yet
+
+end
+
+def run() -> Void
+  if x
+    # todo
+  else
+
+  end
+  xs.each do |x|
+  end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (comment))
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (if
+        (identifier)
+        (comment)
+        (else))
+      (method_call
+        (identifier)
+        (identifier)
+        (block
+          (block_parameters
+            (block_parameter
+              (identifier))))))))
+
+==================
+Body starts at the first statement and ends at the last
+==================
+
+def main() -> Void
+
+  # lead
+  x = 1
+
+  y = 2
+  # trail
+
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (comment)
+    (body
+      (assignment
+        (identifier)
+        (integer))
+      (assignment
+        (identifier)
+        (integer)))
+    (comment)))
