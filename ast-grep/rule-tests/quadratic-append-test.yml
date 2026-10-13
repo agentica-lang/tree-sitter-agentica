@@ -21,6 +21,15 @@ valid:
       end
       return ys
     end
+  - |
+    def f(xs: List[String]) -> Int
+      count = 0
+      for x in xs
+        count += List.size(String.split(x, ",")) + 1
+        count += x.index_of("a") + 1
+      end
+      return count
+    end
 invalid:
   - |
     def f(xs: List[Int]) -> List[Int]
@@ -55,4 +64,12 @@ invalid:
         end
       end
       return out
+    end
+  - |
+    def f(xs: List[String]) -> String
+      s = ""
+      for x in xs
+        s += x + ", "
+      end
+      return s
     end

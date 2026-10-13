@@ -6,6 +6,10 @@ note: |
   `xs = xs.push(y)` and `s += t` on a String build a new value each time, so
   the loop is quadratic. Collect the parts and build the result once, for
   example with `map`/`join`, or restructure the loop.
+
+  The rule is syntactic and misses some forms: `s = s + x`, a String that
+  starts from a non-literal value (`s = name`), a typed reassignment
+  (`ys: List[Int] = ys.push(y)`) and chained pushes (`xs = xs.push(a).push(b)`).
 rule:
   all:
     - inside:
@@ -24,7 +28,10 @@ rule:
                       - kind: string
                       - kind: binary
                         has:
-                          stopBy: end
+                          stopBy:
+                            any:
+                              - kind: call
+                              - kind: method_call
                           kind: string
                 - inside:
                     kind: function_definition

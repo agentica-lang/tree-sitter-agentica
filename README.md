@@ -72,6 +72,10 @@ Expressions: `binary` (`left`, `operator`, `right`), `unary`, `range`
 Types: `type` (`name`, `arguments`), `scoped_type_identifier`
 (`Models.User`), `type_arguments` and `type_identifier`.
 
+A `body` holds at least one statement and spans from the first statement to
+the last; blank and comment lines around it belong to the parent node, so a
+body with no statements has no `body` node.
+
 `IO.puts(x)` is a `call` with a `module`; `xs.size` without parentheses is a
 `field_access`, as in the interpreter's parser.
 
@@ -85,7 +89,7 @@ cannot:
   scanner emits a newline token only where the parser accepts one; elsewhere
   the newline is whitespace.
 - `name!=`. A trailing `!` belongs to a name, but not when `=` follows, so
-  `a!=b` is `a != b`.
+  `a!=b` is `a != b`; the same holds for `nil!=x`, `true!=x` and `false!=x`.
 - `break` and `next` are loop control only when they stand alone on a line;
   otherwise they are ordinary names (`next = 1`).
 - `do` after a `while`, `for` or `case` header belongs to the loop, not to a
@@ -95,16 +99,29 @@ cannot:
 
 ## Differences from the interpreter
 
-The grammar accepts a little more than the interpreter does, to stay simple
-and to suit tools:
+The grammar accepts more than the interpreter does, to stay simple and to
+suit tools. Every superset known today:
 
 - Statements are allowed at the top level, so ast-grep patterns such as
   `$X = $X.push($Y)` parse on their own.
 - The blank line required between declarations is not checked.
-- Comparisons, equalities and ranges may chain.
-- An expression may continue on the next line after a binary operator.
-- Any name is accepted as a `case` pattern, and positional and named
-  arguments may mix.
+- Comparisons, equalities and ranges may chain: `a < b < c`, `1..2..3`.
+- A newline is whitespace wherever a statement cannot end, so an expression
+  may continue on the next line after a binary operator, `=`, `->`, `not`,
+  `try` and similar tokens.
+- An interpolation may span lines and hold comments.
+- A lone carriage return counts as a space.
+- In every body, not only in `do` blocks, the last statement may share its
+  line with `end` (`1 end`), and `else` may be followed by a statement on
+  the same line.
+- A `case` may have no arms and an `enum` no variants.
+- Any name is a valid `case` pattern (`x ->`), and any name may take
+  bindings (`foo(a) ->`), not only `_`, `ok` and `error`.
+- A variant pattern or a type path may have any number of segments
+  (`A.B.C.D`), not only two or three.
+- Positional and named arguments may mix in one call or constructor.
+- Bare names such as `elif` or `let` are accepted as expression statements.
+- `µ` is accepted in names; it is the ast-grep expando character.
 
 ## ast-grep
 
@@ -122,10 +139,22 @@ ast-grep test --skip-snapshot-tests     # check the rules against rule-tests/
 `sgconfig.yml` registers the `agentica` language for `.agc` files and uses
 `µ` as the expando character, since `$` is not valid in Agentica names.
 
+Metavariables are names: `$X` can stand for an expression, a name or a
+statement, but not where the grammar needs a type name: `x: $T = 1` does not
+parse, and `$T(name: $N)` parses as a `call`, not a `construct`. Match types
+with a `kind` or `regex` rule instead.
+
 `rules/quadratic-append.yml` warns on `xs = xs.push(y)`, and on `s += t` when
-`s` is a String (it is assigned a string literal, or declared `String`),
-inside a `while` or `for` loop. Each pass copies the whole value, so the loop
-is quadratic.
+`s` is a String (it is assigned a string literal, or declared `String`, or
+`t` holds a string literal outside any call), inside a `while` or `for` loop.
+Each pass copies the whole value, so the loop is quadratic.
+
+The rule is syntactic, so it misses some forms:
+
+- `s = s + x`;
+- a String that starts from a non-literal value (`s = name`);
+- a typed reassignment (`ys: List[Int] = ys.push(y)`);
+- chained pushes (`xs = xs.push(a).push(b)`).
 
 ## License
 
