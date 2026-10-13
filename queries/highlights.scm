@@ -1,3 +1,11 @@
+(identifier) @variable
+
+(type_identifier) @type
+
+((type_identifier) @type.builtin
+  (#match? @type.builtin
+    "^(BDD|Bool|Dir|File|FileHandle|FileInfo|Float|Fn|Header|HTTP|HttpBody|HttpClient|HttpClientOptions|HttpResponse|HttpServer|HttpServerOptions|HttpWire|HttpWriter|Int|IO|Json|JSON|List|Listener|Map|Nil|Path|Process|ProcessOutput|Random|Range|Request|Response|Result|Socket|String|System|Task|TCP|Time|TLS|Void)$"))
+
 ; Keywords
 
 [
@@ -93,12 +101,6 @@
 (type_path
   (type_identifier) @constant .)
 
-(type_identifier) @type
-
-((type_identifier) @type.builtin
-  (#match? @type.builtin
-    "^(Int|Float|Bool|String|Nil|Void|Process|List|Map|Result|Range|Fn|Json)$"))
-
 ; Patterns
 
 (variant_pattern
@@ -174,5 +176,3 @@
   ":"
   "|"
 ] @punctuation.delimiter
-
-(identifier) @variable
