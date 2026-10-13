@@ -29,10 +29,14 @@ function commaSep(rule) {
   return optional(commaSep1(rule));
 }
 
-function lines($, item) {
-  return choice(
-    seq(repeat1(choice(seq(item, $._newline), $._newline)), optional(item)),
-    item,
+function separated($, item) {
+  return seq(item, repeat(seq(repeat1($._newline), item)));
+}
+
+function content($, name) {
+  return seq(
+    repeat($._newline),
+    optional(seq(field(name, $.body), repeat($._newline))),
   );
 }
 
@@ -46,12 +50,23 @@ module.exports = grammar({
     $.next,
     $.string_content,
     $._loop_do,
+    $._true_before_neq,
+    $._false_before_neq,
+    $._nil_before_neq,
     $._error_sentinel,
   ],
 
   extras: $ => [/[ \t\r\n\f]/, $.comment],
 
   word: $ => $.identifier,
+
+  reserved: {
+    global: _ => [
+      'def', 'struct', 'enum', 'case', 'do', 'import', 'export', 'end', 'if',
+      'elsif', 'else', 'while', 'for', 'in', 'return', 'try', 'true', 'false',
+      'nil', 'and', 'or', 'not',
+    ],
+  },
 
   supertypes: $ => [$._statement, $._expression, $._pattern],
 
@@ -60,7 +75,10 @@ module.exports = grammar({
   ],
 
   rules: {
-    source_file: $ => optional(lines($, choice($._declaration, $._statement))),
+    source_file: $ => seq(
+      repeat($._newline),
+      optional(seq(separated($, choice($._declaration, $._statement)), repeat($._newline))),
+    ),
 
     _declaration: $ => choice(
       $.function_definition,
@@ -93,7 +111,7 @@ module.exports = grammar({
       '->',
       field('return_type', $.type),
       $._newline,
-      optional(field('body', $.body)),
+      content($, 'body'),
       'end',
     ),
 
@@ -154,7 +172,7 @@ module.exports = grammar({
 
     // Statements
 
-    body: $ => lines($, $._statement),
+    body: $ => separated($, $._statement),
 
     _statement: $ => choice(
       $.assignment,
@@ -188,7 +206,7 @@ module.exports = grammar({
       'if',
       field('condition', $._expression),
       $._newline,
-      optional(field('consequence', $.body)),
+      content($, 'consequence'),
       repeat(field('alternative', $.elsif)),
       optional(field('alternative', $.else)),
       'end',
@@ -198,17 +216,17 @@ module.exports = grammar({
       'elsif',
       field('condition', $._expression),
       $._newline,
-      optional(field('consequence', $.body)),
+      content($, 'consequence'),
     ),
 
-    else: $ => seq('else', optional(field('body', $.body))),
+    else: $ => seq('else', content($, 'body')),
 
     while: $ => seq(
       'while',
       field('condition', $._expression),
       optional(alias($._loop_do, 'do')),
       $._newline,
-      optional(field('body', $.body)),
+      content($, 'body'),
       'end',
     ),
 
@@ -219,7 +237,7 @@ module.exports = grammar({
       field('iterable', $._expression),
       optional(alias($._loop_do, 'do')),
       $._newline,
-      optional(field('body', $.body)),
+      content($, 'body'),
       'end',
     ),
 
@@ -236,7 +254,7 @@ module.exports = grammar({
     case_arm: $ => prec.right(seq(
       field('pattern', $._pattern),
       '->',
-      optional(field('body', $.body)),
+      content($, 'body'),
     )),
 
     _pattern: $ => choice(
@@ -322,10 +340,14 @@ module.exports = grammar({
       $.string,
       $.integer,
       $.float,
-      $.true,
-      $.false,
-      $.nil,
+      $._true,
+      $._false,
+      $._nil,
     ),
+
+    _true: $ => choice($.true, alias($._true_before_neq, $.true)),
+    _false: $ => choice($.false, alias($._false_before_neq, $.false)),
+    _nil: $ => choice($.nil, alias($._nil_before_neq, $.nil)),
 
     _name: $ => choice(
       $.identifier,
@@ -381,7 +403,7 @@ module.exports = grammar({
     function_reference: $ => seq(
       '&',
       optional(seq(field('module', $.type_identifier), '.')),
-      field('name', $.identifier),
+      field('name', $._name),
     ),
 
     construct: $ => seq(
@@ -409,7 +431,7 @@ module.exports = grammar({
     block: $ => seq(
       'do',
       optional(field('parameters', $.block_parameters)),
-      optional(field('body', $.body)),
+      content($, 'body'),
       'end',
     ),
 

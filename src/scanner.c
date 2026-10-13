@@ -10,6 +10,9 @@ enum TokenType {
   NEXT,
   STRING_CONTENT,
   LOOP_DO,
+  TRUE_BEFORE_NEQ,
+  FALSE_BEFORE_NEQ,
+  NIL_BEFORE_NEQ,
   ERROR_SENTINEL,
 };
 
@@ -115,7 +118,9 @@ bool tree_sitter_agentica_external_scanner_scan(void *payload, TSLexer *lexer,
   }
 
   bool want_word = valid_symbols[IDENTIFIER_BEFORE_NEQ] || valid_symbols[BREAK] ||
-                   valid_symbols[NEXT] || valid_symbols[LOOP_DO];
+                   valid_symbols[NEXT] || valid_symbols[LOOP_DO] ||
+                   valid_symbols[TRUE_BEFORE_NEQ] || valid_symbols[FALSE_BEFORE_NEQ] ||
+                   valid_symbols[NIL_BEFORE_NEQ];
   if (!want_word || !is_word_start(lexer->lookahead)) return false;
 
   char word[8];
@@ -131,12 +136,25 @@ bool tree_sitter_agentica_external_scanner_scan(void *payload, TSLexer *lexer,
 
   if (lexer->lookahead == '!') {
     lexer->advance(lexer, false);
-    if (lexer->lookahead == '=' && valid_symbols[IDENTIFIER_BEFORE_NEQ] &&
-        !(short_word && is_reserved(word))) {
-      lexer->result_symbol = IDENTIFIER_BEFORE_NEQ;
-      return true;
+    if (lexer->lookahead != '=') return false;
+    if (short_word && is_reserved(word)) {
+      if (strcmp(word, "true") == 0 && valid_symbols[TRUE_BEFORE_NEQ]) {
+        lexer->result_symbol = TRUE_BEFORE_NEQ;
+        return true;
+      }
+      if (strcmp(word, "false") == 0 && valid_symbols[FALSE_BEFORE_NEQ]) {
+        lexer->result_symbol = FALSE_BEFORE_NEQ;
+        return true;
+      }
+      if (strcmp(word, "nil") == 0 && valid_symbols[NIL_BEFORE_NEQ]) {
+        lexer->result_symbol = NIL_BEFORE_NEQ;
+        return true;
+      }
+      return false;
     }
-    return false;
+    if (!valid_symbols[IDENTIFIER_BEFORE_NEQ]) return false;
+    lexer->result_symbol = IDENTIFIER_BEFORE_NEQ;
+    return true;
   }
 
   if (!short_word || lexer->lookahead == '?') return false;

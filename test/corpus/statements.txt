@@ -182,8 +182,8 @@ end
       (while
         (true)
         (body
-          (next)
-          (comment)))
+          (next))
+        (comment))
       (assignment
         (identifier)
         (integer))
@@ -237,3 +237,82 @@ s += "a"
     (identifier)
     (string
       (string_content))))
+
+==================
+Bodies with only blank and comment lines have no body node
+==================
+
+def main() -> Void
+
+  # nothing yet
+
+end
+
+def run() -> Void
+  if x
+    # todo
+  else
+
+  end
+  xs.each do |x|
+  end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (comment))
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (if
+        (identifier)
+        (comment)
+        (else))
+      (method_call
+        (identifier)
+        (identifier)
+        (block
+          (block_parameters
+            (block_parameter
+              (identifier))))))))
+
+==================
+Body starts at the first statement and ends at the last
+==================
+
+def main() -> Void
+
+  # lead
+  x = 1
+
+  y = 2
+  # trail
+
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (comment)
+    (body
+      (assignment
+        (identifier)
+        (integer))
+      (assignment
+        (identifier)
+        (integer)))
+    (comment)))

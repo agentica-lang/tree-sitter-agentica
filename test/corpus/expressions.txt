@@ -387,3 +387,53 @@ end
         (identifier)
         (argument_list
           (identifier))))))
+
+==================
+Not equal after literals and function references
+==================
+
+def main() -> Void
+  a = nil!=x
+  b = true!=x
+  c = false!=x
+  d = &f!=x
+  e = &Util.f!=x
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (binary
+          (nil)
+          (identifier)))
+      (assignment
+        (identifier)
+        (binary
+          (true)
+          (identifier)))
+      (assignment
+        (identifier)
+        (binary
+          (false)
+          (identifier)))
+      (assignment
+        (identifier)
+        (binary
+          (function_reference
+            (identifier))
+          (identifier)))
+      (assignment
+        (identifier)
+        (binary
+          (function_reference
+            (type_identifier)
+            (identifier))
+          (identifier))))))

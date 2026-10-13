@@ -25,9 +25,9 @@ end
     (body
       (assignment
         (identifier)
-        (integer))
-      (comment)
-      (comment)))
+        (integer)))
+    (comment)
+    (comment))
   (comment))
 
 ==================
