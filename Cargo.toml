@@ -1,7 +1,7 @@
 [package]
 name = "tree-sitter-agentica"
 description = "Agentica grammar for tree-sitter"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Johanderson Mogollón <johander1822@gmail.com>"]
 license = "MIT"
 readme = "README.md"

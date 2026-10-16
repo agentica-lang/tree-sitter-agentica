@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-16
+
 ### Added
 
 - Rust bindings: a `tree-sitter-agentica` crate exposing `LANGUAGE`,
@@ -19,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `import_list` of `import_name` nodes (`name`, `rename`).
 - The pipe operator `x |> f(a)` as a `pipe` node, with the `|>` precedence of
   the Agentica grammar (below `+`, above the comparisons).
+- Type aliases using `type Name = Type`, including exported aliases, with a
+  `type_alias_definition` node.
 
 ### Changed
 
@@ -53,4 +57,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and the `quadratic-append` rule, which warns on `xs = xs.push(y)` and String
   `s += t` inside `while`/`for` loops, with rule tests.
 
+[0.2.0]: https://github.com/sonic182/tree-sitter-agentica/releases/tag/v0.2.0
 [0.1.0]: https://github.com/sonic182/tree-sitter-agentica/releases/tag/v0.1.0
