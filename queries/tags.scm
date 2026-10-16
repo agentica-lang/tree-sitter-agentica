@@ -7,6 +7,9 @@
 (enum_definition
   name: (type_identifier) @name) @definition.class
 
+(type_alias_definition
+  name: (type_identifier) @name) @definition.class
+
 (enum_variant
   name: (type_identifier) @name) @definition.constant
 

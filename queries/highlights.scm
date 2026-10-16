@@ -12,6 +12,7 @@
   "def"
   "struct"
   "enum"
+  "type"
   "import"
   "export"
   "as"
@@ -63,6 +64,9 @@
   name: (identifier) @property)
 
 (enum_definition
+  name: (type_identifier) @type.definition)
+
+(type_alias_definition
   name: (type_identifier) @type.definition)
 
 (enum_variant
