@@ -147,6 +147,31 @@ end
           (type_identifier))))))
 
 ==================
+Type aliases
+==================
+
+type UserId = Int
+export type UserList = List[Models.User]
+
+---
+
+(source_file
+  (type_alias_definition
+    (type_identifier)
+    (type
+      (type_identifier)))
+  (export
+    (type_alias_definition
+      (type_identifier)
+      (type
+        (type_identifier)
+        (type_arguments
+          (type
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))))))))
+
+==================
 Struct definition
 ==================
 

@@ -6,6 +6,10 @@ import Models from "models"
 LIMIT = 10
 # ^ constant
 
+type UserId = Int
+# <- keyword
+#    ^ type.definition
+
 struct Point
 # <- keyword
 #      ^ type.definition
