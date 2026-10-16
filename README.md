@@ -1,6 +1,6 @@
 # tree-sitter-agentica
 
-A [tree-sitter](https://tree-sitter.github.io) grammar for [Agentica](https://github.com/sonic182/agentica), a language best described as “Ruby with types”. It supports editor syntax features and structural search and rewrite with [ast-grep](https://ast-grep.github.io/).
+A [tree-sitter](https://tree-sitter.github.io) grammar for [Agentica](https://github.com/sonic182/agentica), a programming language optimized for AI agent development. It supports editor syntax features and structural search and rewrite with [ast-grep](https://ast-grep.github.io/).
 
 This grammar is a work in progress. It intentionally accepts a small superset of the interpreter's syntax to support tools; see [known differences](docs/compatibility.md).
 
