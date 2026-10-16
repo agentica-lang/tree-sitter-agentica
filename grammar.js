@@ -85,6 +85,7 @@ module.exports = grammar({
       $.function_definition,
       $.struct_definition,
       $.enum_definition,
+      $.type_alias_definition,
       $.constant_definition,
       $.import,
       $.export,
@@ -117,6 +118,7 @@ module.exports = grammar({
         $.function_definition,
         $.struct_definition,
         $.enum_definition,
+        $.type_alias_definition,
         $.constant_definition,
       )),
     ),
@@ -128,6 +130,13 @@ module.exports = grammar({
       optional(seq(':', field('type', $.type))),
       '=',
       field('value', $._expression),
+    ),
+
+    type_alias_definition: $ => seq(
+      'type',
+      field('name', $.type_identifier),
+      '=',
+      field('type', $.type),
     ),
 
     function_definition: $ => seq(

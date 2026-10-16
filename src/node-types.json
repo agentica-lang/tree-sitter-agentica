@@ -757,6 +757,10 @@
           {
             "type": "struct_definition",
             "named": true
+          },
+          {
+            "type": "type_alias_definition",
+            "named": true
           }
         ]
       }
@@ -1669,6 +1673,10 @@
         {
           "type": "struct_definition",
           "named": true
+        },
+        {
+          "type": "type_alias_definition",
+          "named": true
         }
       ]
     }
@@ -1762,6 +1770,32 @@
           },
           {
             "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "type_alias_definition",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type",
             "named": true
           }
         ]
@@ -2169,6 +2203,10 @@
   },
   {
     "type": "try",
+    "named": false
+  },
+  {
+    "type": "type",
     "named": false
   },
   {

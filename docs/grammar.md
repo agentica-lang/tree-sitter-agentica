@@ -4,7 +4,7 @@ This page describes the syntax tree exposed by the grammar and behavior implemen
 
 ## Node types
 
-Declarations: `function_definition` (`name`, `parameters`, `return_type`, `body`), `parameter`, `struct_definition` (`name`, `field`), `field_declaration`, `enum_definition` (`name`, `type_parameters`, `variant`), `enum_variant` (`name`, `payload`), `import` (`alias` or `names`, `path`), `import_list`, `import_name` (`name`, `rename`), `constant_definition` (`name`, `type`, `value`) and `export` (`declaration`).
+Declarations: `function_definition` (`name`, `parameters`, `return_type`, `body`), `parameter`, `struct_definition` (`name`, `field`), `field_declaration`, `enum_definition` (`name`, `type_parameters`, `variant`), `enum_variant` (`name`, `payload`), `type_alias_definition` (`name`, `type`), `import` (`alias` or `names`, `path`), `import_list`, `import_name` (`name`, `rename`), `constant_definition` (`name`, `type`, `value`) and `export` (`declaration`).
 
 Statements: `assignment` (`left`, `type`, `right`), `compound_assignment` (`left`, `operator`, `right`), `return`, `break`, `next`, `if` (`condition`, `consequence`, `alternative`), `elsif`, `else`, `while` (`condition`, `body`), `for` (`variable`, `iterable`, `body`), `case` (`value`, `arm`) and `case_arm` (`pattern`, `body`). Agentica has no `when`: an arm is `pattern -> body`. Patterns include `variant_pattern` (`variant`, `bindings`), `negative_number`, literals, and identifiers (including `_`).
 
