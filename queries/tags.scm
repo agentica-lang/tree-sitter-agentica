@@ -16,6 +16,9 @@
 (import
   alias: (type_identifier) @name) @definition.module
 
+(constant_definition
+  name: (type_identifier) @name) @definition.constant
+
 (call
   function: (identifier) @name) @reference.call
 

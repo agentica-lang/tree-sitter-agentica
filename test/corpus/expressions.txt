@@ -452,3 +452,41 @@ Expando names before not equal
     (binary
       (identifier)
       (identifier))))
+
+==================
+Pipe operator
+==================
+
+x = a + 1 |> f(2) |> try g()
+y = a < b |> f()
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (pipe
+      (pipe
+        (binary
+          (identifier)
+          (integer))
+        (pipe_target
+          (call
+            (identifier)
+            (argument_list
+              (integer)))))
+      (pipe_target
+        (call
+          (identifier)
+          (argument_list)))))
+  (assignment
+    (identifier)
+    (binary
+      (identifier)
+      (pipe
+        (identifier)
+        (pipe_target
+          (call
+            (identifier)
+            (argument_list))))))
+)

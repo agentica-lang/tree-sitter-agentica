@@ -13,10 +13,11 @@ const PREC = {
   and: 3,
   equality: 4,
   comparison: 5,
-  additive: 6,
-  multiplicative: 7,
-  unary: 8,
-  postfix: 9,
+  pipe: 6,
+  additive: 7,
+  multiplicative: 8,
+  unary: 9,
+  postfix: 10,
 };
 
 const COMPOUND_OPERATORS = ['+=', '-=', '*=', '/=', '%='];
@@ -84,15 +85,30 @@ module.exports = grammar({
       $.function_definition,
       $.struct_definition,
       $.enum_definition,
+      $.constant_definition,
       $.import,
       $.export,
     ),
 
+    // `import Alias from "path"` or `import {a, B as C} from "path"`: one form
+    // per line, so the alias and the name list are two alternatives.
     import: $ => seq(
       'import',
+      choice(
+        field('alias', $.type_identifier),
+        field('names', $.import_list),
+      ),
+      'from',
       field('path', $.string),
-      'as',
-      field('alias', $.type_identifier),
+    ),
+
+    import_list: $ => seq('{', commaSep1($.import_name), '}'),
+
+    // The original name comes first; `as` gives the local name. Both keep the
+    // case rule of the name they stand for, which the checker enforces.
+    import_name: $ => seq(
+      field('name', choice($.identifier, $.type_identifier)),
+      optional(seq('as', field('rename', choice($.identifier, $.type_identifier)))),
     ),
 
     export: $ => seq(
@@ -101,7 +117,17 @@ module.exports = grammar({
         $.function_definition,
         $.struct_definition,
         $.enum_definition,
+        $.constant_definition,
       )),
+    ),
+
+    // A constant is a type-name token, so it cannot collide with the
+    // `identifier` assignment that statements use.
+    constant_definition: $ => seq(
+      field('name', $.type_identifier),
+      optional(seq(':', field('type', $.type))),
+      '=',
+      field('value', $._expression),
     ),
 
     function_definition: $ => seq(
@@ -289,6 +315,7 @@ module.exports = grammar({
     _expression: $ => choice(
       $.range,
       $.binary,
+      $.pipe,
       $.unary,
       $.try,
       $._primary,
@@ -316,6 +343,17 @@ module.exports = grammar({
         field('right', $._expression),
       ))));
     },
+
+    // `x |> f(a)` is `f(x, a)`. The right side is a call (not an expression),
+    // so `x |> f() + 1` cannot continue past the call: the pipe reduces first.
+    // Our grammar accepts that as `(x |> f()) + 1`, a superset the spec rejects.
+    pipe: $ => prec.left(PREC.pipe, seq(
+      field('left', $._expression),
+      '|>',
+      field('right', $.pipe_target),
+    )),
+
+    pipe_target: $ => seq(optional('try'), $.call),
 
     unary: $ => prec(PREC.unary, seq(
       field('operator', choice('-', 'not', '!')),

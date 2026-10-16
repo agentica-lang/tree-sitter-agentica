@@ -15,6 +15,7 @@
   "import"
   "export"
   "as"
+  "from"
   "end"
   "do"
 ] @keyword
@@ -72,6 +73,9 @@
 
 (import
   alias: (type_identifier) @module)
+
+(constant_definition
+  name: (type_identifier) @constant)
 
 ; Calls
 
@@ -148,6 +152,7 @@
   "*"
   "/"
   "%"
+  "|>"
   "!"
   "&&"
   "||"

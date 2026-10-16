@@ -5,6 +5,27 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Rust bindings: a `tree-sitter-agentica` crate exposing `LANGUAGE`,
+  `NODE_TYPES` and the highlights, locals and tags queries, so Rust tools can
+  depend on the grammar by git revision.
+- Module constants: `NAME = expr` and `NAME: Type = expr` at the top level,
+  `export` in front to share them. `constant_definition` nodes; the
+  highlights and tags queries mark them.
+- Named imports: `import {area, Square as Sq} from "shapes"`, as an
+  `import_list` of `import_name` nodes (`name`, `rename`).
+- The pipe operator `x |> f(a)` as a `pipe` node, with the `|>` precedence of
+  the Agentica grammar (below `+`, above the comparisons).
+
+### Changed
+
+- **Breaking:** the import syntax follows Agentica. `import Models from
+  "models"` replaces `import "models" as Models`, and the `import` node's
+  `path` now follows the `from` keyword. The old form no longer parses.
+
 ## [0.1.0] - 2026-10-13
 
 ### Added

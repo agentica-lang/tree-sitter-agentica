@@ -34,7 +34,7 @@ end
 Blank and comment lines between declarations
 ==================
 
-import "a" as A
+import A from "a"
 
 # section
 
@@ -50,9 +50,9 @@ end
 
 (source_file
   (import
+    (type_identifier)
     (string
-      (string_content))
-    (type_identifier))
+      (string_content)))
   (comment)
   (struct_definition
     (type_identifier)

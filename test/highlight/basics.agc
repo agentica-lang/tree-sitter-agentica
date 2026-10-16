@@ -1,7 +1,10 @@
-import "models" as Models
+import Models from "models"
 # <- keyword
-#               ^ keyword
-#                  ^ module
+#             ^ keyword
+#      ^ module
+
+LIMIT = 10
+# ^ constant
 
 struct Point
 # <- keyword

@@ -4,3 +4,5 @@ node_modules/
 *.dll
 *.wasm
 log.html
+/target
+Cargo.lock
