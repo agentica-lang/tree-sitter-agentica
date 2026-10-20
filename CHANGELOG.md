@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-20
+
 ### Added
 
 - Case guards: `pattern if condition -> body`, as the `guard` field of
@@ -85,6 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and the `quadratic-append` rule, which warns on `xs = xs.push(y)` and String
   `s += t` inside `while`/`for` loops, with rule tests.
 
+[0.3.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.3.0
 [0.2.1]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.2.1
 [0.2.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.2.0
 [0.1.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.1.0
