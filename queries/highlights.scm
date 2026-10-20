@@ -121,6 +121,12 @@
 
 (string) @string
 
+[
+  (heredoc_beginning)
+  (heredoc_content)
+  (heredoc_end)
+] @string
+
 (escape_sequence) @string.escape
 
 (integer) @number

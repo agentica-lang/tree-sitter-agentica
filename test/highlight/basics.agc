@@ -66,3 +66,16 @@ def area(shape: Shape, p: Point) -> Float
 #               ^ constant.builtin
   end
 end
+
+def usage(name: String, width: Int = 80) -> String
+#                                    ^ number
+  return <<~TEXT
+#        ^ string
+    Usage: #{name}
+#   ^ string
+#          ^ punctuation.special
+    Width: 1_000
+  TEXT
+# ^ string
+end
+

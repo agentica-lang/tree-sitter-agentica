@@ -348,3 +348,42 @@ end
           (identifier)
           (argument_list
             (identifier)))))))
+
+==================
+Default parameter values
+==================
+
+def label(text: String, level: Level = Level.Info, tags: List[String] = []) -> String
+  return text
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)))
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))
+        (type_path
+          (type_identifier)
+          (type_identifier)))
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)
+          (type_arguments
+            (type
+              (type_identifier))))
+        (list)))
+    (type
+      (type_identifier))
+    (body
+      (return
+        (identifier)))))

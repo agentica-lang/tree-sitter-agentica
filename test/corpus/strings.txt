@@ -98,3 +98,124 @@ end
                       (string_content))
                     (integer)))
                 (identifier)))))))))
+
+==================
+Heredoc with escapes and interpolation
+==================
+
+def usage(name: String) -> String
+  text = <<~TEXT
+    Usage: #{name} "quoted" \t
+
+      indented # not a comment
+  TEXT
+  return text
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (heredoc_beginning))
+      (heredoc_body
+        (heredoc_content)
+        (interpolation
+          (identifier))
+        (heredoc_content)
+        (escape_sequence)
+        (heredoc_content)
+        (heredoc_end))
+      (return
+        (identifier)))))
+
+==================
+Heredocs as arguments and two on one line
+==================
+
+print(banner("notes", <<~NOTE))
+  first
+  second
+NOTE
+puts(<<~LEFT.length + <<~RIGHT.length)
+  ab
+  cd
+LEFT
+  xyz
+  uvw
+RIGHT
+x = f(<<~A,
+  one
+  two
+A
+  2)
+
+---
+
+(source_file
+  (call
+    (identifier)
+    (argument_list
+      (call
+        (identifier)
+        (argument_list
+          (string
+            (string_content))
+          (heredoc_beginning)))))
+  (heredoc_body
+    (heredoc_content)
+    (heredoc_end))
+  (call
+    (identifier)
+    (argument_list
+      (binary
+        (field_access
+          (heredoc_beginning)
+          (identifier))
+        (field_access
+          (heredoc_beginning)
+          (identifier)))))
+  (heredoc_body
+    (heredoc_content)
+    (heredoc_end))
+  (heredoc_body
+    (heredoc_content)
+    (heredoc_end))
+  (assignment
+    (identifier)
+    (call
+      (identifier)
+      (argument_list
+        (heredoc_beginning)
+        (heredoc_body
+          (heredoc_content)
+          (heredoc_end))
+        (integer)))))
+
+==================
+Heredoc end line at end of file
+==================
+
+x = <<~END_1
+  a
+  b
+END_1
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (heredoc_beginning))
+  (heredoc_body
+    (heredoc_content)
+    (heredoc_end)))

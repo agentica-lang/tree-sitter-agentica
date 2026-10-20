@@ -40,12 +40,25 @@ find site/content -name '*.md' -type f | sort | while read -r page; do
 done
 find "$work/site" -name '*.agc' -type f | sort >> "$work/files"
 
-# A fixture is invalid on purpose when its .expected reports a LEX- or PARSE-
-# diagnostic as the program result.
-rg_or_none -l -P --glob '*.expected' '^\s*"code":\s*"(LEX-|PARSE-(?!GHERKIN-))' tests/fixtures \
-  | sed 's/\.expected$/.agc/' | while read -r agc; do
-    if [ -f "$agc" ]; then echo "$agc"; fi
-  done | sort > "$work/allowlist"
+# A fixture is invalid on purpose when its golden starts with a LEX- or PARSE-
+# diagnostic: `NAME.expected` for `NAME.agc`, or `NAME.linked` for the file
+# that the diagnostic names inside the module fixture folder `NAME/`.
+{
+  find tests/fixtures -name '*.expected' -type f | sort | while read -r golden; do
+    agc="${golden%.expected}.agc"
+    if [ -f "$agc" ] && head -1 "$golden" | rg -q -P '^ERROR (LEX-|PARSE-(?!GHERKIN-))'; then
+      echo "$agc"
+    fi
+  done
+  find tests/fixtures -name '*.linked' -type f | sort | while read -r golden; do
+    file="$(head -1 "$golden" | rg_or_none -o -P '^ERROR (LEX-|PARSE-).* file="\K[^"]+')"
+    agc="${golden%.linked}/$file"
+    if [ -n "$file" ] && [ -f "$agc" ]; then echo "$agc"; fi
+  done
+  # Text that a module fixture places where a std module would be, to show that
+  # the linker never loads it.
+  echo "tests/fixtures/frontend/modules/std-queue-embedded/std/queue.agc"
+} | sort > "$work/allowlist"
 
 total=$(wc -l < "$work/files")
 config="$work/config.json"
