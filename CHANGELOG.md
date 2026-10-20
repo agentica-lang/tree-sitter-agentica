@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-20
+
+### Fixed
+
+- The published crate includes the `LICENSE` file.
+- `src/parser.c` is regenerated, so the language metadata reports the release
+  version.
+
 ## [0.2.0] - 2026-10-16
 
 ### Added
@@ -57,5 +65,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and the `quadratic-append` rule, which warns on `xs = xs.push(y)` and String
   `s += t` inside `while`/`for` loops, with rule tests.
 
+[0.2.1]: https://github.com/sonic182/tree-sitter-agentica/releases/tag/v0.2.1
 [0.2.0]: https://github.com/sonic182/tree-sitter-agentica/releases/tag/v0.2.0
 [0.1.0]: https://github.com/sonic182/tree-sitter-agentica/releases/tag/v0.1.0

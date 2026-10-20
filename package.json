@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-agentica",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Agentica grammar for tree-sitter",
   "license": "MIT",
   "author": "Johanderson Mogollón <johander1822@gmail.com>",
