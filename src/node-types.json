@@ -32,6 +32,10 @@
         "named": true
       },
       {
+        "type": "heredoc_beginning",
+        "named": true
+      },
+      {
         "type": "identifier",
         "named": true
       },
@@ -500,6 +504,16 @@
           }
         ]
       },
+      "guard": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
+      },
       "pattern": {
         "multiple": false,
         "required": true,
@@ -809,6 +823,10 @@
             "named": true
           },
           {
+            "type": "heredoc_beginning",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           },
@@ -995,6 +1013,34 @@
     }
   },
   {
+    "type": "heredoc_body",
+    "named": true,
+    "extra": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "escape_sequence",
+          "named": true
+        },
+        {
+          "type": "heredoc_content",
+          "named": true
+        },
+        {
+          "type": "heredoc_end",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "if",
     "named": true,
     "fields": {
@@ -1162,6 +1208,10 @@
             "named": true
           },
           {
+            "type": "heredoc_beginning",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           },
@@ -1321,6 +1371,10 @@
             "named": true
           },
           {
+            "type": "heredoc_beginning",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           },
@@ -1447,6 +1501,16 @@
     "type": "parameter",
     "named": true,
     "fields": {
+      "default": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -1508,7 +1572,7 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "_pattern",
           "named": true
         }
       ]
@@ -2148,6 +2212,18 @@
   {
     "type": "from",
     "named": false
+  },
+  {
+    "type": "heredoc_beginning",
+    "named": true
+  },
+  {
+    "type": "heredoc_content",
+    "named": true
+  },
+  {
+    "type": "heredoc_end",
+    "named": true
   },
   {
     "type": "identifier",

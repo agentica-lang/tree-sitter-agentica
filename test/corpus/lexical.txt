@@ -87,3 +87,26 @@ end
       (assignment
         (identifier)
         (integer)))))
+
+==================
+Digit separators
+==================
+
+x = 1_000_000
+y = 1_000.000_5
+z = 1_000.times
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (integer))
+  (assignment
+    (identifier)
+    (float))
+  (assignment
+    (identifier)
+    (field_access
+      (integer)
+      (identifier))))

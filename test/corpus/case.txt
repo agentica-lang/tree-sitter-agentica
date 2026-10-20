@@ -117,3 +117,87 @@ end
               (argument_list
                 (string
                   (string_content))))))))))
+
+==================
+Case guards and nested patterns
+==================
+
+def main() -> Void
+  case r
+    Shape.Circle(r) if r > 100 -> 1
+    ok(Reading.Value(0)) -> 2
+    ok(Reading.Value(n)) if n < 0 -> 3
+    error("timeout") -> 4
+    Shape.Pair(-1, _) -> 5
+  end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (case
+        (identifier)
+        (case_arm
+          (variant_pattern
+            (type_path
+              (type_identifier)
+              (type_identifier))
+            (pattern_bindings
+              (identifier)))
+          (binary
+            (identifier)
+            (integer))
+          (body
+            (integer)))
+        (case_arm
+          (variant_pattern
+            (identifier)
+            (pattern_bindings
+              (variant_pattern
+                (type_path
+                  (type_identifier)
+                  (type_identifier))
+                (pattern_bindings
+                  (integer)))))
+          (body
+            (integer)))
+        (case_arm
+          (variant_pattern
+            (identifier)
+            (pattern_bindings
+              (variant_pattern
+                (type_path
+                  (type_identifier)
+                  (type_identifier))
+                (pattern_bindings
+                  (identifier)))))
+          (binary
+            (identifier)
+            (integer))
+          (body
+            (integer)))
+        (case_arm
+          (variant_pattern
+            (identifier)
+            (pattern_bindings
+              (string
+                (string_content))))
+          (body
+            (integer)))
+        (case_arm
+          (variant_pattern
+            (type_path
+              (type_identifier)
+              (type_identifier))
+            (pattern_bindings
+              (negative_number
+                (integer))
+              (identifier)))
+          (body
+            (integer)))))))

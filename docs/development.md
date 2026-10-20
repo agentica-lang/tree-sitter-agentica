@@ -29,4 +29,4 @@ The integration script parses every `.agc` file in `examples/`, `stdlib/`, `test
 script/parse-agentica-repo.sh [path]
 ```
 
-The path defaults to `~/apps/agentica`; set `AGENTICA_REPO` to use another checkout. The script fails on any `ERROR` or `MISSING` node. It skips fixtures that are intentionally invalid, based on `.expected` results with a `LEX-` or `PARSE-` code.
+The path defaults to `~/apps/agentica`; set `AGENTICA_REPO` to use another checkout. The script fails on any `ERROR` or `MISSING` node. It skips fixtures that are intentionally invalid: those whose `.expected` golden, or whose module fixture's `.linked` golden, starts with an `ERROR LEX-` or `ERROR PARSE-` line.

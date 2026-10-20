@@ -488,5 +488,4 @@ y = a < b |> f()
         (pipe_target
           (call
             (identifier)
-            (argument_list))))))
-)
+            (argument_list)))))))

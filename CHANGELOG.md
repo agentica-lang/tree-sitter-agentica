@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Case guards: `pattern if condition -> body`, as the `guard` field of
+  `case_arm`.
+- Nested patterns: the `pattern_bindings` of a variant hold literals, `_`,
+  negative numbers and variants, as in `ok(Reading.Value(0))`.
+- Default parameter values: `name: Type = expression`, as the `default` field
+  of `parameter`.
+- Heredocs `<<~NAME`: a `heredoc_beginning` in the expression and a
+  `heredoc_body` extra with `heredoc_content`, `escape_sequence`,
+  `interpolation` and `heredoc_end`, emitted by the external scanner. The
+  highlights query marks them as strings.
+- Digit separators in number literals: `1_000`, `0.000_5`.
+
+### Fixed
+
+- `script/parse-agentica-repo.sh` reads the current golden format of the
+  interpreter (`ERROR LEX-...` lines in `.expected` and `.linked` files) to
+  find the fixtures that are invalid on purpose.
+
 ## [0.2.1] - 2026-10-20
 
 ### Fixed

@@ -54,10 +54,17 @@ module.exports = grammar({
     $._true_before_neq,
     $._false_before_neq,
     $._nil_before_neq,
+    $.heredoc_beginning,
+    $._heredoc_body_start,
+    $.heredoc_content,
+    $.heredoc_end,
     $._error_sentinel,
   ],
 
-  extras: $ => [/[ \t\r\n\f]/, $.comment],
+  // A heredoc body lies on the lines after its opener, so it cannot be a child
+  // of the expression that holds `<<~NAME`. As in tree-sitter-ruby, the scanner
+  // emits it at the line break of the opener line, as an extra.
+  extras: $ => [/[ \t\r\n\f]/, $.comment, $.heredoc_body],
 
   word: $ => $.identifier,
 
@@ -152,10 +159,13 @@ module.exports = grammar({
 
     parameters: $ => seq('(', commaSep($.parameter), ')'),
 
+    // The parser takes any expression as a default, so that the checker can
+    // say why one is not allowed.
     parameter: $ => seq(
       field('name', $.identifier),
       ':',
       field('type', $.type),
+      optional(seq('=', field('default', $._expression))),
     ),
 
     struct_definition: $ => seq(
@@ -288,6 +298,7 @@ module.exports = grammar({
 
     case_arm: $ => prec.right(seq(
       field('pattern', $._pattern),
+      optional(seq('if', field('guard', $._expression))),
       '->',
       content($, 'body'),
     )),
@@ -317,7 +328,8 @@ module.exports = grammar({
       ),
     ),
 
-    pattern_bindings: $ => seq('(', commaSep1($.identifier), ')'),
+    // A slot binds a name or `_`, or matches a nested literal or variant.
+    pattern_bindings: $ => seq('(', commaSep1($._pattern), ')'),
 
     // Expressions
 
@@ -385,6 +397,7 @@ module.exports = grammar({
       $.list,
       $.map,
       $.string,
+      $.heredoc_beginning,
       $.integer,
       $.float,
       $._true,
@@ -509,6 +522,18 @@ module.exports = grammar({
       token.immediate('"'),
     ),
 
+    // The body keeps the source text: the common indentation that the compiler
+    // removes stays inside `heredoc_content`.
+    heredoc_body: $ => seq(
+      $._heredoc_body_start,
+      repeat(choice(
+        $.heredoc_content,
+        $.escape_sequence,
+        $.interpolation,
+      )),
+      $.heredoc_end,
+    ),
+
     escape_sequence: _ => token.immediate(prec(1, /\\["\\#nrt]/)),
 
     interpolation: $ => seq(
@@ -517,9 +542,10 @@ module.exports = grammar({
       '}',
     ),
 
-    integer: _ => /\d+/,
+    // A `_` may separate two digits: `1_000`, `0.000_5`.
+    integer: _ => /\d+(_\d+)*/,
 
-    float: _ => /\d+\.\d+/,
+    float: _ => /\d+(_\d+)*\.\d+(_\d+)*/,
 
     true: _ => 'true',
     false: _ => 'false',
