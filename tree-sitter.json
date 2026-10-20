@@ -27,7 +27,7 @@
       }
     ],
     "links": {
-      "repository": "https://github.com/sonic182/tree-sitter-agentica"
+      "repository": "https://github.com/agentica-lang/tree-sitter-agentica"
     }
   },
   "bindings": {
