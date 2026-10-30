@@ -4,7 +4,7 @@
 
 ((type_identifier) @type.builtin
   (#match? @type.builtin
-    "^(BDD|Bool|Bytes|Dir|File|FileHandle|FileInfo|Float|Fn|Header|HTTP|HttpBody|HttpClient|HttpClientOptions|HttpResponse|HttpServer|HttpServerOptions|HttpWire|HttpWriter|Int|IO|Json|JSON|List|Listener|Map|Nil|Path|Process|ProcessOutput|Random|Range|Request|Response|Result|Socket|String|System|Task|TCP|Time|TLS|Void)$"))
+    "^(BDD|Bool|Bytes|Dir|File|FileHandle|FileInfo|Float|Fn|Header|HTTP|HttpBody|HttpClient|HttpClientOptions|HttpResponse|HttpServer|HttpServerOptions|HttpWire|HttpWriter|Int|IO|Json|JSON|List|Listener|Map|Nil|Optional|Path|Process|ProcessOutput|Random|Range|Request|Response|Result|Socket|String|System|Task|TCP|Time|TLS|Void)$"))
 
 ; Keywords
 
@@ -116,6 +116,11 @@
 
 ((identifier) @variable.builtin
   (#eq? @variable.builtin "_"))
+
+; `none` is a constant of the language, not a keyword: the parser sees an
+; identifier, so it must come after the generic (identifier) rule.
+((identifier) @constant.builtin
+  (#eq? @constant.builtin "none"))
 
 ; Literals
 

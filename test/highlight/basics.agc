@@ -19,6 +19,9 @@ struct Point
   data: Bytes
 # ^ property
 #       ^ type.builtin
+  note: Optional[String]
+# ^ property
+#       ^ type.builtin
 end
 
 enum Shape
@@ -48,6 +51,11 @@ def area(shape: Shape, p: Point) -> Float
 #                  ^ variable.parameter
   puts(label)
 # ^ function.call
+  found = some(none)
+#         ^ function.call
+#              ^ constant.builtin
+  missing = none
+#           ^ constant.builtin
   IO.puts(label)
 # ^ module
 #    ^ function.call
@@ -64,6 +72,10 @@ def area(shape: Shape, p: Point) -> Float
     ok(v) -> return 1.5
 #   ^ function.builtin
 #                   ^ number.float
+    some(v) -> return v
+#   ^ function.builtin
+    none -> return nil
+#   ^ constant.builtin
     _ -> return nil
 #   ^ variable.builtin
 #               ^ constant.builtin
