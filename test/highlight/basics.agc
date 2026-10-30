@@ -16,6 +16,9 @@ struct Point
   x: Int
 # ^ property
 #    ^ type.builtin
+  data: Bytes
+# ^ property
+#       ^ type.builtin
 end
 
 enum Shape
