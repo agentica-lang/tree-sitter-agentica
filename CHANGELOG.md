@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Hex, binary and octal integers (`0xFF`, `0b1010`, `0o755`, with `_`
+  between digits) parse as `integer`.
 - `Bytes` is highlighted as a builtin type.
 - `Optional` is highlighted as a builtin type, and `none` as a builtin
   constant.

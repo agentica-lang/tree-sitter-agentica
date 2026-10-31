@@ -110,3 +110,39 @@ z = 1_000.times
     (field_access
       (integer)
       (identifier))))
+
+==================
+Hex, binary and octal integers
+==================
+
+a = 0xFF
+b = 0Xdead_BEEF
+c = 0b1010_1010
+d = 0o755
+e = -0x10
+f = 0xFF.to_s
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (integer))
+  (assignment
+    (identifier)
+    (integer))
+  (assignment
+    (identifier)
+    (integer))
+  (assignment
+    (identifier)
+    (integer))
+  (assignment
+    (identifier)
+    (unary
+      (integer)))
+  (assignment
+    (identifier)
+    (field_access
+      (integer)
+      (identifier))))
