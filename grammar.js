@@ -542,8 +542,9 @@ module.exports = grammar({
       '}',
     ),
 
-    // A `_` may separate two digits: `1_000`, `0.000_5`.
-    integer: _ => /\d+(_\d+)*/,
+    // A `_` may separate two digits: `1_000`, `0.000_5`. `0x`, `0b` and `0o` (either case) start a hex, binary or
+    // octal integer: `0xFF`, `0b1010_1010`, `0o755`.
+    integer: _ => /0[xX][0-9a-fA-F]+(_[0-9a-fA-F]+)*|0[bB][01]+(_[01]+)*|0[oO][0-7]+(_[0-7]+)*|\d+(_\d+)*/,
 
     float: _ => /\d+(_\d+)*\.\d+(_\d+)*/,
 
