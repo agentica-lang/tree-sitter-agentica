@@ -16,3 +16,4 @@ The grammar accepts a small superset of the [Agentica interpreter](https://githu
 - Bare names such as `elif` or `let` are accepted as expression statements.
 - `x |> f() + 1` parses as `(x |> f()) + 1`; the specification rejects `+` after a pipe call.
 - `µ` is accepted in names, including before `!=`; it is the ast-grep expando character.
+- A regex literal may repeat a flag (`/a/ii`) and may hold `#{` as text; the interpreter rejects both.

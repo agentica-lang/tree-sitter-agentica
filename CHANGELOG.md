@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Regex literals `/pattern/flags` parse as `regex`, with `regex_content`,
+  `escape_sequence` and `regex_flags`, where an expression starts; a `/`
+  after a value stays division. Highlighted as `@string.regexp`.
 - Hex, binary and octal integers (`0xFF`, `0b1010`, `0o755`, with `_`
   between digits) parse as `integer`.
 - `Bytes` is highlighted as a builtin type.

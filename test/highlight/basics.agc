@@ -63,6 +63,12 @@ def area(shape: Shape, p: Point) -> Float
 #           ^ constant
   f = &area
 #      ^ function
+  word = /\w+\/x/i
+#        ^ string.regexp
+#          ^ string.escape
+#                ^ character.special
+  half = total / 2
+#              ^ operator
   case shape
 # ^ keyword.conditional
     Shape.Circle(r) -> return r

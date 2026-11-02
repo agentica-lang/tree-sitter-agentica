@@ -132,6 +132,10 @@
   (heredoc_end)
 ] @string
 
+(regex) @string.regexp
+
+(regex_flags) @character.special
+
 (escape_sequence) @string.escape
 
 (integer) @number
@@ -176,6 +180,11 @@
   "&"
   "->"
 ] @operator
+
+; The slashes of a regex are the division token, so this comes after the
+; operators to take them back: it relies on a later pattern winning over an
+; earlier one for the same node, as in the tree-sitter CLI and Neovim.
+(regex "/" @string.regexp)
 
 [
   "("
