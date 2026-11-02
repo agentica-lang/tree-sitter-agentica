@@ -130,3 +130,54 @@ end
       (return
         (regex
           (regex_content))))))
+
+==================
+Regex at statement start, in a pipe target and in an interpolation
+==================
+
+def main() -> Void
+  /^a/.source
+  ok = text |> Regex.match?(/b+/i)
+  puts("found #{Regex.match?(text, /c\/d/)}")
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (field_access
+        (regex
+          (regex_content))
+        (identifier))
+      (assignment
+        (identifier)
+        (pipe
+          (identifier)
+          (pipe_target
+            (call
+              (type_identifier)
+              (identifier)
+              (argument_list
+                (regex
+                  (regex_content)
+                  (regex_flags)))))))
+      (call
+        (identifier)
+        (argument_list
+          (string
+            (string_content)
+            (interpolation
+              (call
+                (type_identifier)
+                (identifier)
+                (argument_list
+                  (identifier)
+                  (regex
+                    (regex_content)
+                    (escape_sequence)
+                    (regex_content)))))))))))
