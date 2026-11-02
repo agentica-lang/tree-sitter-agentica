@@ -397,6 +397,7 @@ module.exports = grammar({
       $.list,
       $.map,
       $.string,
+      $.regex,
       $.heredoc_beginning,
       $.integer,
       $.float,
@@ -521,6 +522,27 @@ module.exports = grammar({
       )),
       token.immediate('"'),
     ),
+
+    // `/pattern/flags`. The opening `/` is the division token: the parser takes
+    // it as a regex only where an expression starts, so after a value it stays
+    // division, as in the interpreter's lexer. The body is the pattern as
+    // written: a backslash goes with the next character, so `\/` does not end
+    // it. A body is never empty, so `//` stays two operators.
+    regex: $ => seq(
+      '/',
+      repeat1(choice(
+        $.regex_content,
+        alias($._regex_escape, $.escape_sequence),
+      )),
+      token.immediate('/'),
+      optional($.regex_flags),
+    ),
+
+    regex_content: _ => token.immediate(prec(1, /[^\/\\\n]+/)),
+
+    _regex_escape: _ => token.immediate(prec(1, /\\[^\n]/)),
+
+    regex_flags: _ => token.immediate(/[im]+/),
 
     // The body keeps the source text: the common indentation that the compiler
     // removes stays inside `heredoc_content`.

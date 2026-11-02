@@ -1,0 +1,132 @@
+==================
+Division after a value
+==================
+
+def main() -> Void
+  a = x / 2 / y
+  b = (x)/2
+  c = n /2
+  a /= 2
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (binary
+          (binary
+            (identifier)
+            (integer))
+          (identifier)))
+      (assignment
+        (identifier)
+        (binary
+          (parenthesized_expression
+            (identifier))
+          (integer)))
+      (assignment
+        (identifier)
+        (binary
+          (identifier)
+          (integer)))
+      (compound_assignment
+        (identifier)
+        (integer)))))
+
+==================
+Regex literal with escapes and flags
+==================
+
+def main() -> Void
+  r = /a\/b[\/]c\d+/im
+  s = /# not a comment/
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (regex
+          (regex_content)
+          (escape_sequence)
+          (regex_content)
+          (escape_sequence)
+          (regex_content)
+          (escape_sequence)
+          (regex_content)
+          (regex_flags)))
+      (assignment
+        (identifier)
+        (regex
+          (regex_content))))))
+
+==================
+Regex where an expression starts
+==================
+
+def main() -> Void
+  xs = [/=x/, f(/y/), z == /w/]
+  t = "#{/q/}"
+  ys.map do |s| /^a/ end
+  /line start/
+  return /r/
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (list
+          (regex
+            (regex_content))
+          (call
+            (identifier)
+            (argument_list
+              (regex
+                (regex_content))))
+          (binary
+            (identifier)
+            (regex
+              (regex_content)))))
+      (assignment
+        (identifier)
+        (string
+          (interpolation
+            (regex
+              (regex_content)))))
+      (method_call
+        (identifier)
+        (identifier)
+        (block
+          (block_parameters
+            (block_parameter
+              (identifier)))
+          (body
+            (regex
+              (regex_content)))))
+      (regex
+        (regex_content))
+      (return
+        (regex
+          (regex_content))))))

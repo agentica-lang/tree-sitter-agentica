@@ -132,6 +132,10 @@
   (heredoc_end)
 ] @string
 
+(regex) @string.regexp
+
+(regex_flags) @character.special
+
 (escape_sequence) @string.escape
 
 (integer) @number
@@ -176,6 +180,10 @@
   "&"
   "->"
 ] @operator
+
+; The slashes of a regex are the division token, so this comes after the
+; operators to take them back.
+(regex "/" @string.regexp)
 
 [
   "("
