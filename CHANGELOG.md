@@ -17,6 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Bytes` is highlighted as a builtin type.
 - `Optional` is highlighted as a builtin type, and `none` as a builtin
   constant.
+- The builtin type list of the highlights query matches the names Agentica
+  0.23.0 reserves, including `Math`, `Set`, `Test`, `LogLevel` and
+  `JsonField`.
+
+### Removed
+
+- `BDD`, `HTTP`, `HttpBody`, `HttpWriter`, `Request` and `Response` are no
+  longer highlighted as builtin types: they are not builtin names (`BDD` and
+  `HTTP` are `std/` import aliases).
 
 ## [0.3.0] - 2026-10-20
 

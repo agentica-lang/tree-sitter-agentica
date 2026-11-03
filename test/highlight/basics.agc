@@ -22,6 +22,9 @@ struct Point
   note: Optional[String]
 # ^ property
 #       ^ type.builtin
+  tags: Set[String]
+# ^ property
+#       ^ type.builtin
 end
 
 enum Shape
@@ -59,6 +62,9 @@ def area(shape: Shape, p: Point) -> Float
   IO.puts(label)
 # ^ module
 #    ^ function.call
+  root = Math.sqrt(2.0)
+#        ^ module
+#             ^ function.call
   c = Shape.Circle(1.0)
 #           ^ constant
   f = &area

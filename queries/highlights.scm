@@ -4,7 +4,7 @@
 
 ((type_identifier) @type.builtin
   (#match? @type.builtin
-    "^(BDD|Bool|Bytes|Dir|File|FileHandle|FileInfo|Float|Fn|Header|HTTP|HttpBody|HttpClient|HttpClientOptions|HttpResponse|HttpServer|HttpServerOptions|HttpWire|HttpWriter|Int|IO|Json|JSON|List|Listener|Map|Nil|Optional|Path|Process|ProcessOutput|Random|Range|Request|Response|Result|Socket|String|System|Task|TCP|Time|TLS|Void)$"))
+    "^(ATS|Await|Base64|Bool|Bytes|CMAC|Channel|Cipher|Crypto|Digest|Dir|File|FileHandle|FileInfo|Float|Fn|HMAC|Header|HttpClient|HttpClientOptions|HttpRequest|HttpResponse|HttpServer|HttpServerOptions|HttpWire|IO|Int|JSON|Json|JsonField|KDF|Lazy|List|Listener|LogEvent|LogLevel|LogRegistry|Map|Math|Nil|Optional|Path|Process|ProcessOutput|Profile|Random|Range|RegexEngine|Result|SecureRandom|Set|Socket|Std|String|StructMember|System|TCP|TLS|Task|Test|TestCase|Time|TlsClientOptions|TlsContext|TlsServerOptions|Void|Zlib)$"))
 
 ; Keywords
 
