@@ -469,6 +469,42 @@
     }
   },
   {
+    "type": "callback_definition",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "extern_parameters",
+            "named": true
+          }
+        ]
+      },
+      "return_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "case",
     "named": true,
     "fields": {
@@ -785,6 +821,135 @@
     }
   },
   {
+    "type": "extern_block",
+    "named": true,
+    "fields": {
+      "library": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "member": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "callback_definition",
+            "named": true
+          },
+          {
+            "type": "export",
+            "named": false
+          },
+          {
+            "type": "extern_function_definition",
+            "named": true
+          },
+          {
+            "type": "resource_definition",
+            "named": true
+          },
+          {
+            "type": "struct_definition",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "extern_function_definition",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "extern_parameters",
+            "named": true
+          }
+        ]
+      },
+      "return_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type",
+            "named": true
+          }
+        ]
+      },
+      "symbol": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "extern_parameter",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "extern_parameters",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "extern_parameter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "field_access",
     "named": true,
     "fields": {
@@ -890,6 +1055,16 @@
     "type": "field_declaration",
     "named": true,
     "fields": {
+      "default": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -988,6 +1163,16 @@
         "types": [
           {
             "type": "type",
+            "named": true
+          }
+        ]
+      },
+      "type_parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_parameters",
             "named": true
           }
         ]
@@ -1676,6 +1861,36 @@
     }
   },
   {
+    "type": "reexport",
+    "named": true,
+    "fields": {
+      "module": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "regex",
     "named": true,
     "fields": {},
@@ -1696,6 +1911,54 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "resource_definition",
+    "named": true,
+    "fields": {
+      "free": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "scoped_type_identifier",
+            "named": true
+          },
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "free_kind": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "free",
+            "named": false
+          },
+          {
+            "type": "free_ref",
+            "named": false
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1766,11 +2029,19 @@
           "named": true
         },
         {
+          "type": "extern_block",
+          "named": true
+        },
+        {
           "type": "function_definition",
           "named": true
         },
         {
           "type": "import",
+          "named": true
+        },
+        {
+          "type": "reexport",
           "named": true
         },
         {
@@ -1827,6 +2098,16 @@
         "types": [
           {
             "type": "type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "type_parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_parameters",
             "named": true
           }
         ]
@@ -1899,6 +2180,16 @@
         "types": [
           {
             "type": "type",
+            "named": true
+          }
+        ]
+      },
+      "type_parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_parameters",
             "named": true
           }
         ]
@@ -2196,6 +2487,10 @@
     "named": true
   },
   {
+    "type": "callback",
+    "named": false
+  },
+  {
     "type": "case",
     "named": false
   },
@@ -2203,6 +2498,10 @@
     "type": "comment",
     "named": true,
     "extra": true
+  },
+  {
+    "type": "compute",
+    "named": false
   },
   {
     "type": "def",
@@ -2237,6 +2536,10 @@
     "named": false
   },
   {
+    "type": "extern",
+    "named": false
+  },
+  {
     "type": "false",
     "named": true
   },
@@ -2246,6 +2549,14 @@
   },
   {
     "type": "for",
+    "named": false
+  },
+  {
+    "type": "free",
+    "named": false
+  },
+  {
+    "type": "free_ref",
     "named": false
   },
   {
@@ -2301,12 +2612,20 @@
     "named": false
   },
   {
+    "type": "out",
+    "named": false
+  },
+  {
     "type": "regex_content",
     "named": true
   },
   {
     "type": "regex_flags",
     "named": true
+  },
+  {
+    "type": "resource",
+    "named": false
   },
   {
     "type": "return",

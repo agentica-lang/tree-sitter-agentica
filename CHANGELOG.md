@@ -20,6 +20,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The builtin type list of the highlights query matches the names Agentica
   0.23.0 reserves, including `Math`, `Set`, `Test`, `LogLevel` and
   `JsonField`.
+- Generic declarations: `def first[T](...)`, `struct Pool[T]` and
+  `type Matrix[T] = ...` take `type_parameters`.
+- Struct field defaults (`timeout_ms: Int = 30000`) parse as the `default`
+  of a `field_declaration`.
+- `extern "lib" ... end` blocks parse as `extern_block`, with
+  `extern_function_definition` (also `compute def`, `out` parameters, `...`
+  and `= "c_name"`), `callback_definition`, `resource_definition` and C
+  `struct_definition` members. Highlighted and tagged like the other
+  declarations.
+- `export Alias.name` re-exports parse as `reexport`.
+- Floats with an exponent (`1e5`, `1.5e-3`, `2.0E+10`) parse as `float`.
+- A line that starts with `.name` continues the expression of the line before
+  (a method chain without parentheses).
+- A member read on a qualified name (`Pure.MAX_REDIRECTS.to_s`,
+  `Geo.Point.members`) parses as `field_access` or `method_call` on a
+  `type_path`.
 
 ### Removed
 

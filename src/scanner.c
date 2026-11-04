@@ -84,6 +84,34 @@ static bool at_line_end(TSLexer *lexer) {
   return lexer->eof(lexer) || !is_word_char(lexer->lookahead);
 }
 
+// Called just after a line break. A line whose first token is `.name`
+// continues the expression of the line before: its break is not a NEWLINE.
+// Comment lines between the two are skipped; a blank line, a `##` doc line
+// and `..` / `...` (ranges) end the statement.
+//
+// The look-ahead is bounded: the scanner runs at every break of a comment run,
+// and each call rescans the lines after it, so an unbounded skip is quadratic
+// in the run length. Past MAX_SKIPPED_COMMENTS the chain is not continued.
+#define MAX_SKIPPED_COMMENTS 64
+
+static bool next_line_continues(TSLexer *lexer) {
+  for (int skipped = 0;; skipped++) {
+    if (skipped > MAX_SKIPPED_COMMENTS) return false;
+    skip_blanks(lexer);
+    if (lexer->lookahead == '#') {
+      lexer->advance(lexer, false);
+      if (lexer->lookahead == '#') return false;
+      while (!lexer->eof(lexer) && lexer->lookahead != '\n') lexer->advance(lexer, false);
+      if (lexer->eof(lexer)) return false;
+      lexer->advance(lexer, false);
+      continue;
+    }
+    if (lexer->lookahead != '.') return false;
+    lexer->advance(lexer, false);
+    return is_word_start(lexer->lookahead);
+  }
+}
+
 static bool scan_string_content(TSLexer *lexer) {
   bool has_content = false;
   for (;;) {
@@ -270,8 +298,12 @@ bool tree_sitter_agentica_external_scanner_scan(void *payload, TSLexer *lexer,
     if (valid_symbols[NEWLINE]) {
       lexer->advance(lexer, false);
       lexer->mark_end(lexer);
-      lexer->result_symbol = NEWLINE;
-      return true;
+      // The token ends at the mark; only the lookahead moves on.
+      if (!next_line_continues(lexer)) {
+        lexer->result_symbol = NEWLINE;
+        return true;
+      }
+      return false;
     }
     lexer->advance(lexer, true);
   }

@@ -15,5 +15,7 @@ The grammar accepts a small superset of the [Agentica interpreter](https://githu
 - Positional and named arguments may mix in one call or constructor.
 - Bare names such as `elif` or `let` are accepted as expression statements.
 - `x |> f() + 1` parses as `(x |> f()) + 1`; the specification rejects `+` after a pipe call.
+- A leading `.name` continues the line before also where the interpreter rejects it (the first line of a body, or after a type annotation such as `-> Void`).
+- An `extern` block accepts any type in a signature and a default value is not rejected; the interpreter reports `PARSE-EXTERN-TYPE`, `PARSE-EXTERN-DEFAULT` and the other `PARSE-EXTERN-` codes. `extern`, `callback`, `resource`, `compute`, `free` and `out` are keywords where an extern member or parameter starts and ordinary names elsewhere.
 - `µ` is accepted in names, including before `!=`; it is the ast-grep expando character.
 - A regex literal may repeat a flag (`/a/ii`) and may hold `#{` as text; the interpreter rejects both.

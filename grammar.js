@@ -80,6 +80,7 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$.body],
+    [$.type_path],
   ],
 
   rules: {
@@ -96,6 +97,8 @@ module.exports = grammar({
       $.constant_definition,
       $.import,
       $.export,
+      $.reexport,
+      $.extern_block,
     ),
 
     // `import Alias from "path"` or `import {a, B as C} from "path"`: one form
@@ -130,6 +133,86 @@ module.exports = grammar({
       )),
     ),
 
+    // `export Alias.name` makes a name of an imported file importable again.
+    reexport: $ => seq(
+      'export',
+      field('module', $.type_identifier),
+      '.',
+      field('name', choice($.identifier, $.type_identifier)),
+    ),
+
+    // `extern "lib" ... end` declares C functions of a native library. A
+    // member is one line, except a C struct, which has fields and an `end`.
+    // The members are the nodes that carry a `name`: a C struct reuses
+    // `struct_definition`, and a function with no body is an
+    // `extern_function_definition`, not a `function_definition`.
+    extern_block: $ => seq(
+      'extern',
+      field('library', $.string),
+      $._newline,
+      repeat(choice(seq(field('member', $._extern_member), $._newline), $._newline)),
+      'end',
+    ),
+
+    _extern_member: $ => seq(
+      optional('export'),
+      choice(
+        $.extern_function_definition,
+        $.callback_definition,
+        $.resource_definition,
+        $.struct_definition,
+      ),
+    ),
+
+    // `= "c_name"` after the result gives the C symbol when it differs from
+    // the name. `compute def` runs off the scheduler.
+    extern_function_definition: $ => seq(
+      optional('compute'),
+      'def',
+      field('name', $.identifier),
+      field('parameters', $.extern_parameters),
+      '->',
+      field('return_type', $.type),
+      optional(seq('=', field('symbol', $.string))),
+    ),
+
+    callback_definition: $ => seq(
+      'callback',
+      field('name', $.type_identifier),
+      field('parameters', $.extern_parameters),
+      '->',
+      field('return_type', $.type),
+    ),
+
+    // `resource Name, free: c_name` (or `free_ref:`, or `free: C.Function`):
+    // the type of the C pointers that the block's functions return.
+    resource_definition: $ => seq(
+      'resource',
+      field('name', $.type_identifier),
+      ',',
+      field('free_kind', choice('free', 'free_ref')),
+      ':',
+      field('free', choice($.identifier, $.type_identifier, $.scoped_type_identifier)),
+    ),
+
+    // A bare `...` ends the fixed parameters of a variadic C function.
+    extern_parameters: $ => seq(
+      '(',
+      commaSep(choice($.extern_parameter, '...')),
+      ')',
+    ),
+
+    // `out` marks an out parameter only before a name, so `out: C.Pointer` is
+    // a parameter called `out`.
+    extern_parameter: $ => seq(
+      choice(
+        seq(optional('out'), field('name', $.identifier)),
+        field('name', alias('out', $.identifier)),
+      ),
+      ':',
+      field('type', $.type),
+    ),
+
     // A constant is a type-name token, so it cannot collide with the
     // `identifier` assignment that statements use.
     constant_definition: $ => seq(
@@ -142,6 +225,7 @@ module.exports = grammar({
     type_alias_definition: $ => seq(
       'type',
       field('name', $.type_identifier),
+      optional(field('type_parameters', $.type_parameters)),
       '=',
       field('type', $.type),
     ),
@@ -149,6 +233,7 @@ module.exports = grammar({
     function_definition: $ => seq(
       'def',
       field('name', $.identifier),
+      optional(field('type_parameters', $.type_parameters)),
       field('parameters', $.parameters),
       '->',
       field('return_type', $.type),
@@ -171,15 +256,19 @@ module.exports = grammar({
     struct_definition: $ => seq(
       'struct',
       field('name', $.type_identifier),
+      optional(field('type_parameters', $.type_parameters)),
       $._newline,
       repeat(choice(seq(field('field', $.field_declaration), $._newline), $._newline)),
       'end',
     ),
 
+    // Like a parameter, a field takes any expression as a default, so that
+    // the checker can say why one is not allowed.
     field_declaration: $ => seq(
       field('name', $.identifier),
       ':',
       field('type', $.type),
+      optional(seq('=', field('default', $._expression))),
     ),
 
     enum_definition: $ => seq(
@@ -472,10 +561,13 @@ module.exports = grammar({
       field('arguments', $.argument_list),
     ),
 
-    type_path: $ => prec.right(seq(
+    // `Geo.Point` is a path; a further `.name` (`Geo.Point.members`,
+    // `Limits.NAMES.size`) reads a member of it. Only the token after the dot
+    // tells the two apart, so the parser keeps both readings until then.
+    type_path: $ => seq(
       $.type_identifier,
       repeat1(seq('.', $.type_identifier)),
-    )),
+    ),
 
     argument_list: $ => seq(
       '(',
@@ -568,7 +660,8 @@ module.exports = grammar({
     // octal integer: `0xFF`, `0b1010_1010`, `0o755`.
     integer: _ => /0[xX][0-9a-fA-F]+(_[0-9a-fA-F]+)*|0[bB][01]+(_[01]+)*|0[oO][0-7]+(_[0-7]+)*|\d+(_\d+)*/,
 
-    float: _ => /\d+(_\d+)*\.\d+(_\d+)*/,
+    // The exponent follows the digits or the fraction: `1e5`, `1.5e-3`, `2.0E+10`.
+    float: _ => /\d+(_\d+)*(\.\d+(_\d+)*)?[eE][+-]?\d+(_\d+)*|\d+(_\d+)*\.\d+(_\d+)*/,
 
     true: _ => 'true',
     false: _ => 'false',
