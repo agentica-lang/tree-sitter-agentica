@@ -23,6 +23,7 @@ jobs:
       - run: git diff --exit-code -- src/parser.c src/grammar.json src/node-types.json
       - run: npx tree-sitter test
       - run: npx tree-sitter parse test/fixtures/ci-smoke.agc
+      - run: script/check-comment-run.sh
 
       - uses: actions-rust-lang/setup-rust-toolchain@v2
       - run: cargo test

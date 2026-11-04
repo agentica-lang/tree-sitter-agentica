@@ -133,8 +133,6 @@ module.exports = grammar({
       )),
     ),
 
-    // A constant is a type-name token, so it cannot collide with the
-    // `identifier` assignment that statements use.
     // `export Alias.name` makes a name of an imported file importable again.
     reexport: $ => seq(
       'export',
@@ -215,6 +213,8 @@ module.exports = grammar({
       field('type', $.type),
     ),
 
+    // A constant is a type-name token, so it cannot collide with the
+    // `identifier` assignment that statements use.
     constant_definition: $ => seq(
       field('name', $.type_identifier),
       optional(seq(':', field('type', $.type))),

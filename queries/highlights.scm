@@ -117,6 +117,14 @@
 (reexport
   module: (type_identifier) @module)
 
+(reexport
+  name: (identifier) @function)
+
+; The C function that frees a resource: a `type_identifier` when it starts
+; with a capital letter (`PQfinish`). `C.Function` stays a type.
+(resource_definition
+  free: [(identifier) (type_identifier)] @function)
+
 (function_reference
   name: (identifier) @function)
 

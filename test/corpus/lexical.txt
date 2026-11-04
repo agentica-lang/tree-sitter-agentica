@@ -171,3 +171,168 @@ d = 1_0.0e1_0
   (assignment
     (identifier)
     (float)))
+
+==================
+Long comment run between statements
+==================
+
+def main() -> Void
+  x = 1
+  # comment 0
+  # comment 1
+  # comment 2
+  # comment 3
+  # comment 4
+  # comment 5
+  # comment 6
+  # comment 7
+  # comment 8
+  # comment 9
+  # comment 10
+  # comment 11
+  # comment 12
+  # comment 13
+  # comment 14
+  # comment 15
+  # comment 16
+  # comment 17
+  # comment 18
+  # comment 19
+  # comment 20
+  # comment 21
+  # comment 22
+  # comment 23
+  # comment 24
+  # comment 25
+  # comment 26
+  # comment 27
+  # comment 28
+  # comment 29
+  # comment 30
+  # comment 31
+  # comment 32
+  # comment 33
+  # comment 34
+  # comment 35
+  # comment 36
+  # comment 37
+  # comment 38
+  # comment 39
+  # comment 40
+  # comment 41
+  # comment 42
+  # comment 43
+  # comment 44
+  # comment 45
+  # comment 46
+  # comment 47
+  # comment 48
+  # comment 49
+  # comment 50
+  # comment 51
+  # comment 52
+  # comment 53
+  # comment 54
+  # comment 55
+  # comment 56
+  # comment 57
+  # comment 58
+  # comment 59
+  # comment 60
+  # comment 61
+  # comment 62
+  # comment 63
+  # comment 64
+  # comment 65
+  # comment 66
+  # comment 67
+  # comment 68
+  # comment 69
+  y = 2
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (integer))
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (comment)
+      (assignment
+        (identifier)
+        (integer)))))

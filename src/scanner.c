@@ -88,8 +88,15 @@ static bool at_line_end(TSLexer *lexer) {
 // continues the expression of the line before: its break is not a NEWLINE.
 // Comment lines between the two are skipped; a blank line, a `##` doc line
 // and `..` / `...` (ranges) end the statement.
+//
+// The look-ahead is bounded: the scanner runs at every break of a comment run,
+// and each call rescans the lines after it, so an unbounded skip is quadratic
+// in the run length. Past MAX_SKIPPED_COMMENTS the chain is not continued.
+#define MAX_SKIPPED_COMMENTS 64
+
 static bool next_line_continues(TSLexer *lexer) {
-  for (;;) {
+  for (int skipped = 0;; skipped++) {
+    if (skipped > MAX_SKIPPED_COMMENTS) return false;
     skip_blanks(lexer);
     if (lexer->lookahead == '#') {
       lexer->advance(lexer, false);

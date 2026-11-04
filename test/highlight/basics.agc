@@ -116,3 +116,17 @@ extern "libc"
 # ^ keyword
 #          ^ type.definition
 end
+
+extern "libpq"
+  resource Conn, free: PQfinish
+#                      ^ function
+  resource Db, free_ref: duckdb_close
+#                        ^ function
+  resource Thing, free: C.Function
+#                       ^ type
+end
+
+export Util.helper
+# <- keyword
+#      ^ module
+#           ^ function
