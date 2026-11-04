@@ -16,6 +16,7 @@ trap 'rm -rf "$work"' EXIT
   printf '  y = 2\nend\n'
 } > "$work/comments.agc"
 printf '{"parser-directories": []}\n' > "$work/config.json"
+cd "$root"
 
 timeout "$limit" "$root/node_modules/.bin/tree-sitter" parse --config-path "$work/config.json" \
   --quiet "$work/comments.agc"
