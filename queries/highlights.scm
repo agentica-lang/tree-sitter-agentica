@@ -19,6 +19,13 @@
   "from"
   "end"
   "do"
+  "extern"
+  "compute"
+  "callback"
+  "resource"
+  "free"
+  "free_ref"
+  "out"
 ] @keyword
 
 [
@@ -51,7 +58,19 @@
 (function_definition
   name: (identifier) @function)
 
+(extern_function_definition
+  name: (identifier) @function)
+
+(callback_definition
+  name: (type_identifier) @type.definition)
+
+(resource_definition
+  name: (type_identifier) @type.definition)
+
 (parameter
+  name: (identifier) @variable.parameter)
+
+(extern_parameter
   name: (identifier) @variable.parameter)
 
 (block_parameter
@@ -93,6 +112,9 @@
   method: (identifier) @function.method.call)
 
 (function_reference
+  module: (type_identifier) @module)
+
+(reexport
   module: (type_identifier) @module)
 
 (function_reference

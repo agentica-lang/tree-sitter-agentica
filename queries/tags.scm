@@ -1,6 +1,15 @@
 (function_definition
   name: (identifier) @name) @definition.function
 
+(extern_function_definition
+  name: (identifier) @name) @definition.function
+
+(callback_definition
+  name: (type_identifier) @name) @definition.class
+
+(resource_definition
+  name: (type_identifier) @name) @definition.class
+
 (struct_definition
   name: (type_identifier) @name) @definition.class
 

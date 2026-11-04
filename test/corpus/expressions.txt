@@ -489,3 +489,112 @@ y = a < b |> f()
           (call
             (identifier)
             (argument_list)))))))
+
+==================
+Member of a qualified name
+==================
+
+x = Pure.MAX_REDIRECTS.to_s
+y = Geo.Point.members
+z = Limits.NAMES[1]
+w = Geo.Point(1, 2)
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (field_access
+      (type_path
+        (type_identifier)
+        (type_identifier))
+      (identifier)))
+  (assignment
+    (identifier)
+    (field_access
+      (type_path
+        (type_identifier)
+        (type_identifier))
+      (identifier)))
+  (assignment
+    (identifier)
+    (index
+      (type_path
+        (type_identifier)
+        (type_identifier))
+      (integer)))
+  (assignment
+    (identifier)
+    (construct
+      (type_path
+        (type_identifier)
+        (type_identifier))
+      (argument_list
+        (integer)
+        (integer)))))
+
+==================
+Method chain continued on the next line
+==================
+
+lines = File.foreach("ledger.csv")
+  .drop(1)   # header
+  # a comment line between
+  .map do |line| parse(line) end
+  .filter(&big?)
+  .reduce(0) do |acc, line|
+    acc + 1
+  end
+puts(lines)
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (method_call
+      (method_call
+        (method_call
+          (method_call
+            (call
+              (type_identifier)
+              (identifier)
+              (argument_list
+                (string
+                  (string_content))))
+            (identifier)
+            (argument_list
+              (integer)))
+          (comment)
+          (comment)
+          (identifier)
+          (block
+            (block_parameters
+              (block_parameter
+                (identifier)))
+            (body
+              (call
+                (identifier)
+                (argument_list
+                  (identifier))))))
+        (identifier)
+        (argument_list
+          (function_reference
+            (identifier))))
+      (identifier)
+      (argument_list
+        (integer))
+      (block
+        (block_parameters
+          (block_parameter
+            (identifier))
+          (block_parameter
+            (identifier)))
+        (body
+          (binary
+            (identifier)
+            (integer))))))
+  (call
+    (identifier)
+    (argument_list
+      (identifier))))

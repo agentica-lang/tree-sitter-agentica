@@ -106,3 +106,13 @@ def usage(name: String, width: Int = 80) -> String
 # ^ string
 end
 
+
+extern "libc"
+# <- keyword
+  export def close(fd: C.Int32) -> C.Int32
+#            ^ function
+#                  ^ variable.parameter
+  callback Visit(item: C.Pointer) -> Void
+# ^ keyword
+#          ^ type.definition
+end

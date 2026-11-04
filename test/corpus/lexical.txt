@@ -146,3 +146,28 @@ f = 0xFF.to_s
     (field_access
       (integer)
       (identifier))))
+
+==================
+Floats with an exponent
+==================
+
+a = 1e5
+b = 1.5e-3
+c = 2.0E+10
+d = 1_0.0e1_0
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (float))
+  (assignment
+    (identifier)
+    (float))
+  (assignment
+    (identifier)
+    (float))
+  (assignment
+    (identifier)
+    (float)))

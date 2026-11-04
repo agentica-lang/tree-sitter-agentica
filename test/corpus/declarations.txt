@@ -387,3 +387,320 @@ end
     (body
       (return
         (identifier)))))
+
+==================
+Generic function, struct and type alias
+==================
+
+def first_or[T](xs: List[T], fallback: T) -> T
+  return fallback
+end
+
+struct Pool[T]
+  items: List[T]
+end
+
+type Matrix[T] = List[List[T]]
+
+def tally[T](first: T, rest: List[T] = [], extra: Optional[T] = none) -> String
+  return "x"
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (type_parameters
+      (type_identifier))
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)
+          (type_arguments
+            (type
+              (type_identifier)))))
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (body
+      (return
+        (identifier))))
+  (struct_definition
+    (type_identifier)
+    (type_parameters
+      (type_identifier))
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)
+        (type_arguments
+          (type
+            (type_identifier))))))
+  (type_alias_definition
+    (type_identifier)
+    (type_parameters
+      (type_identifier))
+    (type
+      (type_identifier)
+      (type_arguments
+        (type
+          (type_identifier)
+          (type_arguments
+            (type
+              (type_identifier)))))))
+  (function_definition
+    (identifier)
+    (type_parameters
+      (type_identifier))
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)))
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)
+          (type_arguments
+            (type
+              (type_identifier))))
+        (list))
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)
+          (type_arguments
+            (type
+              (type_identifier))))
+        (identifier)))
+    (type
+      (type_identifier))
+    (body
+      (return
+        (string
+          (string_content))))))
+
+==================
+Struct field defaults
+==================
+
+struct Options
+  timeout_ms: Int = 30000
+  default: Default = Default.Absent
+  tags: List[Int] = EMPTY
+end
+
+---
+
+(source_file
+  (struct_definition
+    (type_identifier)
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier))
+      (integer))
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier))
+      (type_path
+        (type_identifier)
+        (type_identifier)))
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)
+        (type_arguments
+          (type
+            (type_identifier))))
+      (type_identifier))))
+
+==================
+Re-export
+==================
+
+export Util.helper
+export Util.Shape
+
+---
+
+(source_file
+  (reexport
+    (type_identifier)
+    (identifier))
+  (reexport
+    (type_identifier)
+    (type_identifier)))
+
+==================
+Extern block with functions
+==================
+
+extern "libc"
+  ## Closes a descriptor.
+  export def close(fd: C.Int32) -> C.Int32
+  def fcntl_int(fd: C.Int32, cmd: C.Int32, ...) -> C.Int32 = "fcntl"
+  compute def sleep_ms(ms: C.Int32) -> Void
+  def out_pair(out: C.Pointer, out count: C.Int32) -> Void
+end
+
+---
+
+(source_file
+  (extern_block
+    (string
+      (string_content))
+    (comment)
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier)))))
+      (type
+        (scoped_type_identifier
+          (type_identifier)
+          (type_identifier))))
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))))
+        (extern_parameter
+          (identifier)
+          (type
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier)))))
+      (type
+        (scoped_type_identifier
+          (type_identifier)
+          (type_identifier)))
+      (string
+        (string_content)))
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier)))))
+      (type
+        (type_identifier)))
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))))
+        (extern_parameter
+          (identifier)
+          (type
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier)))))
+      (type
+        (type_identifier)))))
+
+==================
+Extern block with callbacks, resources and structs
+==================
+
+extern "libdemo"
+  callback Visit(item: C.Pointer, data: C.Pointer) -> Void
+  resource Conn, free: PQfinish
+  resource Handle, free_ref: duckdb_close
+  resource Thing, free: C.Function
+  export struct Point
+    x: C.Double
+    y: C.Double = 0.0
+  end
+  def conn_open(url: C.String) -> Conn
+end
+
+def main() -> Void
+end
+
+---
+
+(source_file
+  (extern_block
+    (string
+      (string_content))
+    (callback_definition
+      (type_identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))))
+        (extern_parameter
+          (identifier)
+          (type
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier)))))
+      (type
+        (type_identifier)))
+    (resource_definition
+      (type_identifier)
+      (type_identifier))
+    (resource_definition
+      (type_identifier)
+      (identifier))
+    (resource_definition
+      (type_identifier)
+      (scoped_type_identifier
+        (type_identifier)
+        (type_identifier)))
+    (struct_definition
+      (type_identifier)
+      (field_declaration
+        (identifier)
+        (type
+          (scoped_type_identifier
+            (type_identifier)
+            (type_identifier))))
+      (field_declaration
+        (identifier)
+        (type
+          (scoped_type_identifier
+            (type_identifier)
+            (type_identifier)))
+        (float)))
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier)))))
+      (type
+        (type_identifier))))
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))))
