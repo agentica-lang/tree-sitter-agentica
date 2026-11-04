@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-04
+
 ### Added
 
 - Regex literals `/pattern/flags` parse as `regex`, with `regex_content`,
@@ -32,7 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `export Alias.name` re-exports parse as `reexport`.
 - Floats with an exponent (`1e5`, `1.5e-3`, `2.0E+10`) parse as `float`.
 - A line that starts with `.name` continues the expression of the line before
-  (a method chain without parentheses).
+  (a method chain without parentheses). Up to 64 comment lines between the two
+  are skipped; after more, the line break ends the statement, which keeps
+  parsing linear.
 - A member read on a qualified name (`Pure.MAX_REDIRECTS.to_s`,
   `Geo.Point.members`) parses as `field_access` or `method_call` on a
   `type_path`.
@@ -123,6 +127,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and the `quadratic-append` rule, which warns on `xs = xs.push(y)` and String
   `s += t` inside `while`/`for` loops, with rule tests.
 
+[0.4.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.4.0
 [0.3.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.3.0
 [0.2.1]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.2.1
 [0.2.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.2.0
