@@ -25,6 +25,10 @@ struct Point
   tags: Set[String]
 # ^ property
 #       ^ type.builtin
+  owner: TaskRef
+#        ^ type.builtin
+  codec: Codec
+#        ^ type.builtin
 end
 
 enum Shape
@@ -124,6 +128,17 @@ extern "libpq"
 #                        ^ function
   resource Thing, free: C.Function
 #                       ^ type
+end
+
+extern module "stats"
+# <- keyword
+#      ^ keyword
+  resource Db
+#          ^ type.definition
+  compute def scan(db: Db) -> List[Int]
+#             ^ function
+#                  ^ variable.parameter
+  export def empty?(db: Db) -> Bool
 end
 
 export Util.helper

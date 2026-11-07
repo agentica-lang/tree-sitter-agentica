@@ -99,6 +99,7 @@ module.exports = grammar({
       $.export,
       $.reexport,
       $.extern_block,
+      $.extern_module_block,
     ),
 
     // `import Alias from "path"` or `import {a, B as C} from "path"`: one form
@@ -162,6 +163,35 @@ module.exports = grammar({
         $.resource_definition,
         $.struct_definition,
       ),
+    ),
+
+    // `extern module "NAME" ... end` declares the functions of a native module
+    // with Agentica types. Its members reuse `extern_function_definition` (a
+    // `def` or `compute def` with no body) and add `module_resource_definition`,
+    // which has no `free:` because the module frees its resources. `callback`,
+    // `struct`, `out`, `...`, `= "c_name"` and `C.` types are not members: the
+    // interpreter rejects them (`PARSE-EXTERN-MODULE`), and so does this grammar
+    // for `callback` and `struct`. `module` is a keyword only after `extern`.
+    extern_module_block: $ => seq(
+      'extern',
+      'module',
+      field('library', $.string),
+      $._newline,
+      repeat(choice(seq(field('member', $._extern_module_member), $._newline), $._newline)),
+      'end',
+    ),
+
+    _extern_module_member: $ => seq(
+      optional('export'),
+      choice(
+        $.extern_function_definition,
+        $.module_resource_definition,
+      ),
+    ),
+
+    module_resource_definition: $ => seq(
+      'resource',
+      field('name', $.type_identifier),
     ),
 
     // `= "c_name"` after the result gives the C symbol when it differs from

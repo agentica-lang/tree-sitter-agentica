@@ -4,7 +4,7 @@
 
 ((type_identifier) @type.builtin
   (#match? @type.builtin
-    "^(ATS|Await|Base64|Bool|Bytes|CMAC|Channel|Cipher|Crypto|Digest|Dir|File|FileHandle|FileInfo|Float|Fn|HMAC|Header|HttpClient|HttpClientOptions|HttpRequest|HttpResponse|HttpServer|HttpServerOptions|HttpWire|IO|Int|JSON|Json|JsonField|KDF|Lazy|List|Listener|LogEvent|LogLevel|LogRegistry|Map|Math|Nil|Optional|Path|Process|ProcessOutput|Profile|Random|Range|RegexEngine|Result|SecureRandom|Set|Socket|Std|String|StructMember|System|TCP|TLS|Task|Test|TestCase|Time|TlsClientOptions|TlsContext|TlsServerOptions|Void|Zlib)$"))
+    "^(ATS|Await|Base64|Bool|Bytes|CMAC|Channel|Cipher|Codec|Crypto|Digest|Dir|File|FileHandle|FileInfo|Float|Fn|HMAC|Header|HttpClient|HttpClientOptions|HttpRequest|HttpResponse|HttpServer|HttpServerOptions|HttpWire|IO|Int|JSON|Json|JsonField|KDF|Lazy|List|Listener|LogEvent|LogLevel|LogRegistry|Map|Math|Nil|Optional|Path|Process|ProcessOutput|Profile|Random|Range|RegexEngine|Result|SecureRandom|Set|Socket|Std|String|StructMember|System|TCP|TLS|Task|TaskDown|TaskExit|TaskRef|Test|TestCase|Time|TlsClientOptions|TlsContext|TlsServerOptions|Void|Zlib)$"))
 
 ; Keywords
 
@@ -20,6 +20,7 @@
   "end"
   "do"
   "extern"
+  "module"
   "compute"
   "callback"
   "resource"
@@ -65,6 +66,9 @@
   name: (type_identifier) @type.definition)
 
 (resource_definition
+  name: (type_identifier) @type.definition)
+
+(module_resource_definition
   name: (type_identifier) @type.definition)
 
 (parameter

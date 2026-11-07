@@ -704,3 +704,437 @@ end
     (parameters)
     (type
       (type_identifier))))
+
+==================
+Extern module block
+==================
+
+extern module "m"
+  resource Db
+  def open(path: String) -> Result[Db]
+  compute def scan(db: Db) -> List[Int]
+  export def empty?(db: Db) -> Bool
+end
+
+---
+
+(source_file
+  (extern_module_block
+    (string
+      (string_content))
+    (module_resource_definition
+      (type_identifier))
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (type_identifier))))
+      (type
+        (type_identifier)
+        (type_arguments
+          (type
+            (type_identifier)))))
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (type_identifier))))
+      (type
+        (type_identifier)
+        (type_arguments
+          (type
+            (type_identifier)))))
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (type_identifier))))
+      (type
+        (type_identifier)))))
+
+==================
+Extern module block with docs, blank lines and bang names
+==================
+
+extern module "m"
+  ## The first line of the docs.
+  ## The second line.
+  export resource Db
+
+  ## Saves the db.
+  export compute def save!(db: Db, rows: Map[String, Optional[Int]]) -> Result[Void]
+
+  def count(db: Db) -> Int
+end
+
+---
+
+(source_file
+  (extern_module_block
+    (string
+      (string_content))
+    (comment)
+    (comment)
+    (module_resource_definition
+      (type_identifier))
+    (comment)
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (type_identifier)))
+        (extern_parameter
+          (identifier)
+          (type
+            (type_identifier)
+            (type_arguments
+              (type
+                (type_identifier))
+              (type
+                (type_identifier)
+                (type_arguments
+                  (type
+                    (type_identifier))))))))
+      (type
+        (type_identifier)
+        (type_arguments
+          (type
+            (type_identifier)))))
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (type_identifier))))
+      (type
+        (type_identifier)))))
+
+==================
+Extern module block after a def
+==================
+
+def helper() -> Int
+  return 1
+end
+
+extern module "m"
+  def run(n: Int) -> Int
+end
+
+def after() -> Int
+  return 2
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (return
+        (integer))))
+  (extern_module_block
+    (string
+      (string_content))
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (type_identifier))))
+      (type
+        (type_identifier))))
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (return
+        (integer)))))
+
+==================
+Extern module with a path library
+==================
+
+extern module "/opt/lib/libstats.so"
+end
+
+---
+
+(source_file
+  (extern_module_block
+    (string
+      (string_content))))
+
+==================
+Extern module block of the native_module example
+==================
+
+## A native module (stats.c, built as README.md says): one call gives a struct, another reads a CSV text into rows of
+## typed cells.
+
+struct Summary
+  count: Int
+  min: Float
+  max: Float
+  mean: Float
+end
+
+enum Cell
+  Empty
+  Number(Float)
+  Text(String)
+end
+
+extern module "stats"
+  ## The count, smallest, largest and mean of the values; none for no values.
+  def summary(values: List[Float]) -> Optional[Summary]
+  ## The lines of a CSV text after its header, as maps from the header's names to typed cells.
+  def rows(text: String) -> Result[List[Map[String, Cell]]]
+end
+
+def main() -> Void
+  puts(summary([2.0, 4.0, 9.0]))
+  puts(summary([]))
+  case rows("name,qty,note\nkiwi,3,\napple,1.5,ripe\n")
+    ok(table) -> table.each do |row| puts(row) end
+    error(message) -> puts(message)
+  end
+
+  puts(rows("a,b\n1\n"))
+end
+
+---
+
+(source_file
+  (comment)
+  (comment)
+  (struct_definition
+    (type_identifier)
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)))
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)))
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)))
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier))))
+  (enum_definition
+    (type_identifier)
+    (enum_variant
+      (type_identifier))
+    (enum_variant
+      (type_identifier)
+      (variant_payload
+        (type
+          (type_identifier))))
+    (enum_variant
+      (type_identifier)
+      (variant_payload
+        (type
+          (type_identifier)))))
+  (extern_module_block
+    (string
+      (string_content))
+    (comment)
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (type_identifier)
+            (type_arguments
+              (type
+                (type_identifier))))))
+      (type
+        (type_identifier)
+        (type_arguments
+          (type
+            (type_identifier)))))
+    (comment)
+    (extern_function_definition
+      (identifier)
+      (extern_parameters
+        (extern_parameter
+          (identifier)
+          (type
+            (type_identifier))))
+      (type
+        (type_identifier)
+        (type_arguments
+          (type
+            (type_identifier)
+            (type_arguments
+              (type
+                (type_identifier)
+                (type_arguments
+                  (type
+                    (type_identifier))
+                  (type
+                    (type_identifier))))))))))
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (call
+        (identifier)
+        (argument_list
+          (call
+            (identifier)
+            (argument_list
+              (list
+                (float)
+                (float)
+                (float))))))
+      (call
+        (identifier)
+        (argument_list
+          (call
+            (identifier)
+            (argument_list
+              (list)))))
+      (case
+        (call
+          (identifier)
+          (argument_list
+            (string
+              (string_content)
+              (escape_sequence)
+              (string_content)
+              (escape_sequence)
+              (string_content)
+              (escape_sequence))))
+        (case_arm
+          (variant_pattern
+            (identifier)
+            (pattern_bindings
+              (identifier)))
+          (body
+            (method_call
+              (identifier)
+              (identifier)
+              (block
+                (block_parameters
+                  (block_parameter
+                    (identifier)))
+                (body
+                  (call
+                    (identifier)
+                    (argument_list
+                      (identifier))))))))
+        (case_arm
+          (variant_pattern
+            (identifier)
+            (pattern_bindings
+              (identifier)))
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (identifier))))))
+      (call
+        (identifier)
+        (argument_list
+          (call
+            (identifier)
+            (argument_list
+              (string
+                (string_content)
+                (escape_sequence)
+                (string_content)
+                (escape_sequence)))))))))
+
+==================
+Module stays a plain name outside extern
+==================
+
+def module(extern: Int) -> Int
+  return extern
+end
+
+def main() -> Void
+  module = 1
+  puts(module)
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (body
+      (return
+        (identifier))))
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (integer))
+      (call
+        (identifier)
+        (argument_list
+          (identifier))))))
+
+==================
+Extern module block with a callback line is a syntax error
+:error
+==================
+
+extern module "m"
+  callback Visit(item: Int) -> Void
+end
+
+---
+
+(source_file
+  (ERROR))
+
+==================
+Extern module block with a free part is a syntax error
+:error
+==================
+
+extern module "m"
+  resource Db, free: x
+end
+
+---
+
+(source_file
+  (ERROR))
