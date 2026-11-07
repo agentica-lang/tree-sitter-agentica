@@ -10,6 +10,9 @@
 (resource_definition
   name: (type_identifier) @name) @definition.class
 
+(module_resource_definition
+  name: (type_identifier) @name) @definition.class
+
 (struct_definition
   name: (type_identifier) @name) @definition.class
 

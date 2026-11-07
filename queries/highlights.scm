@@ -20,6 +20,7 @@
   "end"
   "do"
   "extern"
+  "module"
   "compute"
   "callback"
   "resource"
@@ -65,6 +66,9 @@
   name: (type_identifier) @type.definition)
 
 (resource_definition
+  name: (type_identifier) @type.definition)
+
+(module_resource_definition
   name: (type_identifier) @type.definition)
 
 (parameter

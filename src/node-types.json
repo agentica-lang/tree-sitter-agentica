@@ -909,6 +909,40 @@
     }
   },
   {
+    "type": "extern_module_block",
+    "named": true,
+    "fields": {
+      "library": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "member": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "export",
+            "named": false
+          },
+          {
+            "type": "extern_function_definition",
+            "named": true
+          },
+          {
+            "type": "module_resource_definition",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "extern_parameter",
     "named": true,
     "fields": {
@@ -1628,6 +1662,22 @@
     }
   },
   {
+    "type": "module_resource_definition",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "named_argument",
     "named": true,
     "fields": {
@@ -2030,6 +2080,10 @@
         },
         {
           "type": "extern_block",
+          "named": true
+        },
+        {
+          "type": "extern_module_block",
           "named": true
         },
         {
@@ -2594,6 +2648,10 @@
   {
     "type": "integer",
     "named": true
+  },
+  {
+    "type": "module",
+    "named": false
   },
   {
     "type": "next",

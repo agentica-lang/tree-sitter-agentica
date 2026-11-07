@@ -126,6 +126,17 @@ extern "libpq"
 #                       ^ type
 end
 
+extern module "stats"
+# <- keyword
+#      ^ keyword
+  resource Db
+#          ^ type.definition
+  compute def scan(db: Db) -> List[Int]
+#             ^ function
+#                  ^ variable.parameter
+  export def empty?(db: Db) -> Bool
+end
+
 export Util.helper
 # <- keyword
 #      ^ module
