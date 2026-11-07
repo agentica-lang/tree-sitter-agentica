@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `extern_function_definition` (`def` and `compute def`, with Agentica types
   and names that may end in `?` or `!`) and `module_resource_definition`
   (`resource Name`, with no `free:`). Highlighted and tagged like `extern`.
+- `Codec`, `TaskDown`, `TaskExit` and `TaskRef` are highlighted as builtin
+  types: the builtin type list of the highlights query matches the names
+  Agentica 0.26.0 reserves.
 
 ## [0.4.0] - 2026-11-04
 

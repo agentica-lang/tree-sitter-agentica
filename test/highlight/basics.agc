@@ -25,6 +25,10 @@ struct Point
   tags: Set[String]
 # ^ property
 #       ^ type.builtin
+  owner: TaskRef
+#        ^ type.builtin
+  codec: Codec
+#        ^ type.builtin
 end
 
 enum Shape

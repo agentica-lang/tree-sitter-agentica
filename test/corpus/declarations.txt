@@ -1110,3 +1110,31 @@ end
         (identifier)
         (argument_list
           (identifier))))))
+
+==================
+Extern module block with a callback line is a syntax error
+:error
+==================
+
+extern module "m"
+  callback Visit(item: Int) -> Void
+end
+
+---
+
+(source_file
+  (ERROR))
+
+==================
+Extern module block with a free part is a syntax error
+:error
+==================
+
+extern module "m"
+  resource Db, free: x
+end
+
+---
+
+(source_file
+  (ERROR))
