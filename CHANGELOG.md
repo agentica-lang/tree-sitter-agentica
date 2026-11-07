@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-07
+
 ### Added
 
 - `extern module "lib" ... end` blocks (Agentica 0.26.0) parse as
@@ -138,6 +140,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and the `quadratic-append` rule, which warns on `xs = xs.push(y)` and String
   `s += t` inside `while`/`for` loops, with rule tests.
 
+[0.5.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.5.0
 [0.4.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.4.0
 [0.3.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.3.0
 [0.2.1]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.2.1
