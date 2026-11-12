@@ -33,7 +33,8 @@ Agentica 0.30.x syntax.
   `JSON.decode(text, Map[String, Int])`, parses as `type_application`.
 - Builtin nested names (`OpenSSL.Digest`, `HTTP.Request`, `HTTP.Response`,
   `Logger.Event`, `TLS.Context`, `TCP.Socket`, `JSON.Value`, `File.Handle`) are
-  highlighted as types, in expressions and in type positions.
+  highlighted as types, in expressions and in type positions: a family from a
+  fixed list followed by any capitalized member.
 - `lambda` and `brace_block` are scopes in `locals.scm`, and `module_block` is
   a tag.
 - `script/parse-agentica-repo.sh` also parses `compiler/` of the Agentica
@@ -42,7 +43,7 @@ Agentica 0.30.x syntax.
 ### Changed
 
 - The builtin type list of the highlights query follows Agentica 0.30: it adds
-  `OpenSSL`, `C` and `Native`, and drops the names that moved into a family or
+  `OpenSSL`, `HTTP`, `HttpWire`, `Logger`, `LogRegistry`, `C` and `Native`, and drops the names that moved into a family or
   were released (`Digest`, `HMAC`, `HttpRequest`, `LogEvent`, ...).
 
 ## [0.5.0] - 2026-11-07

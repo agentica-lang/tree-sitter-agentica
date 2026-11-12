@@ -161,6 +161,18 @@ def families(d: OpenSSL.Digest, r: HTTP.Response) -> Void
   event = Logger.Event(message: "x")
 #         ^ type.builtin
 #                ^ type.builtin
+  s = HTTP.Stream(x)
+#     ^ type.builtin
+#          ^ type.builtin
+  e = Event.Level
+#     ^ type
+#           ^ constant
+  r = HttpWire.get(url)
+#     ^ module
+#              ^ function.call
+  l = Logger.info("x")
+#     ^ module
+#            ^ function.call
   twice = ->(n: Int) { n * 2 }
 #         ^ operator
 #            ^ variable.parameter
