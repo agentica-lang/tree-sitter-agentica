@@ -1,0 +1,341 @@
+==================
+Lambdas with and without parameters
+==================
+
+def main() -> Void
+  f = ->(x) { x * 2 }
+  g = ->(x: Int, y: Int) { x + y }
+  h = -> { 42 }
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (lambda
+          (lambda_parameters
+            (block_parameter
+              (identifier)))
+          (body
+            (binary
+              (identifier)
+              (integer)))))
+      (assignment
+        (identifier)
+        (lambda
+          (lambda_parameters
+            (block_parameter
+              (identifier)
+              (type
+                (type_identifier)))
+            (block_parameter
+              (identifier)
+              (type
+                (type_identifier))))
+          (body
+            (binary
+              (identifier)
+              (identifier)))))
+      (assignment
+        (identifier)
+        (lambda
+          (body
+            (integer)))))))
+
+==================
+Multi-line lambda body
+==================
+
+def main() -> Void
+  f = ->(x) {
+    y = x + 1
+    y * 2
+  }
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (lambda
+          (lambda_parameters
+            (block_parameter
+              (identifier)))
+          (body
+            (assignment
+              (identifier)
+              (binary
+                (identifier)
+                (integer)))
+            (binary
+              (identifier)
+              (integer))))))))
+
+==================
+Lambda as the last argument and in a pipe
+==================
+
+def main() -> Void
+  total = xs |> map(->(x) { x * 2 }) |> sum()
+  ys = xs.map(->(x) { x * 2 })
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (pipe
+          (pipe
+            (identifier)
+            (pipe_target
+              (call
+                (identifier)
+                (argument_list
+                  (lambda
+                    (lambda_parameters
+                      (block_parameter
+                        (identifier)))
+                    (body
+                      (binary
+                        (identifier)
+                        (integer))))))))
+          (pipe_target
+            (call
+              (identifier)
+              (argument_list)))))
+      (assignment
+        (identifier)
+        (method_call
+          (identifier)
+          (identifier)
+          (argument_list
+            (lambda
+              (lambda_parameters
+                (block_parameter
+                  (identifier)))
+              (body
+                (binary
+                  (identifier)
+                  (integer))))))))))
+
+==================
+Brace block after a call
+==================
+
+def main() -> Void
+  xs.each { |x| puts(x) }
+  ys = xs.map { |x: Int| x * 2 }
+  twice { |x| x + 1 }
+  zs = xs.map { |x|
+    y = x + 1
+    y * 2
+  }
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (method_call
+        (identifier)
+        (identifier)
+        (brace_block
+          (block_parameters
+            (block_parameter
+              (identifier)))
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (identifier))))))
+      (assignment
+        (identifier)
+        (method_call
+          (identifier)
+          (identifier)
+          (brace_block
+            (block_parameters
+              (block_parameter
+                (identifier)
+                (type
+                  (type_identifier))))
+            (body
+              (binary
+                (identifier)
+                (integer))))))
+      (call
+        (identifier)
+        (brace_block
+          (block_parameters
+            (block_parameter
+              (identifier)))
+          (body
+            (binary
+              (identifier)
+              (integer)))))
+      (assignment
+        (identifier)
+        (method_call
+          (identifier)
+          (identifier)
+          (brace_block
+            (block_parameters
+              (block_parameter
+                (identifier)))
+            (body
+              (assignment
+                (identifier)
+                (binary
+                  (identifier)
+                  (integer)))
+              (binary
+                (identifier)
+                (integer)))))))))
+
+==================
+Block after a call without parentheses
+==================
+
+def main() -> Void
+  run do
+    puts("a")
+  end
+  n = twice do |x| x * 3 end
+  [1].each do |x|
+    puts(x)
+  end
+  Util.reset do
+    puts("b")
+  end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (call
+        (identifier)
+        (block
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (string
+                  (string_content)))))))
+      (assignment
+        (identifier)
+        (call
+          (identifier)
+          (block
+            (block_parameters
+              (block_parameter
+                (identifier)))
+            (body
+              (binary
+                (identifier)
+                (integer))))))
+      (method_call
+        (list
+          (integer))
+        (identifier)
+        (block
+          (block_parameters
+            (block_parameter
+              (identifier)))
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (identifier))))))
+      (call
+        (type_identifier)
+        (identifier)
+        (block
+          (body
+            (call
+              (identifier)
+              (argument_list
+                (string
+                  (string_content))))))))))
+
+==================
+Pipe into a method by bare name
+==================
+
+def main() -> Void
+  y = x |> upcase()
+  z = xs |> try parse() |> each_pair() do |a, b| puts(a) end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (pipe
+          (identifier)
+          (pipe_target
+            (call
+              (identifier)
+              (argument_list)))))
+      (assignment
+        (identifier)
+        (pipe
+          (pipe
+            (identifier)
+            (pipe_target
+              (call
+                (identifier)
+                (argument_list))))
+          (pipe_target
+            (call
+              (identifier)
+              (argument_list)
+              (block
+                (block_parameters
+                  (block_parameter
+                    (identifier))
+                  (block_parameter
+                    (identifier)))
+                (body
+                  (call
+                    (identifier)
+                    (argument_list
+                      (identifier))))))))))))

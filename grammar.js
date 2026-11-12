@@ -81,6 +81,7 @@ module.exports = grammar({
   conflicts: $ => [
     [$.body],
     [$.type_path],
+    [$._primary, $.type_application],
   ],
 
   rules: {
@@ -100,6 +101,26 @@ module.exports = grammar({
       $.reexport,
       $.extern_block,
       $.extern_module_block,
+      $.module_block,
+    ),
+
+    // `module Name ... end` groups declarations of one file under a name;
+    // `export module` makes it importable. A lowercase `module` is a name.
+    module_block: $ => seq(
+      'module',
+      field('name', $.type_identifier),
+      $._newline,
+      repeat(choice(seq(field('member', $._module_member), $._newline), $._newline)),
+      'end',
+    ),
+
+    _module_member: $ => choice(
+      $.function_definition,
+      $.struct_definition,
+      $.enum_definition,
+      $.type_alias_definition,
+      $.constant_definition,
+      $.export,
     ),
 
     // `import Alias from "path"` or `import {a, B as C} from "path"`: one form
@@ -131,6 +152,7 @@ module.exports = grammar({
         $.enum_definition,
         $.type_alias_definition,
         $.constant_definition,
+        $.module_block,
       )),
     ),
 
@@ -267,9 +289,11 @@ module.exports = grammar({
       field('parameters', $.parameters),
       '->',
       field('return_type', $.type),
-      $._newline,
-      content($, 'body'),
-      'end',
+      choice(
+        seq($._newline, content($, 'body'), 'end'),
+        // `def f(x: Int) -> Int = x * 2`: the expression is the whole body.
+        seq('=', field('value', $._expression)),
+      ),
     ),
 
     parameters: $ => seq('(', commaSep($.parameter), ')'),
@@ -348,23 +372,31 @@ module.exports = grammar({
       $.while,
       $.for,
       $.case,
+      $.guard,
       $._expression,
+    ),
+
+    // `return x if c`, `break if c`, `next if c`: the `if` with one statement.
+    guard: $ => seq(
+      field('statement', choice($.return, $.break, $.next)),
+      'if',
+      field('condition', $._expression),
     ),
 
     assignment: $ => seq(
       field('left', $.identifier),
       optional(seq(':', field('type', $.type))),
       '=',
-      field('right', $._expression),
+      field('right', choice($._expression, $.case)),
     ),
 
     compound_assignment: $ => seq(
       field('left', $.identifier),
       field('operator', choice(...COMPOUND_OPERATORS)),
-      field('right', $._expression),
+      field('right', choice($._expression, $.case)),
     ),
 
-    return: $ => prec.right(seq('return', optional(field('value', $._expression)))),
+    return: $ => prec.right(seq('return', optional(field('value', choice($._expression, $.case))))),
 
     if: $ => seq(
       'if',
@@ -417,6 +449,7 @@ module.exports = grammar({
 
     case_arm: $ => prec.right(seq(
       field('pattern', $._pattern),
+      repeat(seq(',', field('pattern', $._pattern))),
       optional(seq('if', field('guard', $._expression))),
       '->',
       content($, 'body'),
@@ -513,6 +546,8 @@ module.exports = grammar({
       $.construct,
       $.type_identifier,
       $.type_path,
+      $.type_application,
+      $.lambda,
       $.list,
       $.map,
       $.string,
@@ -540,14 +575,19 @@ module.exports = grammar({
       seq(
         field('function', $.identifier),
         field('arguments', $.argument_list),
-        optional(field('block', $.block)),
+        optional(field('block', $._block)),
+      ),
+      // `run do ... end`, `twice { |x| x + 1 }`: no `()` before a block.
+      seq(
+        field('function', $.identifier),
+        field('block', $._block),
       ),
       seq(
         field('module', $.type_identifier),
         '.',
         field('function', $._name),
         optional(field('arguments', $.argument_list)),
-        optional(field('block', $.block)),
+        optional(field('block', $._block)),
       ),
     )),
 
@@ -557,13 +597,13 @@ module.exports = grammar({
         '.',
         field('method', $.identifier),
         field('arguments', $.argument_list),
-        optional(field('block', $.block)),
+        optional(field('block', $._block)),
       ),
       seq(
         field('receiver', $._primary),
         '.',
         field('method', $.identifier),
-        field('block', $.block),
+        field('block', $._block),
       ),
     )),
 
@@ -591,6 +631,13 @@ module.exports = grammar({
       field('arguments', $.argument_list),
     ),
 
+    // A type with two or more arguments as a value, `JSON.decode(text, Map[String,
+    // Int])`. One argument stays an `index`, which reads the same.
+    type_application: $ => seq(
+      field('name', $.type_identifier),
+      alias(seq('[', $.type, ',', commaSep1($.type), ']'), $.type_arguments),
+    ),
+
     // `Geo.Point` is a path; a further `.name` (`Geo.Point.members`,
     // `Limits.NAMES.size`) reads a member of it. Only the token after the dot
     // tells the two apart, so the parser keeps both readings until then.
@@ -610,6 +657,27 @@ module.exports = grammar({
       ':',
       field('value', $._expression),
     ),
+
+    _block: $ => choice($.block, $.brace_block),
+
+    // `xs.map { |x| x * 2 }`: the body is a lambda's, one line or several.
+    brace_block: $ => seq(
+      '{',
+      optional(field('parameters', $.block_parameters)),
+      content($, 'body'),
+      '}',
+    ),
+
+    // `->(x) { x + 1 }` and `-> { 42 }`: a block written as a value.
+    lambda: $ => seq(
+      '->',
+      optional(field('parameters', $.lambda_parameters)),
+      '{',
+      content($, 'body'),
+      '}',
+    ),
+
+    lambda_parameters: $ => seq('(', commaSep1($.block_parameter), ')'),
 
     block: $ => seq(
       'do',

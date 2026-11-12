@@ -28,6 +28,9 @@
 (field_declaration
   name: (identifier) @name) @definition.field
 
+(module_block
+  name: (type_identifier) @name) @definition.module
+
 (import
   alias: (type_identifier) @name) @definition.module
 

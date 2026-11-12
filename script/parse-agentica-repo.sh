@@ -21,7 +21,7 @@ work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
 
 cd "$repo"
-find examples stdlib tests/fixtures tests/bdd -name '*.agc' -type f | sort > "$work/files"
+find examples stdlib compiler tests/fixtures tests/bdd -name '*.agc' -type f | sort > "$work/files"
 
 mkdir -p "$work/site"
 : > "$work/site-skipped"

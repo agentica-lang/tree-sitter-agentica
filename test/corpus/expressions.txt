@@ -598,3 +598,117 @@ puts(lines)
     (identifier)
     (argument_list
       (identifier))))
+
+==================
+Nested builtin names
+==================
+
+def main() -> Void
+  d = OpenSSL.Digest.sha256("x")
+  r = HTTP.Request(url: "x")
+  e = Logger.Event(message: "x")
+  h: File.Handle = x
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (method_call
+          (type_path
+            (type_identifier)
+            (type_identifier))
+          (identifier)
+          (argument_list
+            (string
+              (string_content)))))
+      (assignment
+        (identifier)
+        (construct
+          (type_path
+            (type_identifier)
+            (type_identifier))
+          (argument_list
+            (named_argument
+              (identifier)
+              (string
+                (string_content))))))
+      (assignment
+        (identifier)
+        (construct
+          (type_path
+            (type_identifier)
+            (type_identifier))
+          (argument_list
+            (named_argument
+              (identifier)
+              (string
+                (string_content))))))
+      (assignment
+        (identifier)
+        (type
+          (scoped_type_identifier
+            (type_identifier)
+            (type_identifier)))
+        (identifier)))))
+
+==================
+Type with several arguments as a value
+==================
+
+def main() -> Void
+  a = JSON.decode(text, Map[String, Int])
+  b = JSON.decode(text, Map[String, List[Int]])
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (call
+          (type_identifier)
+          (identifier)
+          (argument_list
+            (identifier)
+            (type_application
+              (type_identifier)
+              (type_arguments)
+              (type_arguments
+                (type_identifier))
+              (type_arguments)
+              (type_arguments
+                (type_identifier))
+              (type_arguments)))))
+      (assignment
+        (identifier)
+        (call
+          (type_identifier)
+          (identifier)
+          (argument_list
+            (identifier)
+            (type_application
+              (type_identifier)
+              (type_arguments)
+              (type_arguments
+                (type_identifier))
+              (type_arguments)
+              (type_arguments
+                (type_identifier)
+                (type_arguments
+                  (type
+                    (type_identifier))))
+              (type_arguments))))))))
