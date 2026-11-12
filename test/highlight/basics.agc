@@ -15,20 +15,20 @@ struct Point
 #      ^ type.definition
   x: Int
 # ^ property
-#    ^ type.builtin
+#    ^ type
   data: Bytes
 # ^ property
-#       ^ type.builtin
+#       ^ type
   note: Optional[String]
 # ^ property
-#       ^ type.builtin
+#       ^ type
   tags: Set[String]
 # ^ property
-#       ^ type.builtin
+#       ^ type
   owner: TaskRef
-#        ^ type.builtin
+#        ^ type
   codec: Codec
-#        ^ type.builtin
+#        ^ type
 end
 
 enum Shape
@@ -42,7 +42,7 @@ def area(shape: Shape, p: Point) -> Float
 #   ^ function
 #        ^ variable.parameter
 #               ^ type
-#                                   ^ type.builtin
+#                                   ^ type
   total = p.x + 1
 # ^ variable
 #           ^ property
@@ -70,7 +70,7 @@ def area(shape: Shape, p: Point) -> Float
 #        ^ module
 #             ^ function.call
   c = Shape.Circle(1.0)
-#           ^ constant
+#           ^ type
   f = &area
 #      ^ function
   word = /\w+\/x/i
@@ -83,7 +83,7 @@ def area(shape: Shape, p: Point) -> Float
 # ^ keyword.conditional
     Shape.Circle(r) -> return r
 #   ^ type
-#         ^ constant
+#         ^ type
 #                      ^ keyword.return
     ok(v) -> return 1.5
 #   ^ function.builtin
@@ -127,7 +127,7 @@ extern "libpq"
   resource Db, free_ref: duckdb_close
 #                        ^ function
   resource Thing, free: C.Function
-#                       ^ type.builtin
+#                       ^ type
 end
 
 extern module "stats"
@@ -151,22 +151,22 @@ def scale(x: Int) -> Int = x * 2
 #   ^ function
 
 def families(d: OpenSSL.Digest, r: HTTP.Response) -> Void
-#               ^ type.builtin
-#                       ^ type.builtin
-#                                  ^ type.builtin
-#                                       ^ type.builtin
+#               ^ type
+#                       ^ type
+#                                  ^ type
+#                                       ^ type
   req = HTTP.Request(url: "x")
-#       ^ type.builtin
-#            ^ type.builtin
+#       ^ type
+#            ^ type
   event = Logger.Event(message: "x")
-#         ^ type.builtin
-#                ^ type.builtin
+#         ^ type
+#                ^ type
   s = HTTP.Stream(x)
-#     ^ type.builtin
-#          ^ type.builtin
+#     ^ type
+#          ^ type
   e = Event.Level
 #     ^ type
-#           ^ constant
+#           ^ type
   r = HttpWire.get(url)
 #     ^ module
 #              ^ function.call
