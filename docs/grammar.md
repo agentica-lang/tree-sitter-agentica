@@ -25,7 +25,7 @@ Types include `type` (`name`, `arguments`), `scoped_type_identifier` (`Models.Us
 - `Geo.Point` is a `type_path`; `Geo.Point.members` and `Limits.NAMES.size` are a `field_access` or `method_call` on it.
 - A call takes a block without `()`: `run do ... end` and `twice { |x| x + 1 }` are a `call` with a `block` and no `arguments`; `xs.each { |x| ... }` is a `method_call`. A lambda in an argument list is an ordinary argument, and `xs |> map(->(x) { x * 2 })` is a `pipe` whose `pipe_target` holds the `call`; a pipe step by method name (`x |> upcase()`) is the same `call` shape.
 - `IO.puts(x)` is a `call` with a `module`; `xs.size` without parentheses is a `field_access`, matching the interpreter's parser.
-- A builtin nested name such as `OpenSSL.Digest`, `HTTP.Request`, `Logger.Event`, `TLS.Context`, `TCP.Socket`, `JSON.Value` or `File.Handle` is a `scoped_type_identifier` in a type and a `type_path` in an expression. The highlights query colors a family and its member as builtin types (a fixed list of families, listed in `queries/highlights.scm`, and any capitalized member).
+- A builtin nested name such as `OpenSSL.Digest`, `HTTP.Request`, `Logger.Event`, `TLS.Context`, `TCP.Socket`, `JSON.Value` or `File.Handle` is a `scoped_type_identifier` in a type and a `type_path` in an expression. The highlights query has no list of builtins: both names of `A.B` are types, and the left side of `X.y(...)` is a module, as for a user's own names.
 - `break` and `next` are loop control when alone on a line or before `if` (`break if done`).
 
 ## External scanner
