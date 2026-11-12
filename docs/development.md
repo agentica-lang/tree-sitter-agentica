@@ -23,7 +23,7 @@ npx tree-sitter parse file.agc          # print one syntax tree
 
 ## Check the Agentica interpreter repository
 
-The integration script parses every `.agc` file in `examples/`, `stdlib/`, `tests/fixtures/`, and `tests/bdd/` in the [Agentica repository](https://github.com/sonic182/agentica). It also parses every `agentica` code block in `site/content/`.
+The integration script parses every `.agc` file in `examples/`, `stdlib/`, `compiler/`, `tests/fixtures/`, and `tests/bdd/` in the [Agentica repository](https://github.com/sonic182/agentica). It also parses every `agentica` code block in `site/content/`.
 
 ```sh
 script/parse-agentica-repo.sh [path]

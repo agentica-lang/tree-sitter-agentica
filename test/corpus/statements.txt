@@ -316,3 +316,158 @@ end
         (identifier)
         (integer)))
     (comment)))
+
+==================
+Guards
+==================
+
+def f(x: Int) -> Int
+  return x if x > 1
+  return if x == 0
+  while true
+    break if x > 3
+    next if x > 2
+  end
+  x
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (body
+      (guard
+        (return
+          (identifier))
+        (binary
+          (identifier)
+          (integer)))
+      (guard
+        (return)
+        (binary
+          (identifier)
+          (integer)))
+      (while
+        (true)
+        (body
+          (guard
+            (break)
+            (binary
+              (identifier)
+              (integer)))
+          (guard
+            (next)
+            (binary
+              (identifier)
+              (integer)))))
+      (identifier))))
+
+==================
+Case as a value
+==================
+
+def f(x: Int) -> Int
+  y = case x
+    1 -> 2
+    _ -> 3
+  end
+  return case y
+    2 -> 4
+    _ -> 5
+  end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (case
+          (identifier)
+          (case_arm
+            (integer)
+            (body
+              (integer)))
+          (case_arm
+            (identifier)
+            (body
+              (integer)))))
+      (return
+        (case
+          (identifier)
+          (case_arm
+            (integer)
+            (body
+              (integer)))
+          (case_arm
+            (identifier)
+            (body
+              (integer))))))))
+
+==================
+Case arm with several patterns
+==================
+
+def f(s: String) -> Int
+  case s
+    "ex", "px" -> 1
+    "a", "b" if s == "a" -> 2
+    _ -> 3
+  end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (body
+      (case
+        (identifier)
+        (case_arm
+          (string
+            (string_content))
+          (string
+            (string_content))
+          (body
+            (integer)))
+        (case_arm
+          (string
+            (string_content))
+          (string
+            (string_content))
+          (binary
+            (identifier)
+            (string
+              (string_content)))
+          (body
+            (integer)))
+        (case_arm
+          (identifier)
+          (body
+            (integer)))))))

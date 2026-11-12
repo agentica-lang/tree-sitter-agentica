@@ -20,3 +20,5 @@ The grammar accepts a small superset of the [Agentica interpreter](https://githu
 - An `extern module` block parses `out` parameters, `...`, `= "c_name"` and `C.` types too; the interpreter reports `PARSE-EXTERN-MODULE` and `PARSE-EXTERN-TYPE` for them. A `callback` or `struct` line, or a `free:` after a resource, is a syntax error here.
 - `µ` is accepted in names, including before `!=`; it is the ast-grep expando character.
 - A regex literal may repeat a flag (`/a/ii`) and may hold `#{` as text; the interpreter rejects both.
+- A one-line `def` may return `Void` (`def f() -> Void = puts(1)`); the interpreter reports `PARSE-UNEXPECTED-TOKEN` at the `=`.
+- A block in braces follows a call written with arguments too (`xs.map(1) { |x| x }`); the interpreter accepts it only after a call written without `(`.

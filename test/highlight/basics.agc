@@ -127,7 +127,7 @@ extern "libpq"
   resource Db, free_ref: duckdb_close
 #                        ^ function
   resource Thing, free: C.Function
-#                       ^ type
+#                       ^ type.builtin
 end
 
 extern module "stats"
@@ -145,3 +145,36 @@ export Util.helper
 # <- keyword
 #      ^ module
 #           ^ function
+
+def scale(x: Int) -> Int = x * 2
+# <- keyword
+#   ^ function
+
+def families(d: OpenSSL.Digest, r: HTTP.Response) -> Void
+#               ^ type.builtin
+#                       ^ type.builtin
+#                                  ^ type.builtin
+#                                       ^ type.builtin
+  req = HTTP.Request(url: "x")
+#       ^ type.builtin
+#            ^ type.builtin
+  event = Logger.Event(message: "x")
+#         ^ type.builtin
+#                ^ type.builtin
+  twice = ->(n: Int) { n * 2 }
+#         ^ operator
+#            ^ variable.parameter
+  names = xs |> map(->(n) { n.to_s }) |> join(", ")
+#               ^ function.call
+#                                        ^ function.call
+  xs.each { |x| puts(x) }
+#    ^ function.method.call
+#            ^ variable.parameter
+  run do
+# ^ function.call
+    puts("a")
+  end
+  return x if x > 1
+# ^ keyword.return
+#          ^ keyword.conditional
+end

@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-12
+
+Agentica 0.30.x syntax.
+
+### Added
+
+- Lambdas `->(x) { x * 2 }`, `->(x: Int) { ... }` and `-> { 42 }` parse as
+  `lambda`, with `lambda_parameters` and a `body` that may span lines. A
+  lambda in an argument list, and `xs |> map(->(x) { x * 2 }) |> sum()`, parse
+  as before.
+- Brace blocks `xs.each { |x| puts(x) }` parse as `brace_block`, a `block` of a
+  `call` or `method_call`.
+- A call takes a block without `()`: `run do ... end`, `n = twice do |x| x * 3
+  end`, `[1].each do |x| ... end` and `twice { |x| x + 1 }`.
+- One-line definitions `def f(x: Int) -> Int = x * 2` (the expression is the
+  `value` of the `function_definition`).
+- Guards `return x if c`, `return if c`, `break if c` and `next if c` parse as
+  `guard`; `break` and `next` before `if` are loop control.
+- Module blocks `module Name ... end` and `export module` parse as
+  `module_block`.
+- A `case` as the right side of an assignment or the value of a `return`, and
+  several patterns in one arm (`"ex", "px" -> ...`).
+- A type with two or more arguments as a value, `Map[String, Int]` in
+  `JSON.decode(text, Map[String, Int])`, parses as `type_application`.
+- Builtin nested names (`OpenSSL.Digest`, `HTTP.Request`, `HTTP.Response`,
+  `Logger.Event`, `TLS.Context`, `TCP.Socket`, `JSON.Value`, `File.Handle`) are
+  highlighted as types, in expressions and in type positions.
+- `lambda` and `brace_block` are scopes in `locals.scm`, and `module_block` is
+  a tag.
+- `script/parse-agentica-repo.sh` also parses `compiler/` of the Agentica
+  repository.
+
+### Changed
+
+- The builtin type list of the highlights query follows Agentica 0.30: it adds
+  `OpenSSL`, `C` and `Native`, and drops the names that moved into a family or
+  were released (`Digest`, `HMAC`, `HttpRequest`, `LogEvent`, ...).
+
 ## [0.5.0] - 2026-11-07
 
 ### Added
@@ -140,6 +178,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and the `quadratic-append` rule, which warns on `xs = xs.push(y)` and String
   `s += t` inside `while`/`for` loops, with rule tests.
 
+[0.6.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.6.0
 [0.5.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.5.0
 [0.4.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.4.0
 [0.3.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.3.0

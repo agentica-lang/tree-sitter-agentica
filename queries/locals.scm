@@ -6,6 +6,8 @@
 [
   (function_definition)
   (block)
+  (brace_block)
+  (lambda)
   (elsif)
   (else)
   (while)

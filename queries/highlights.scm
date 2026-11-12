@@ -4,7 +4,7 @@
 
 ((type_identifier) @type.builtin
   (#match? @type.builtin
-    "^(ATS|Await|Base64|Bool|Bytes|CMAC|Channel|Cipher|Codec|Crypto|Digest|Dir|File|FileHandle|FileInfo|Float|Fn|HMAC|Header|HttpClient|HttpClientOptions|HttpRequest|HttpResponse|HttpServer|HttpServerOptions|HttpWire|IO|Int|JSON|Json|JsonField|KDF|Lazy|List|Listener|LogEvent|LogLevel|LogRegistry|Map|Math|Nil|Optional|Path|Process|ProcessOutput|Profile|Random|Range|RegexEngine|Result|SecureRandom|Set|Socket|Std|String|StructMember|System|TCP|TLS|Task|TaskDown|TaskExit|TaskRef|Test|TestCase|Time|TlsClientOptions|TlsContext|TlsServerOptions|Void|Zlib)$"))
+    "^(ATS|Await|Base64|Bool|Bytes|C|Channel|Codec|Dir|File|FileHandle|FileInfo|Float|Fn|IO|Int|JSON|Json|JsonField|Lazy|List|Listener|Map|Math|Native|Nil|OpenSSL|Optional|Path|Process|ProcessOutput|Profile|Random|Range|Result|Set|Socket|String|StructMember|System|TCP|TLS|Task|TaskDown|TaskExit|TaskRef|Test|TestCase|Time|TlsClientOptions|TlsContext|TlsServerOptions|Void|Zlib)$"))
 
 ; Keywords
 
@@ -140,8 +140,32 @@
 
 ; Types
 
+((type_path
+   . (type_identifier) @_family
+   . (type_identifier) @type .)
+  (#match? @_family
+    "^(OpenSSL|HTTP|HttpWire|Logger|LogRegistry|TLS|TCP|JSON|File|Process|C|Native)$"))
+
 (type_path
   (type_identifier) @constant .)
+
+; A builtin nested name, `Family.Member` (`OpenSSL.Digest`, `HTTP.Request`,
+; `Logger.Event`, `TLS.Context`, `File.Handle`), is a type. The two names are
+; captured by one pattern so that the family and the member are highlighted
+; together; the predicate tests both names against the families and the members
+; that the builtin catalog knows, and a third segment (`Logger.Level.Info`) keeps
+; its constant color.
+((type_path
+   . (type_identifier) @type.builtin
+   . (type_identifier) @type.builtin)
+  (#match? @type.builtin
+    "^(OpenSSL|HTTP|HttpWire|Logger|LogRegistry|TLS|TCP|JSON|File|Process|C|Native|Digest|HMAC|CMAC|Cipher|KDF|Random|RSA|Request|Response|Header|ClientOptions|ServerOptions|Client|Server|Handler|Event|Level|Context|Socket|Value|Handle|Options|Pointer|Function|Mutex)$"))
+
+((scoped_type_identifier
+   module: (type_identifier) @type.builtin
+   name: (type_identifier) @type.builtin)
+  (#match? @type.builtin
+    "^(OpenSSL|HTTP|HttpWire|Logger|LogRegistry|TLS|TCP|JSON|File|Process|C|Native|Digest|HMAC|CMAC|Cipher|KDF|Random|RSA|Request|Response|Header|ClientOptions|ServerOptions|Client|Server|Handler|Event|Level|Context|Socket|Value|Handle|Options|Pointer|Function|Mutex)$"))
 
 ; Patterns
 

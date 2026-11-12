@@ -1138,3 +1138,141 @@ end
 
 (source_file
   (ERROR))
+
+==================
+One-line function definition
+==================
+
+def double(n: Int) -> Int = n * 2
+export def label(n: Int) -> String = "n: #{n}"
+def first_or[T](xs: List[T], default: T) -> T = xs.first(default)
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (binary
+      (identifier)
+      (integer)))
+  (export
+    (function_definition
+      (identifier)
+      (parameters
+        (parameter
+          (identifier)
+          (type
+            (type_identifier))))
+      (type
+        (type_identifier))
+      (string
+        (string_content)
+        (interpolation
+          (identifier)))))
+  (function_definition
+    (identifier)
+    (type_parameters
+      (type_identifier))
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)
+          (type_arguments
+            (type
+              (type_identifier)))))
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (method_call
+      (identifier)
+      (identifier)
+      (argument_list
+        (identifier)))))
+
+==================
+Module blocks
+==================
+
+UNIT = "items"
+
+module Stock
+  export enum Change
+    Add(Int)
+  end
+
+  export def apply(count: Int) -> Int
+    count
+  end
+
+  def floor_at_zero(n: Int) -> Int = n
+end
+
+export module Report
+  export def line(n: Int) -> String = "x"
+end
+
+---
+
+(source_file
+  (constant_definition
+    (type_identifier)
+    (string
+      (string_content)))
+  (module_block
+    (type_identifier)
+    (export
+      (enum_definition
+        (type_identifier)
+        (enum_variant
+          (type_identifier)
+          (variant_payload
+            (type
+              (type_identifier))))))
+    (export
+      (function_definition
+        (identifier)
+        (parameters
+          (parameter
+            (identifier)
+            (type
+              (type_identifier))))
+        (type
+          (type_identifier))
+        (body
+          (identifier))))
+    (function_definition
+      (identifier)
+      (parameters
+        (parameter
+          (identifier)
+          (type
+            (type_identifier))))
+      (type
+        (type_identifier))
+      (identifier)))
+  (export
+    (module_block
+      (type_identifier)
+      (export
+        (function_definition
+          (identifier)
+          (parameters
+            (parameter
+              (identifier)
+              (type
+                (type_identifier))))
+          (type
+            (type_identifier))
+          (string
+            (string_content)))))))

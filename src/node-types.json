@@ -48,6 +48,10 @@
         "named": true
       },
       {
+        "type": "lambda",
+        "named": true
+      },
+      {
         "type": "list",
         "named": true
       },
@@ -89,6 +93,10 @@
       },
       {
         "type": "try",
+        "named": true
+      },
+      {
+        "type": "type_application",
         "named": true
       },
       {
@@ -176,6 +184,10 @@
         "named": true
       },
       {
+        "type": "guard",
+        "named": true
+      },
+      {
         "type": "if",
         "named": true
       },
@@ -232,6 +244,10 @@
         "types": [
           {
             "type": "_expression",
+            "named": true
+          },
+          {
+            "type": "case",
             "named": true
           }
         ]
@@ -423,6 +439,32 @@
     }
   },
   {
+    "type": "brace_block",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "body",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "block_parameters",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "call",
     "named": true,
     "fields": {
@@ -442,6 +484,10 @@
         "types": [
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "brace_block",
             "named": true
           }
         ]
@@ -555,7 +601,7 @@
         ]
       },
       "pattern": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
           {
@@ -612,6 +658,10 @@
         "types": [
           {
             "type": "_expression",
+            "named": true
+          },
+          {
+            "type": "case",
             "named": true
           }
         ]
@@ -806,6 +856,10 @@
           },
           {
             "type": "function_definition",
+            "named": true
+          },
+          {
+            "type": "module_block",
             "named": true
           },
           {
@@ -1042,6 +1096,10 @@
             "named": true
           },
           {
+            "type": "lambda",
+            "named": true
+          },
+          {
             "type": "list",
             "named": true
           },
@@ -1071,6 +1129,10 @@
           },
           {
             "type": "true",
+            "named": true
+          },
+          {
+            "type": "type_application",
             "named": true
           },
           {
@@ -1210,6 +1272,16 @@
             "named": true
           }
         ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
       }
     }
   },
@@ -1233,6 +1305,40 @@
         "types": [
           {
             "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "guard",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
+      },
+      "statement": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "break",
+            "named": true
+          },
+          {
+            "type": "next",
+            "named": true
+          },
+          {
+            "type": "return",
             "named": true
           }
         ]
@@ -1451,6 +1557,10 @@
             "named": true
           },
           {
+            "type": "lambda",
+            "named": true
+          },
+          {
             "type": "list",
             "named": true
           },
@@ -1483,6 +1593,10 @@
             "named": true
           },
           {
+            "type": "type_application",
+            "named": true
+          },
+          {
             "type": "type_identifier",
             "named": true
           },
@@ -1504,6 +1618,47 @@
       "types": [
         {
           "type": "_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "lambda",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "body",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "lambda_parameters",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "lambda_parameters",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block_parameter",
           "named": true
         }
       ]
@@ -1559,6 +1714,10 @@
         "types": [
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "brace_block",
             "named": true
           }
         ]
@@ -1618,6 +1777,10 @@
             "named": true
           },
           {
+            "type": "lambda",
+            "named": true
+          },
+          {
             "type": "list",
             "named": true
           },
@@ -1650,11 +1813,61 @@
             "named": true
           },
           {
+            "type": "type_application",
+            "named": true
+          },
+          {
             "type": "type_identifier",
             "named": true
           },
           {
             "type": "type_path",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "module_block",
+    "named": true,
+    "fields": {
+      "member": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "constant_definition",
+            "named": true
+          },
+          {
+            "type": "enum_definition",
+            "named": true
+          },
+          {
+            "type": "export",
+            "named": true
+          },
+          {
+            "type": "function_definition",
+            "named": true
+          },
+          {
+            "type": "struct_definition",
+            "named": true
+          },
+          {
+            "type": "type_alias_definition",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
             "named": true
           }
         ]
@@ -2022,6 +2235,10 @@
           {
             "type": "_expression",
             "named": true
+          },
+          {
+            "type": "case",
+            "named": true
           }
         ]
       }
@@ -2092,6 +2309,10 @@
         },
         {
           "type": "import",
+          "named": true
+        },
+        {
+          "type": "module_block",
           "named": true
         },
         {
@@ -2251,12 +2472,63 @@
     }
   },
   {
-    "type": "type_arguments",
+    "type": "type_application",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
+      "types": [
+        {
+          "type": "type_arguments",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_arguments",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_arguments",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "scoped_type_identifier",
+            "named": true
+          },
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
       "types": [
         {
           "type": "type",

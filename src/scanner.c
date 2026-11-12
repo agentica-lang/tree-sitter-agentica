@@ -76,6 +76,14 @@ static bool at_line_end(TSLexer *lexer) {
   if (lexer->eof(lexer) || lexer->lookahead == '\n' || lexer->lookahead == '#') {
     return true;
   }
+  // `end` closes the body on the same line; `if` makes the word a guard
+  // (`break if done`).
+  if (lexer->lookahead == 'i') {
+    lexer->advance(lexer, false);
+    if (lexer->lookahead != 'f') return false;
+    lexer->advance(lexer, false);
+    return !is_word_char(lexer->lookahead);
+  }
   const char *end = "end";
   for (int i = 0; i < 3; i++) {
     if (lexer->lookahead != end[i]) return false;
