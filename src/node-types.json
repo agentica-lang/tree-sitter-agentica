@@ -839,42 +839,6 @@
     }
   },
   {
-    "type": "export",
-    "named": true,
-    "fields": {
-      "declaration": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "constant_definition",
-            "named": true
-          },
-          {
-            "type": "enum_definition",
-            "named": true
-          },
-          {
-            "type": "function_definition",
-            "named": true
-          },
-          {
-            "type": "module_block",
-            "named": true
-          },
-          {
-            "type": "struct_definition",
-            "named": true
-          },
-          {
-            "type": "type_alias_definition",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
     "type": "extern_block",
     "named": true,
     "fields": {
@@ -895,10 +859,6 @@
           {
             "type": "callback_definition",
             "named": true
-          },
-          {
-            "type": "export",
-            "named": false
           },
           {
             "type": "extern_function_definition",
@@ -980,10 +940,6 @@
         "multiple": true,
         "required": false,
         "types": [
-          {
-            "type": "export",
-            "named": false
-          },
           {
             "type": "extern_function_definition",
             "named": true
@@ -1845,10 +1801,6 @@
             "named": true
           },
           {
-            "type": "export",
-            "named": true
-          },
-          {
             "type": "function_definition",
             "named": true
           },
@@ -1872,6 +1824,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "private_line",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -2084,6 +2046,11 @@
     }
   },
   {
+    "type": "private_line",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "range",
     "named": true,
     "fields": {
@@ -2292,10 +2259,6 @@
           "named": true
         },
         {
-          "type": "export",
-          "named": true
-        },
-        {
           "type": "extern_block",
           "named": true
         },
@@ -2313,6 +2276,10 @@
         },
         {
           "type": "module_block",
+          "named": true
+        },
+        {
+          "type": "private_line",
           "named": true
         },
         {
@@ -2387,6 +2354,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "private_line",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -2943,6 +2920,10 @@
   },
   {
     "type": "out",
+    "named": false
+  },
+  {
+    "type": "private",
     "named": false
   },
   {

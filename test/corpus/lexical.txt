@@ -89,6 +89,33 @@ end
         (integer)))))
 
 ==================
+Private line with CRLF line endings
+==================
+
+def f() -> Int = 1
+
+private
+
+def g() -> Int = 2
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (integer))
+  (private_line)
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (integer)))
+
+==================
 Digit separators
 ==================
 

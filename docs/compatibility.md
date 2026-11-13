@@ -3,7 +3,8 @@
 The grammar accepts a small superset of the [Agentica interpreter](https://github.com/sonic182/agentica). This keeps the grammar simple and supports editor and structural-search tools. These are the known differences:
 
 - Statements are allowed at the top level, so ast-grep patterns such as `$X = $X.push($Y)` parse on their own.
-- The blank line required between declarations is not checked.
+- The blank line required between declarations is not checked, nor the blank lines around a `private` line.
+- A file, a module block or a struct may have more than one `private` line (`PARSE-SECOND-PRIVATE` in the interpreter), and a C struct of an `extern` block may have one.
 - Comparisons, equalities, and ranges may chain: `a < b < c`, `1..2..3`.
 - A newline is whitespace wherever a statement cannot end, so expressions may continue after a binary operator, `=`, `->`, `not`, `try`, and similar tokens.
 - An interpolation may span lines and contain comments.

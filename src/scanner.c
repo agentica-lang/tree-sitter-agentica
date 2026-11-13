@@ -19,6 +19,7 @@ enum TokenType {
   HEREDOC_BODY_START,
   HEREDOC_CONTENT,
   HEREDOC_END,
+  PRIVATE,
   ERROR_SENTINEL,
 };
 
@@ -64,15 +65,19 @@ static bool is_reserved(const char *word) {
   return false;
 }
 
-static void skip_blanks(TSLexer *lexer) {
+// Before a token, `skip` leaves the blanks out of it. After `mark_end` the
+// blanks must not be skipped: a skip moves the token start, so the token would
+// start at its end and have no text. There `skip` is false, and the blanks are
+// only look-ahead past the marked end.
+static void skip_blanks(TSLexer *lexer, bool skip) {
   while (lexer->lookahead == ' ' || lexer->lookahead == '\t' ||
          lexer->lookahead == '\r' || lexer->lookahead == '\f') {
-    lexer->advance(lexer, true);
+    lexer->advance(lexer, skip);
   }
 }
 
 static bool at_line_end(TSLexer *lexer) {
-  skip_blanks(lexer);
+  skip_blanks(lexer, false);
   if (lexer->eof(lexer) || lexer->lookahead == '\n' || lexer->lookahead == '#') {
     return true;
   }
@@ -105,7 +110,7 @@ static bool at_line_end(TSLexer *lexer) {
 static bool next_line_continues(TSLexer *lexer) {
   for (int skipped = 0;; skipped++) {
     if (skipped > MAX_SKIPPED_COMMENTS) return false;
-    skip_blanks(lexer);
+    skip_blanks(lexer, false);
     if (lexer->lookahead == '#') {
       lexer->advance(lexer, false);
       if (lexer->lookahead == '#') return false;
@@ -288,7 +293,7 @@ bool tree_sitter_agentica_external_scanner_scan(void *payload, TSLexer *lexer,
   }
 
   for (;;) {
-    skip_blanks(lexer);
+    skip_blanks(lexer, true);
     if (lexer->lookahead != '\n') break;
     // The line break that ends an opener line starts the first pending body;
     // the line's own NEWLINE comes at the break after the last end line.
@@ -323,7 +328,7 @@ bool tree_sitter_agentica_external_scanner_scan(void *payload, TSLexer *lexer,
   bool want_word = valid_symbols[IDENTIFIER_BEFORE_NEQ] || valid_symbols[BREAK] ||
                    valid_symbols[NEXT] || valid_symbols[LOOP_DO] ||
                    valid_symbols[TRUE_BEFORE_NEQ] || valid_symbols[FALSE_BEFORE_NEQ] ||
-                   valid_symbols[NIL_BEFORE_NEQ];
+                   valid_symbols[NIL_BEFORE_NEQ] || valid_symbols[PRIVATE];
   if (!want_word || !is_word_start(lexer->lookahead)) return false;
 
   char word[8];
@@ -336,6 +341,21 @@ bool tree_sitter_agentica_external_scanner_scan(void *payload, TSLexer *lexer,
   word[length < sizeof(word) ? length : sizeof(word) - 1] = '\0';
   bool short_word = length < sizeof(word);
   lexer->mark_end(lexer);
+
+  // `private` alone on its line, a comment allowed after it, is the line that
+  // makes the rest of its scope private (the interpreter's `private_start?`:
+  // the name and then the end of the line). Anything else after the word
+  // (`=`, `(`, `:`, `.`) leaves it a name, and the internal lexer reads it
+  // again, so this check may move the lookahead.
+  if (valid_symbols[PRIVATE] && short_word && strcmp(word, "private") == 0 &&
+      lexer->lookahead != '!' && lexer->lookahead != '?') {
+    skip_blanks(lexer, false);
+    if (lexer->eof(lexer) || lexer->lookahead == '\n' || lexer->lookahead == '#') {
+      lexer->result_symbol = PRIVATE;
+      return true;
+    }
+    return false;
+  }
 
   if (lexer->lookahead == '!') {
     lexer->advance(lexer, false);
