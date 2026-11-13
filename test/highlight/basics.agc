@@ -189,6 +189,12 @@ def families(d: OpenSSL.Digest, r: HTTP.Response) -> Void
   return x if x > 1
 # ^ keyword.return
 #          ^ keyword.conditional
+  while true
+    break # done
+#   ^ keyword.repeat
+    next  # again
+#   ^ keyword.repeat
+  end
 end
 
 struct Conn
@@ -211,7 +217,7 @@ module Counter
   def step(n: Int, by: Int) -> Int = n + by
 end
 
-private
+private # the rest of the file
 # <- keyword
 
 def private() -> Int = 1

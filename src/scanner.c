@@ -65,15 +65,19 @@ static bool is_reserved(const char *word) {
   return false;
 }
 
-static void skip_blanks(TSLexer *lexer) {
+// Before a token, `skip` leaves the blanks out of it. After `mark_end` the
+// blanks must not be skipped: a skip moves the token start, so the token would
+// start at its end and have no text. There `skip` is false, and the blanks are
+// only look-ahead past the marked end.
+static void skip_blanks(TSLexer *lexer, bool skip) {
   while (lexer->lookahead == ' ' || lexer->lookahead == '\t' ||
          lexer->lookahead == '\r' || lexer->lookahead == '\f') {
-    lexer->advance(lexer, true);
+    lexer->advance(lexer, skip);
   }
 }
 
 static bool at_line_end(TSLexer *lexer) {
-  skip_blanks(lexer);
+  skip_blanks(lexer, false);
   if (lexer->eof(lexer) || lexer->lookahead == '\n' || lexer->lookahead == '#') {
     return true;
   }
@@ -106,7 +110,7 @@ static bool at_line_end(TSLexer *lexer) {
 static bool next_line_continues(TSLexer *lexer) {
   for (int skipped = 0;; skipped++) {
     if (skipped > MAX_SKIPPED_COMMENTS) return false;
-    skip_blanks(lexer);
+    skip_blanks(lexer, false);
     if (lexer->lookahead == '#') {
       lexer->advance(lexer, false);
       if (lexer->lookahead == '#') return false;
@@ -289,7 +293,7 @@ bool tree_sitter_agentica_external_scanner_scan(void *payload, TSLexer *lexer,
   }
 
   for (;;) {
-    skip_blanks(lexer);
+    skip_blanks(lexer, true);
     if (lexer->lookahead != '\n') break;
     // The line break that ends an opener line starts the first pending body;
     // the line's own NEWLINE comes at the break after the last end line.
@@ -345,7 +349,7 @@ bool tree_sitter_agentica_external_scanner_scan(void *payload, TSLexer *lexer,
   // again, so this check may move the lookahead.
   if (valid_symbols[PRIVATE] && short_word && strcmp(word, "private") == 0 &&
       lexer->lookahead != '!' && lexer->lookahead != '?') {
-    skip_blanks(lexer);
+    skip_blanks(lexer, false);
     if (lexer->eof(lexer) || lexer->lookahead == '\n' || lexer->lookahead == '#') {
       lexer->result_symbol = PRIVATE;
       return true;

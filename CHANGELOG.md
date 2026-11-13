@@ -31,6 +31,11 @@ Agentica 0.31.0 syntax.
   declaration is public unless it comes after `private`. `export Alias.name`
   still parses as `reexport`.
 
+### Fixed
+
+- `break` and `next` followed by spaces, a comment or a CRLF line ending keep
+  their text: the node no longer has zero width, so they are highlighted.
+
 ## [0.6.0] - 2026-11-12
 
 Agentica 0.30.x syntax.

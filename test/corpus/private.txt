@@ -362,3 +362,71 @@ end
 
 (source_file
   (ERROR))
+
+==================
+Private line with trailing blanks
+==================
+
+def f() -> Int = 1
+
+private 	
+
+def g() -> Int = 2
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (integer))
+  (private_line)
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (integer)))
+
+==================
+Private line as the last line of a module block
+==================
+
+module M
+  def f() -> Int = 1
+
+  private
+end
+
+---
+
+(source_file
+  (module_block
+    (type_identifier)
+    (function_definition
+      (identifier)
+      (parameters)
+      (type
+        (type_identifier))
+      (integer))
+    (private_line)))
+
+==================
+Private line at the end of the file with no newline
+==================
+
+def f() -> Int = 1
+
+private
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (integer))
+  (private_line))
