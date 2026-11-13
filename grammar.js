@@ -58,6 +58,7 @@ module.exports = grammar({
     $._heredoc_body_start,
     $.heredoc_content,
     $.heredoc_end,
+    $._private,
     $._error_sentinel,
   ],
 
@@ -87,7 +88,10 @@ module.exports = grammar({
   rules: {
     source_file: $ => seq(
       repeat($._newline),
-      optional(seq(separated($, choice($._declaration, $._statement)), repeat($._newline))),
+      optional(seq(
+        separated($, choice($._declaration, $._statement, $.private_line)),
+        repeat($._newline),
+      )),
     ),
 
     _declaration: $ => choice(
@@ -97,22 +101,33 @@ module.exports = grammar({
       $.type_alias_definition,
       $.constant_definition,
       $.import,
-      $.export,
       $.reexport,
       $.extern_block,
       $.extern_module_block,
       $.module_block,
     ),
 
-    // `module Name ... end` groups declarations of one file under a name;
-    // `export module` makes it importable. A lowercase `module` is a name.
+    // `module Name ... end` groups declarations of one file under a name. A
+    // lowercase `module` is a name.
     module_block: $ => seq(
       'module',
       field('name', $.type_identifier),
       $._newline,
-      repeat(choice(seq(field('member', $._module_member), $._newline), $._newline)),
+      repeat(choice(
+        seq(field('member', $._module_member), $._newline),
+        seq($.private_line, $._newline),
+        $._newline,
+      )),
       'end',
     ),
+
+    // `private` alone on its line, at the level of the declarations of a file
+    // or a module block, or among the fields of a struct: what comes after it
+    // is private. The scanner emits it only for the word alone on its line (a
+    // comment may follow), so `private = 1`, `private()` and a field
+    // `private: Int` keep `private` as a name. A second line in one scope is
+    // the interpreter's error (`PARSE-SECOND-PRIVATE`), not this grammar's.
+    private_line: $ => alias($._private, 'private'),
 
     _module_member: $ => choice(
       $.function_definition,
@@ -120,7 +135,6 @@ module.exports = grammar({
       $.enum_definition,
       $.type_alias_definition,
       $.constant_definition,
-      $.export,
     ),
 
     // `import Alias from "path"` or `import {a, B as C} from "path"`: one form
@@ -144,19 +158,9 @@ module.exports = grammar({
       optional(seq('as', field('rename', choice($.identifier, $.type_identifier)))),
     ),
 
-    export: $ => seq(
-      'export',
-      field('declaration', choice(
-        $.function_definition,
-        $.struct_definition,
-        $.enum_definition,
-        $.type_alias_definition,
-        $.constant_definition,
-        $.module_block,
-      )),
-    ),
-
-    // `export Alias.name` makes a name of an imported file importable again.
+    // `export Alias.name` makes a name of an imported file importable again. It
+    // is the only use of `export`: a declaration is public unless it comes
+    // after a `private_line`.
     reexport: $ => seq(
       'export',
       field('module', $.type_identifier),
@@ -177,14 +181,11 @@ module.exports = grammar({
       'end',
     ),
 
-    _extern_member: $ => seq(
-      optional('export'),
-      choice(
-        $.extern_function_definition,
-        $.callback_definition,
-        $.resource_definition,
-        $.struct_definition,
-      ),
+    _extern_member: $ => choice(
+      $.extern_function_definition,
+      $.callback_definition,
+      $.resource_definition,
+      $.struct_definition,
     ),
 
     // `extern module "NAME" ... end` declares the functions of a native module
@@ -203,12 +204,9 @@ module.exports = grammar({
       'end',
     ),
 
-    _extern_module_member: $ => seq(
-      optional('export'),
-      choice(
-        $.extern_function_definition,
-        $.module_resource_definition,
-      ),
+    _extern_module_member: $ => choice(
+      $.extern_function_definition,
+      $.module_resource_definition,
     ),
 
     module_resource_definition: $ => seq(
@@ -312,7 +310,11 @@ module.exports = grammar({
       field('name', $.type_identifier),
       optional(field('type_parameters', $.type_parameters)),
       $._newline,
-      repeat(choice(seq(field('field', $.field_declaration), $._newline), $._newline)),
+      repeat(choice(
+        seq(field('field', $.field_declaration), $._newline),
+        seq($.private_line, $._newline),
+        $._newline,
+      )),
       'end',
     ),
 

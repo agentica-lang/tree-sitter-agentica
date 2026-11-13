@@ -113,9 +113,9 @@ end
 
 extern "libc"
 # <- keyword
-  export def close(fd: C.Int32) -> C.Int32
-#            ^ function
-#                  ^ variable.parameter
+  def close(fd: C.Int32) -> C.Int32
+#     ^ function
+#           ^ variable.parameter
   callback Visit(item: C.Pointer) -> Void
 # ^ keyword
 #          ^ type.definition
@@ -138,7 +138,7 @@ extern module "stats"
   compute def scan(db: Db) -> List[Int]
 #             ^ function
 #                  ^ variable.parameter
-  export def empty?(db: Db) -> Bool
+  def empty?(db: Db) -> Bool
 end
 
 export Util.helper
@@ -190,3 +190,29 @@ def families(d: OpenSSL.Digest, r: HTTP.Response) -> Void
 # ^ keyword.return
 #          ^ keyword.conditional
 end
+
+struct Conn
+  host: String
+
+  private
+# ^ keyword
+
+  private: Int
+# ^ property
+end
+
+module Counter
+  def start(n: Int) -> Int = step(n, by: 1)
+#                                    ^ property
+
+  private
+# ^ keyword
+
+  def step(n: Int, by: Int) -> Int = n + by
+end
+
+private
+# <- keyword
+
+def private() -> Int = 1
+#   ^ function

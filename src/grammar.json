@@ -32,6 +32,10 @@
                         {
                           "type": "SYMBOL",
                           "name": "_statement"
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "private_line"
                         }
                       ]
                     },
@@ -57,6 +61,10 @@
                               {
                                 "type": "SYMBOL",
                                 "name": "_statement"
+                              },
+                              {
+                                "type": "SYMBOL",
+                                "name": "private_line"
                               }
                             ]
                           }
@@ -107,10 +115,6 @@
         {
           "type": "SYMBOL",
           "name": "import"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "export"
         },
         {
           "type": "SYMBOL",
@@ -172,6 +176,19 @@
                 ]
               },
               {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "private_line"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_newline"
+                  }
+                ]
+              },
+              {
                 "type": "SYMBOL",
                 "name": "_newline"
               }
@@ -183,6 +200,15 @@
           "value": "end"
         }
       ]
+    },
+    "private_line": {
+      "type": "ALIAS",
+      "content": {
+        "type": "SYMBOL",
+        "name": "_private"
+      },
+      "named": false,
+      "value": "private"
     },
     "_module_member": {
       "type": "CHOICE",
@@ -206,10 +232,6 @@
         {
           "type": "SYMBOL",
           "name": "constant_definition"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "export"
         }
       ]
     },
@@ -361,48 +383,6 @@
         }
       ]
     },
-    "export": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "export"
-        },
-        {
-          "type": "FIELD",
-          "name": "declaration",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "function_definition"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "struct_definition"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "enum_definition"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "type_alias_definition"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "constant_definition"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "module_block"
-              }
-            ]
-          }
-        }
-      ]
-    },
     "reexport": {
       "type": "SEQ",
       "members": [
@@ -496,40 +476,23 @@
       ]
     },
     "_extern_member": {
-      "type": "SEQ",
+      "type": "CHOICE",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "export"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "extern_function_definition"
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "extern_function_definition"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "callback_definition"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "resource_definition"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "struct_definition"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "callback_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "resource_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "struct_definition"
         }
       ]
     },
@@ -592,32 +555,15 @@
       ]
     },
     "_extern_module_member": {
-      "type": "SEQ",
+      "type": "CHOICE",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "export"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "extern_function_definition"
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "extern_function_definition"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "module_resource_definition"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "module_resource_definition"
         }
       ]
     },
@@ -1329,6 +1275,19 @@
                       "type": "SYMBOL",
                       "name": "field_declaration"
                     }
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_newline"
+                  }
+                ]
+              },
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "private_line"
                   },
                   {
                     "type": "SYMBOL",
@@ -4680,6 +4639,10 @@
     {
       "type": "SYMBOL",
       "name": "heredoc_end"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_private"
     },
     {
       "type": "SYMBOL",

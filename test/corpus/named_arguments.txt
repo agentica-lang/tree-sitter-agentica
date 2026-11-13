@@ -1,0 +1,222 @@
+==================
+Named arguments in every call form
+==================
+
+check(gen, 200, verbose: true)
+xs.reduce(initial: 0)
+M.f(a: 1)
+Http.Client.get(url, timeout_ms: 5)
+x |> f(a: 1)
+x |> try f(a: 1)
+
+---
+
+(source_file
+  (call
+    (identifier)
+    (argument_list
+      (identifier)
+      (integer)
+      (named_argument
+        (identifier)
+        (true))))
+  (method_call
+    (identifier)
+    (identifier)
+    (argument_list
+      (named_argument
+        (identifier)
+        (integer))))
+  (call
+    (type_identifier)
+    (identifier)
+    (argument_list
+      (named_argument
+        (identifier)
+        (integer))))
+  (method_call
+    (type_path
+      (type_identifier)
+      (type_identifier))
+    (identifier)
+    (argument_list
+      (identifier)
+      (named_argument
+        (identifier)
+        (integer))))
+  (pipe
+    (identifier)
+    (pipe_target
+      (call
+        (identifier)
+        (argument_list
+          (named_argument
+            (identifier)
+            (integer))))))
+  (pipe
+    (identifier)
+    (pipe_target
+      (call
+        (identifier)
+        (argument_list
+          (named_argument
+            (identifier)
+            (integer)))))))
+
+==================
+Named arguments with a trailing block
+==================
+
+f(a: 1) do |x|
+  x
+end
+xs.reduce(initial: 0) do |acc, x|
+  acc + x
+end
+f(a: 1) { |x| x }
+xs |> reduce(initial: 0) { |acc, x| acc + x }
+
+---
+
+(source_file
+  (call
+    (identifier)
+    (argument_list
+      (named_argument
+        (identifier)
+        (integer)))
+    (block
+      (block_parameters
+        (block_parameter
+          (identifier)))
+      (body
+        (identifier))))
+  (method_call
+    (identifier)
+    (identifier)
+    (argument_list
+      (named_argument
+        (identifier)
+        (integer)))
+    (block
+      (block_parameters
+        (block_parameter
+          (identifier))
+        (block_parameter
+          (identifier)))
+      (body
+        (binary
+          (identifier)
+          (identifier)))))
+  (call
+    (identifier)
+    (argument_list
+      (named_argument
+        (identifier)
+        (integer)))
+    (brace_block
+      (block_parameters
+        (block_parameter
+          (identifier)))
+      (body
+        (identifier))))
+  (pipe
+    (identifier)
+    (pipe_target
+      (call
+        (identifier)
+        (argument_list
+          (named_argument
+            (identifier)
+            (integer)))
+        (brace_block
+          (block_parameters
+            (block_parameter
+              (identifier))
+            (block_parameter
+              (identifier)))
+          (body
+            (binary
+              (identifier)
+              (identifier))))))))
+
+==================
+Named argument values
+==================
+
+f(g(b: 2), a: h(c: 3))
+f(block: ->(x) { x * 2 })
+f(headers: {"a": 1}, ok: a or b)
+f({a: 1}, b: 2)
+f(
+  a: 1,
+  b: 2,
+)
+
+---
+
+(source_file
+  (call
+    (identifier)
+    (argument_list
+      (call
+        (identifier)
+        (argument_list
+          (named_argument
+            (identifier)
+            (integer))))
+      (named_argument
+        (identifier)
+        (call
+          (identifier)
+          (argument_list
+            (named_argument
+              (identifier)
+              (integer)))))))
+  (call
+    (identifier)
+    (argument_list
+      (named_argument
+        (identifier)
+        (lambda
+          (lambda_parameters
+            (block_parameter
+              (identifier)))
+          (body
+            (binary
+              (identifier)
+              (integer)))))))
+  (call
+    (identifier)
+    (argument_list
+      (named_argument
+        (identifier)
+        (map
+          (pair
+            (string
+              (string_content))
+            (integer))))
+      (named_argument
+        (identifier)
+        (binary
+          (identifier)
+          (identifier)))))
+  (call
+    (identifier)
+    (argument_list
+      (map
+        (pair
+          (identifier)
+          (integer)))
+      (named_argument
+        (identifier)
+        (integer))))
+  (call
+    (identifier)
+    (argument_list
+      (named_argument
+        (identifier)
+        (integer))
+      (named_argument
+        (identifier)
+        (integer)))))

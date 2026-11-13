@@ -28,7 +28,7 @@ import {
 } from "lib/measure"
 
 LIMIT: Int = 10
-export NAME = "x"
+NAME = "x"
 
 ---
 
@@ -56,11 +56,10 @@ export NAME = "x"
     (type
       (type_identifier))
     (integer))
-  (export
-    (constant_definition
-      (type_identifier)
-      (string
-        (string_content)))))
+  (constant_definition
+    (type_identifier)
+    (string
+      (string_content))))
 
 ==================
 Function definition
@@ -109,49 +108,11 @@ end
       (type_identifier))))
 
 ==================
-Exported definitions
-==================
-
-export def greet(name: String) -> String
-  "hi #{name}"
-end
-
-export struct User
-  name: String
-end
-
----
-
-(source_file
-  (export
-    (function_definition
-      (identifier)
-      (parameters
-        (parameter
-          (identifier)
-          (type
-            (type_identifier))))
-      (type
-        (type_identifier))
-      (body
-        (string
-          (string_content)
-          (interpolation
-            (identifier))))))
-  (export
-    (struct_definition
-      (type_identifier)
-      (field_declaration
-        (identifier)
-        (type
-          (type_identifier))))))
-
-==================
 Type aliases
 ==================
 
 type UserId = Int
-export type UserList = List[Models.User]
+type UserList = List[Models.User]
 
 ---
 
@@ -160,16 +121,15 @@ export type UserList = List[Models.User]
     (type_identifier)
     (type
       (type_identifier)))
-  (export
-    (type_alias_definition
+  (type_alias_definition
+    (type_identifier)
+    (type
       (type_identifier)
-      (type
-        (type_identifier)
-        (type_arguments
-          (type
-            (scoped_type_identifier
-              (type_identifier)
-              (type_identifier))))))))
+      (type_arguments
+        (type
+          (scoped_type_identifier
+            (type_identifier)
+            (type_identifier)))))))
 
 ==================
 Struct definition
@@ -544,7 +504,7 @@ Extern block with functions
 
 extern "libc"
   ## Closes a descriptor.
-  export def close(fd: C.Int32) -> C.Int32
+  def close(fd: C.Int32) -> C.Int32
   def fcntl_int(fd: C.Int32, cmd: C.Int32, ...) -> C.Int32 = "fcntl"
   compute def sleep_ms(ms: C.Int32) -> Void
   def out_pair(out: C.Pointer, out count: C.Int32) -> Void
@@ -629,7 +589,8 @@ extern "libdemo"
   resource Conn, free: PQfinish
   resource Handle, free_ref: duckdb_close
   resource Thing, free: C.Function
-  export struct Point
+  ## A point of the C library.
+  struct Point
     x: C.Double
     y: C.Double = 0.0
   end
@@ -673,6 +634,7 @@ end
       (scoped_type_identifier
         (type_identifier)
         (type_identifier)))
+    (comment)
     (struct_definition
       (type_identifier)
       (field_declaration
@@ -713,7 +675,7 @@ extern module "m"
   resource Db
   def open(path: String) -> Result[Db]
   compute def scan(db: Db) -> List[Int]
-  export def empty?(db: Db) -> Bool
+  def empty?(db: Db) -> Bool
 end
 
 ---
@@ -765,10 +727,10 @@ Extern module block with docs, blank lines and bang names
 extern module "m"
   ## The first line of the docs.
   ## The second line.
-  export resource Db
+  resource Db
 
   ## Saves the db.
-  export compute def save!(db: Db, rows: Map[String, Optional[Int]]) -> Result[Void]
+  compute def save!(db: Db, rows: Map[String, Optional[Int]]) -> Result[Void]
 
   def count(db: Db) -> Int
 end
@@ -1144,7 +1106,7 @@ One-line function definition
 ==================
 
 def double(n: Int) -> Int = n * 2
-export def label(n: Int) -> String = "n: #{n}"
+def label(n: Int) -> String = "n: #{n}"
 def first_or[T](xs: List[T], default: T) -> T = xs.first(default)
 
 ---
@@ -1162,20 +1124,19 @@ def first_or[T](xs: List[T], default: T) -> T = xs.first(default)
     (binary
       (identifier)
       (integer)))
-  (export
-    (function_definition
-      (identifier)
-      (parameters
-        (parameter
-          (identifier)
-          (type
-            (type_identifier))))
-      (type
-        (type_identifier))
-      (string
-        (string_content)
-        (interpolation
-          (identifier)))))
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (string
+      (string_content)
+      (interpolation
+        (identifier))))
   (function_definition
     (identifier)
     (type_parameters
@@ -1207,19 +1168,21 @@ Module blocks
 UNIT = "items"
 
 module Stock
-  export enum Change
+  enum Change
     Add(Int)
   end
 
-  export def apply(count: Int) -> Int
+  def apply(count: Int) -> Int
     count
   end
+
+  private
 
   def floor_at_zero(n: Int) -> Int = n
 end
 
-export module Report
-  export def line(n: Int) -> String = "x"
+module Report
+  def line(n: Int) -> String = "x"
 end
 
 ---
@@ -1231,26 +1194,25 @@ end
       (string_content)))
   (module_block
     (type_identifier)
-    (export
-      (enum_definition
+    (enum_definition
+      (type_identifier)
+      (enum_variant
         (type_identifier)
-        (enum_variant
-          (type_identifier)
-          (variant_payload
-            (type
-              (type_identifier))))))
-    (export
-      (function_definition
-        (identifier)
-        (parameters
-          (parameter
-            (identifier)
-            (type
-              (type_identifier))))
-        (type
-          (type_identifier))
-        (body
-          (identifier))))
+        (variant_payload
+          (type
+            (type_identifier)))))
+    (function_definition
+      (identifier)
+      (parameters
+        (parameter
+          (identifier)
+          (type
+            (type_identifier))))
+      (type
+        (type_identifier))
+      (body
+        (identifier)))
+    (private_line)
     (function_definition
       (identifier)
       (parameters
@@ -1261,18 +1223,16 @@ end
       (type
         (type_identifier))
       (identifier)))
-  (export
-    (module_block
-      (type_identifier)
-      (export
-        (function_definition
+  (module_block
+    (type_identifier)
+    (function_definition
+      (identifier)
+      (parameters
+        (parameter
           (identifier)
-          (parameters
-            (parameter
-              (identifier)
-              (type
-                (type_identifier))))
           (type
-            (type_identifier))
-          (string
-            (string_content)))))))
+            (type_identifier))))
+      (type
+        (type_identifier))
+      (string
+        (string_content)))))

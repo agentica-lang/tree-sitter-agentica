@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-11-13
+
+Agentica 0.31.0 syntax.
+
+### Added
+
+- A `private` line in a file, a `module` block or a struct body parses as
+  `private_line`, a sibling of the declarations or fields around it: what
+  comes after it is private. Only the word alone on its line (a comment may
+  follow) is a `private_line`, so `private` stays a name for a function, a
+  local, a parameter, a field, a named argument and a map key. Highlighted as
+  `@keyword`.
+- Corpus tests for named arguments (`check(gen, verbose: true)`) in every call
+  form: method calls, `M.f(a: 1)`, pipes, trailing blocks, and values that are
+  lambdas or maps.
+
+### Removed
+
+- **Breaking:** `export` before a declaration (`export def`, `export struct`,
+  `export enum`, `export type`, `export NAME = ...`, `export module`, a member
+  of an `extern` block) no longer parses, and the `export` node is gone: a
+  declaration is public unless it comes after `private`. `export Alias.name`
+  still parses as `reexport`.
+
 ## [0.6.0] - 2026-11-12
 
 Agentica 0.30.x syntax.
@@ -179,6 +203,7 @@ Agentica 0.30.x syntax.
   and the `quadratic-append` rule, which warns on `xs = xs.push(y)` and String
   `s += t` inside `while`/`for` loops, with rule tests.
 
+[0.7.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.7.0
 [0.6.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.6.0
 [0.5.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.5.0
 [0.4.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.4.0

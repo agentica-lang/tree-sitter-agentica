@@ -1,0 +1,364 @@
+==================
+Private line in a file
+==================
+
+import Util from "util"
+import {area} from "shapes"
+
+export Util.helper
+
+LIMIT = 10
+
+def open(id: Int) -> Int = connect(id)
+
+private # helpers
+
+BUFFER = 4096
+
+def connect(id: Int) -> Int = id + BUFFER
+
+---
+
+(source_file
+  (import
+    (type_identifier)
+    (string
+      (string_content)))
+  (import
+    (import_list
+      (import_name
+        (identifier)))
+    (string
+      (string_content)))
+  (reexport
+    (type_identifier)
+    (identifier))
+  (constant_definition
+    (type_identifier)
+    (integer))
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (call
+      (identifier)
+      (argument_list
+        (identifier))))
+  (private_line)
+  (comment)
+  (constant_definition
+    (type_identifier)
+    (integer))
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (binary
+      (identifier)
+      (type_identifier))))
+
+==================
+First declaration right after imports and private
+==================
+
+import Util from "util"
+
+private
+
+def helper() -> Int = 1
+
+---
+
+(source_file
+  (import
+    (type_identifier)
+    (string
+      (string_content)))
+  (private_line)
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (integer)))
+
+==================
+File with only public declarations
+==================
+
+def a() -> Int = 1
+
+struct B
+  x: Int
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (integer))
+  (struct_definition
+    (type_identifier)
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)))))
+
+==================
+File with only private declarations
+==================
+
+private
+
+def a() -> Int = 1
+
+B = 2
+
+---
+
+(source_file
+  (private_line)
+  (function_definition
+    (identifier)
+    (parameters)
+    (type
+      (type_identifier))
+    (integer))
+  (constant_definition
+    (type_identifier)
+    (integer)))
+
+==================
+Private line in a module block
+==================
+
+module Counter
+  def start(initial: Int) -> Int = step(initial)
+
+  private  # not for importers
+
+  def step(count: Int) -> Int = count + 1
+end
+
+---
+
+(source_file
+  (module_block
+    (type_identifier)
+    (function_definition
+      (identifier)
+      (parameters
+        (parameter
+          (identifier)
+          (type
+            (type_identifier))))
+      (type
+        (type_identifier))
+      (call
+        (identifier)
+        (argument_list
+          (identifier))))
+    (private_line)
+    (comment)
+    (function_definition
+      (identifier)
+      (parameters
+        (parameter
+          (identifier)
+          (type
+            (type_identifier))))
+      (type
+        (type_identifier))
+      (binary
+        (identifier)
+        (integer)))))
+
+==================
+Private line in a struct body
+==================
+
+struct Conn
+  host: String
+
+  private # the socket stays inside
+
+  socket: Int
+  retries: Int = 3
+end
+
+struct Hidden
+  private
+
+  token: String
+end
+
+---
+
+(source_file
+  (struct_definition
+    (type_identifier)
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)))
+    (private_line)
+    (comment)
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)))
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier))
+      (integer)))
+  (struct_definition
+    (type_identifier)
+    (private_line)
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)))))
+
+==================
+Private as a name
+==================
+
+def private(private: Int) -> Int
+  private = 1
+  private
+  private()
+  f(private: 1)
+  m = {private: 2}
+  x.private
+  private.size
+end
+
+struct Flags
+  private: Bool
+end
+
+private = 1
+private(2)
+private.size
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (integer))
+      (identifier)
+      (call
+        (identifier)
+        (argument_list))
+      (call
+        (identifier)
+        (argument_list
+          (named_argument
+            (identifier)
+            (integer))))
+      (assignment
+        (identifier)
+        (map
+          (pair
+            (identifier)
+            (integer))))
+      (field_access
+        (identifier)
+        (identifier))
+      (field_access
+        (identifier)
+        (identifier))))
+  (struct_definition
+    (type_identifier)
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier))))
+  (assignment
+    (identifier)
+    (integer))
+  (call
+    (identifier)
+    (argument_list
+      (integer)))
+  (field_access
+    (identifier)
+    (identifier)))
+
+==================
+Private before a declaration on its line is a syntax error
+:error
+==================
+
+private def f() -> Int = 1
+
+---
+
+(source_file
+  (ERROR))
+
+==================
+Export before a definition is a syntax error
+:error
+==================
+
+export def f() -> Int = 1
+
+---
+
+(source_file
+  (ERROR))
+
+==================
+Export before a module block is a syntax error
+:error
+==================
+
+export module M
+  def f() -> Int = 1
+end
+
+---
+
+(source_file
+  (ERROR))
+
+==================
+Export before an extern member is a syntax error
+:error
+==================
+
+extern "libc"
+  export def close(fd: C.Int32) -> C.Int32
+end
+
+---
+
+(source_file
+  (ERROR))

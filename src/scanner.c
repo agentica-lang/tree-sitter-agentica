@@ -19,6 +19,7 @@ enum TokenType {
   HEREDOC_BODY_START,
   HEREDOC_CONTENT,
   HEREDOC_END,
+  PRIVATE,
   ERROR_SENTINEL,
 };
 
@@ -323,7 +324,7 @@ bool tree_sitter_agentica_external_scanner_scan(void *payload, TSLexer *lexer,
   bool want_word = valid_symbols[IDENTIFIER_BEFORE_NEQ] || valid_symbols[BREAK] ||
                    valid_symbols[NEXT] || valid_symbols[LOOP_DO] ||
                    valid_symbols[TRUE_BEFORE_NEQ] || valid_symbols[FALSE_BEFORE_NEQ] ||
-                   valid_symbols[NIL_BEFORE_NEQ];
+                   valid_symbols[NIL_BEFORE_NEQ] || valid_symbols[PRIVATE];
   if (!want_word || !is_word_start(lexer->lookahead)) return false;
 
   char word[8];
@@ -336,6 +337,21 @@ bool tree_sitter_agentica_external_scanner_scan(void *payload, TSLexer *lexer,
   word[length < sizeof(word) ? length : sizeof(word) - 1] = '\0';
   bool short_word = length < sizeof(word);
   lexer->mark_end(lexer);
+
+  // `private` alone on its line, a comment allowed after it, is the line that
+  // makes the rest of its scope private (the interpreter's `private_start?`:
+  // the name and then the end of the line). Anything else after the word
+  // (`=`, `(`, `:`, `.`) leaves it a name, and the internal lexer reads it
+  // again, so this check may move the lookahead.
+  if (valid_symbols[PRIVATE] && short_word && strcmp(word, "private") == 0 &&
+      lexer->lookahead != '!' && lexer->lookahead != '?') {
+    skip_blanks(lexer);
+    if (lexer->eof(lexer) || lexer->lookahead == '\n' || lexer->lookahead == '#') {
+      lexer->result_symbol = PRIVATE;
+      return true;
+    }
+    return false;
+  }
 
   if (lexer->lookahead == '!') {
     lexer->advance(lexer, false);

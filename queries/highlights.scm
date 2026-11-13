@@ -11,6 +11,7 @@
   "type"
   "import"
   "export"
+  "private"
   "as"
   "from"
   "end"
