@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- The body of a `<<~EAG` heredoc is raw text: `#{ b: 1 }` and `\q` in it no longer give `ERROR` nodes.
+
+### Added
+
+- A `##` doc comment is also highlighted as `@comment.documentation`.
+- CI parses the Agentica 0.33.0 corpus with `npm run parse-corpus`.
+
 ## [0.7.0] - 2026-11-13
 
 Agentica 0.31.0 syntax.

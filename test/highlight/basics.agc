@@ -222,3 +222,8 @@ private # the rest of the file
 
 def private() -> Int = 1
 #   ^ function
+
+## A doc comment.
+# <- comment.documentation
+# a plain comment
+# <- comment
