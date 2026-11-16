@@ -1236,3 +1236,54 @@ end
         (type_identifier))
       (string
         (string_content)))))
+
+================================================================================
+Type paths with two or more module segments
+================================================================================
+
+def f(s: A.B.C) -> TUI.Raw.Screen.Cell = 1
+def g(xs: List[A.B.C[T]]) -> Int = 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier)))))
+    (type
+      (scoped_type_identifier
+        (scoped_type_identifier
+          (scoped_type_identifier
+            (type_identifier)
+            (type_identifier))
+          (type_identifier))
+        (type_identifier)))
+    (integer))
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)
+          (type_arguments
+            (type
+              (scoped_type_identifier
+                (scoped_type_identifier
+                  (type_identifier)
+                  (type_identifier))
+                (type_identifier))
+              (type_arguments
+                (type
+                  (type_identifier))))))))
+    (type
+      (type_identifier))
+    (integer)))
