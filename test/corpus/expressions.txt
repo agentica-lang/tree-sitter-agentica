@@ -712,3 +712,42 @@ end
                   (type
                     (type_identifier))))
               (type_arguments))))))))
+
+================================================================================
+Paths with more than two segments in expressions
+================================================================================
+
+x = TUI.Raw.Screen.Cell(1)
+y = A.B.C[T]
+z = TUI.Raw.screen(1)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (construct
+      (type_path
+        (type_identifier)
+        (type_identifier)
+        (type_identifier)
+        (type_identifier))
+      (argument_list
+        (integer))))
+  (assignment
+    (identifier)
+    (index
+      (type_path
+        (type_identifier)
+        (type_identifier)
+        (type_identifier))
+      (type_identifier)))
+  (assignment
+    (identifier)
+    (method_call
+      (type_path
+        (type_identifier)
+        (type_identifier))
+      (identifier)
+      (argument_list
+        (integer)))))
