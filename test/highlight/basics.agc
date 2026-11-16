@@ -227,3 +227,7 @@ def private() -> Int = 1
 # <- comment.documentation
 # a plain comment
 # <- comment
+
+### three marks
+# <- comment
+# <- !comment.documentation
