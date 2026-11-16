@@ -231,3 +231,11 @@ def private() -> Int = 1
 ### three marks
 # <- comment
 # <- !comment.documentation
+
+def screens(s: TUI.Raw.Screen) -> TUI.Raw.Cell = 1
+#              ^ type
+#                  ^ type
+#                      ^ type
+#                                 ^ type
+#                                     ^ type
+#                                         ^ type
