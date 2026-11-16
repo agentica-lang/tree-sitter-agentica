@@ -195,9 +195,15 @@ static bool at_heredoc_end_line(const Heredoc *heredoc, TSLexer *lexer, bool mar
   return lexer->eof(lexer) || lexer->lookahead == '\n';
 }
 
+static bool is_eag(const Heredoc *heredoc) {
+  return heredoc->length == 3 && memcmp(heredoc->name, "EAG", 3) == 0;
+}
+
 // Body text up to an escape, an interpolation or the end line. Line breaks are
-// part of the text; the end line is a token of its own.
+// part of the text; the end line is a token of its own. The body of `<<~EAG`
+// is raw: it has no escape and no interpolation.
 static bool scan_heredoc_content(Scanner *scanner, TSLexer *lexer) {
+  bool raw = is_eag(&scanner->open);
   bool has_content = false;
   bool at_line_start = lexer->get_column(lexer) == 0;
   for (;;) {
@@ -219,8 +225,8 @@ static bool scan_heredoc_content(Scanner *scanner, TSLexer *lexer) {
     }
     if (lexer->eof(lexer)) break;
     int32_t c = lexer->lookahead;
-    if (c == '\\') break;
-    if (c == '#') {
+    if (c == '\\' && !raw) break;
+    if (c == '#' && !raw) {
       lexer->mark_end(lexer);
       lexer->advance(lexer, false);
       if (lexer->lookahead == '{') {

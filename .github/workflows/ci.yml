@@ -27,3 +27,23 @@ jobs:
 
       - uses: actions-rust-lang/setup-rust-toolchain@v2
       - run: cargo test
+
+  corpus:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/checkout@v6
+        with:
+          repository: agentica-lang/agentica
+          ref: 020f0f657fa9f51cc3cd90257779200485ae3d18 # 0.33.0
+          path: agentica
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - run: sudo apt-get install -y ripgrep
+      - run: npm ci
+      - run: npm run parse-corpus -- agentica
