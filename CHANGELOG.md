@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-11-20
+
+Agentica 0.35.1 syntax. CI validates the grammar against that release.
+
 ### Fixed
 
 - Generic types in expressions, such as `Box[Int]` and `Alias.Pair[Int, String]`, parse as `type_application`. Uppercase constant accesses such as `Alias.VALUES[OFFSET]` still parse as `index`.
@@ -224,6 +228,7 @@ Agentica 0.30.x syntax.
   and the `quadratic-append` rule, which warns on `xs = xs.push(y)` and String
   `s += t` inside `while`/`for` loops, with rule tests.
 
+[0.9.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.9.0
 [0.8.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.8.0
 [0.7.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.7.0
 [0.6.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.6.0
