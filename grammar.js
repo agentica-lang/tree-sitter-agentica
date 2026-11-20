@@ -82,7 +82,8 @@ module.exports = grammar({
   conflicts: $ => [
     [$.body],
     [$.type_path],
-    [$._primary, $.type_application],
+    [$.type_identifier, $.type_application],
+    [$._applicable_type_path, $.type_identifier],
   ],
 
   rules: {
@@ -634,11 +635,18 @@ module.exports = grammar({
       field('arguments', $.argument_list),
     ),
 
-    // A type with two or more arguments as a value, `JSON.decode(text, Map[String,
-    // Int])`. One argument stays an `index`, which reads the same.
-    type_application: $ => seq(
-      field('name', $.type_identifier),
-      alias(seq('[', $.type, ',', commaSep1($.type), ']'), $.type_arguments),
+    type_application: $ => prec.dynamic(1, seq(
+      field('name', choice(
+        alias($._type_name, $.type_identifier),
+        alias($._applicable_type_path, $.type_path),
+      )),
+      $.type_arguments,
+    )),
+
+    _applicable_type_path: $ => seq(
+      $.type_identifier,
+      '.',
+      alias($._type_name, $.type_identifier),
     ),
 
     // `Geo.Point` is a path; a further `.name` (`Geo.Point.members`,
@@ -770,7 +778,11 @@ module.exports = grammar({
 
     identifier: _ => /[a-z_\u00b5][a-zA-Z0-9_\u00b5]*[?!]?/,
 
-    type_identifier: _ => /[A-Z][a-zA-Z0-9_]*/,
+    type_identifier: $ => choice($._type_name, $._constant_name),
+
+    _type_name: _ => /[A-Z]([A-Z0-9_]*[a-z][a-zA-Z0-9_]*)?/,
+
+    _constant_name: _ => /[A-Z][A-Z0-9_]+/,
 
     comment: _ => token(prec(-1, /#.*/)),
   },

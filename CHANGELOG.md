@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Generic types in expressions, such as `Box[Int]` and `Alias.Pair[Int, String]`, parse as `type_application`. Uppercase constant accesses such as `Alias.VALUES[OFFSET]` still parse as `index`.
 - A type with more than one module segment, `TUI.Raw.Screen` or `A.B.C[T]`, parses: `scoped_type_identifier` nests to the left, its `name` is the last segment and its `module` the path before it.
 
 ## [0.8.0] - 2026-11-16
