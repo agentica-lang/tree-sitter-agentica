@@ -660,12 +660,17 @@ end
         (identifier)))))
 
 ==================
-Type with several arguments as a value
+Generic types and constant indexing in expressions
 ==================
 
 def main() -> Void
   a = JSON.decode(text, Map[String, Int])
   b = JSON.decode(text, Map[String, List[Int]])
+  c = JSON.schema(Alias.Pair[Int, String])
+  d = JSON.schema(Alias.Box[Int])
+  e = JSON.schema(Box[Int])
+  f = Alias.VALUES[0]
+  g = VALUES[0]
 end
 
 ---
@@ -686,13 +691,11 @@ end
             (identifier)
             (type_application
               (type_identifier)
-              (type_arguments)
               (type_arguments
-                (type_identifier))
-              (type_arguments)
-              (type_arguments
-                (type_identifier))
-              (type_arguments)))))
+                (type
+                  (type_identifier))
+                (type
+                  (type_identifier)))))))
       (assignment
         (identifier)
         (call
@@ -702,13 +705,62 @@ end
             (identifier)
             (type_application
               (type_identifier)
-              (type_arguments)
               (type_arguments
-                (type_identifier))
-              (type_arguments)
-              (type_arguments
+                (type
+                  (type_identifier))
+                (type
+                  (type_identifier)
+                  (type_arguments
+                    (type
+                      (type_identifier)))))))))
+      (assignment
+        (identifier)
+        (call
+          (type_identifier)
+          (identifier)
+          (argument_list
+            (type_application
+              (type_path
                 (type_identifier)
-                (type_arguments
-                  (type
-                    (type_identifier))))
-              (type_arguments))))))))
+                (type_identifier))
+              (type_arguments
+                (type
+                  (type_identifier))
+                (type
+                  (type_identifier)))))))
+      (assignment
+        (identifier)
+        (call
+          (type_identifier)
+          (identifier)
+          (argument_list
+            (type_application
+              (type_path
+                (type_identifier)
+                (type_identifier))
+              (type_arguments
+                (type
+                  (type_identifier)))))))
+      (assignment
+        (identifier)
+        (call
+          (type_identifier)
+          (identifier)
+          (argument_list
+            (type_application
+              (type_identifier)
+              (type_arguments
+                (type
+                  (type_identifier)))))))
+      (assignment
+        (identifier)
+        (index
+          (type_path
+            (type_identifier)
+            (type_identifier))
+          (integer)))
+      (assignment
+        (identifier)
+        (index
+          (type_identifier)
+          (integer))))))
