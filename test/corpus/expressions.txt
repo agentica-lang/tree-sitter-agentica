@@ -669,8 +669,8 @@ def main() -> Void
   c = JSON.schema(Alias.Pair[Int, String])
   d = JSON.schema(Alias.Box[Int])
   e = JSON.schema(Box[Int])
-  f = Alias.VALUES[0]
-  g = VALUES[0]
+  f = Alias.VALUES[OFFSET]
+  g = VALUES[OFFSET]
 end
 
 ---
@@ -758,12 +758,12 @@ end
           (type_path
             (type_identifier)
             (type_identifier))
-          (integer)))
+          (type_identifier)))
       (assignment
         (identifier)
         (index
           (type_identifier)
-          (integer))))))
+          (type_identifier))))))
 
 ================================================================================
 Paths with more than two segments in expressions
