@@ -219,3 +219,68 @@ END_1
   (heredoc_body
     (heredoc_content)
     (heredoc_end)))
+
+==================
+EAG heredoc body is raw text
+==================
+
+import EAG from "std/eag"
+
+def page(names: List[String]) -> String
+  return <<~EAG
+    <ul class="a\q">
+    #{ b: 1 } \t #{
+    <% for name in names %>
+      <li><%= name -%></li>
+    <% end %>
+  EAG
+end
+
+---
+
+(source_file
+  (import
+    (type_identifier)
+    (string
+      (string_content)))
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)
+          (type_arguments
+            (type
+              (type_identifier))))))
+    (type
+      (type_identifier))
+    (body
+      (return
+        (heredoc_beginning)))
+    (heredoc_body
+      (heredoc_content)
+      (heredoc_end))))
+
+==================
+A name that starts with EAG is an ordinary heredoc
+==================
+
+x = <<~EAGLE
+  #{a} \t
+EAGLE
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (heredoc_beginning))
+  (heredoc_body
+    (heredoc_content)
+    (interpolation
+      (identifier))
+    (heredoc_content)
+    (escape_sequence)
+    (heredoc_content)
+    (heredoc_end)))

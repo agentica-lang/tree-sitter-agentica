@@ -4,6 +4,8 @@ A [tree-sitter](https://tree-sitter.github.io) grammar for [Agentica](https://gi
 
 This grammar is a work in progress. It intentionally accepts a small superset of the interpreter's syntax to support tools; see [known differences](docs/compatibility.md).
 
+The body of a `<<~EAG` template is one `heredoc_content` node: its `<% %>` tags are plain content in the tree, with no nodes of their own.
+
 ## Quick start
 
 ```sh

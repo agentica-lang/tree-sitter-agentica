@@ -81,8 +81,8 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$.body],
+    [$.type_path],
     [$.type_identifier, $.type_application],
-    [$._applicable_type_path, $.type_path],
     [$._applicable_type_path, $.type_identifier],
   ],
 
@@ -353,11 +353,12 @@ module.exports = grammar({
       optional(field('arguments', $.type_arguments)),
     ),
 
-    scoped_type_identifier: $ => seq(
-      field('module', $.type_identifier),
+    // `A.B.C` nests to the left: the name is the last segment, the module the path before it.
+    scoped_type_identifier: $ => prec.left(seq(
+      field('module', choice($.type_identifier, $.scoped_type_identifier)),
       '.',
       field('name', $.type_identifier),
-    ),
+    )),
 
     type_arguments: $ => seq('[', commaSep1($.type), ']'),
 
@@ -644,7 +645,6 @@ module.exports = grammar({
 
     _applicable_type_path: $ => seq(
       $.type_identifier,
-      repeat(seq('.', $.type_identifier)),
       '.',
       alias($._type_name, $.type_identifier),
     ),

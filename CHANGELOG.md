@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- A type with more than one module segment, `TUI.Raw.Screen` or `A.B.C[T]`, parses: `scoped_type_identifier` nests to the left, its `name` is the last segment and its `module` the path before it.
+
+## [0.8.0] - 2026-11-16
+
+### Fixed
+
+- The body of a `<<~EAG` heredoc is raw text: `#{ b: 1 }` and `\q` in it no longer give `ERROR` nodes.
+
+### Added
+
+- A `##` doc comment is also highlighted as `@comment.documentation`: the comment is `##` alone or `##` and a space, so `###` lines are not docs.
+- CI parses the Agentica 0.33.0 corpus with `npm run parse-corpus`.
+
 ## [0.7.0] - 2026-11-13
 
 Agentica 0.31.0 syntax.
@@ -208,6 +223,7 @@ Agentica 0.30.x syntax.
   and the `quadratic-append` rule, which warns on `xs = xs.push(y)` and String
   `s += t` inside `while`/`for` loops, with rule tests.
 
+[0.8.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.8.0
 [0.7.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.7.0
 [0.6.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.6.0
 [0.5.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.5.0

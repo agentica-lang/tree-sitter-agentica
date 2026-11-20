@@ -1236,3 +1236,127 @@ end
         (type_identifier))
       (string
         (string_content)))))
+
+================================================================================
+Type paths with two or more module segments
+================================================================================
+
+def f(s: A.B.C) -> TUI.Raw.Screen.Cell = 1
+def g(xs: List[A.B.C[T]]) -> Int = 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier)))))
+    (type
+      (scoped_type_identifier
+        (scoped_type_identifier
+          (scoped_type_identifier
+            (type_identifier)
+            (type_identifier))
+          (type_identifier))
+        (type_identifier)))
+    (integer))
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)
+          (type_arguments
+            (type
+              (scoped_type_identifier
+                (scoped_type_identifier
+                  (type_identifier)
+                  (type_identifier))
+                (type_identifier))
+              (type_arguments
+                (type
+                  (type_identifier))))))))
+    (type
+      (type_identifier))
+    (integer)))
+
+================================================================================
+Types with three module segments in fields, payloads, aliases and resources
+================================================================================
+
+struct Frame
+  screen: TUI.Raw.Screen
+  cells: List[TUI.Raw.Cell]
+end
+
+enum Event
+  Draw(TUI.Raw.Screen)
+end
+
+type Cell = TUI.Raw.Cell
+
+extern "libdemo"
+  resource Raw, free: TUI.Raw.Free
+end
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (struct_definition
+    (type_identifier)
+    (field_declaration
+      (identifier)
+      (type
+        (scoped_type_identifier
+          (scoped_type_identifier
+            (type_identifier)
+            (type_identifier))
+          (type_identifier))))
+    (field_declaration
+      (identifier)
+      (type
+        (type_identifier)
+        (type_arguments
+          (type
+            (scoped_type_identifier
+              (scoped_type_identifier
+                (type_identifier)
+                (type_identifier))
+              (type_identifier)))))))
+  (enum_definition
+    (type_identifier)
+    (enum_variant
+      (type_identifier)
+      (variant_payload
+        (type
+          (scoped_type_identifier
+            (scoped_type_identifier
+              (type_identifier)
+              (type_identifier))
+            (type_identifier))))))
+  (type_alias_definition
+    (type_identifier)
+    (type
+      (scoped_type_identifier
+        (scoped_type_identifier
+          (type_identifier)
+          (type_identifier))
+        (type_identifier))))
+  (extern_block
+    (string
+      (string_content))
+    (resource_definition
+      (type_identifier)
+      (scoped_type_identifier
+        (scoped_type_identifier
+          (type_identifier)
+          (type_identifier))
+        (type_identifier)))))

@@ -222,3 +222,20 @@ private # the rest of the file
 
 def private() -> Int = 1
 #   ^ function
+
+## A doc comment.
+# <- comment.documentation
+# a plain comment
+# <- comment
+
+### three marks
+# <- comment
+# <- !comment.documentation
+
+def screens(s: TUI.Raw.Screen) -> TUI.Raw.Cell = 1
+#              ^ type
+#                  ^ type
+#                      ^ type
+#                                 ^ type
+#                                     ^ type
+#                                         ^ type

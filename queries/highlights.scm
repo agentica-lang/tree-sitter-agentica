@@ -182,6 +182,9 @@
 
 (comment) @comment
 
+((comment) @comment.documentation
+  (#match? @comment.documentation "^##( |$)"))
+
 ; Operators and punctuation
 
 [
