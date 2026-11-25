@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-11-25
+
+Agentica 0.38.0 syntax. CI validates the grammar against that release.
+
 ### Added
 
 - Safe navigation, `o&.name` and `o&.name(args)`, parses as `safe_field_access` and `safe_method_call`, with the same precedence as `.`. A line that starts with `&.name` continues the line before. CI validates the grammar against Agentica 0.38.0.
@@ -232,6 +236,7 @@ Agentica 0.30.x syntax.
   and the `quadratic-append` rule, which warns on `xs = xs.push(y)` and String
   `s += t` inside `while`/`for` loops, with rule tests.
 
+[0.10.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.10.0
 [0.9.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.9.0
 [0.8.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.8.0
 [0.7.0]: https://github.com/agentica-lang/tree-sitter-agentica/releases/tag/v0.7.0
