@@ -248,3 +248,6 @@ city = user&.address&.city
 user&.save(1)
 #   ^ operator
 #     ^ function.method.call
+done = list&.empty?
+#          ^ operator
+#            ^ property

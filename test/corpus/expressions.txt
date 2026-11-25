@@ -1038,3 +1038,57 @@ end
             (identifier)
             (argument_list
               (identifier))))))))
+
+==================
+Safe navigation with predicate and bang methods
+==================
+
+a = list&.empty?
+b = x&.save!(1)
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (safe_field_access
+      (identifier)
+      (identifier)))
+  (assignment
+    (identifier)
+    (safe_method_call
+      (identifier)
+      (identifier)
+      (argument_list
+        (integer)))))
+
+==================
+Function reference and safe navigation in one expression
+==================
+
+a = f(&g, x&.y)
+b = xs.map(&g)&.size
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (call
+      (identifier)
+      (argument_list
+        (function_reference
+          (identifier))
+        (safe_field_access
+          (identifier)
+          (identifier)))))
+  (assignment
+    (identifier)
+    (safe_field_access
+      (method_call
+        (identifier)
+        (identifier)
+        (argument_list
+          (function_reference
+            (identifier))))
+      (identifier))))
