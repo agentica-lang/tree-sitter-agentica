@@ -112,6 +112,9 @@
 (method_call
   method: (identifier) @function.method.call)
 
+(safe_method_call
+  method: (identifier) @function.method.call)
+
 (function_reference
   module: (type_identifier) @module)
 
@@ -130,6 +133,9 @@
   name: (identifier) @function)
 
 (field_access
+  field: (identifier) @property)
+
+(safe_field_access
   field: (identifier) @property)
 
 (named_argument
@@ -212,6 +218,7 @@
   ".."
   "..."
   "&"
+  "&."
   "->"
 ] @operator
 

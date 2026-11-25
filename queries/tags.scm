@@ -43,6 +43,9 @@
 (method_call
   method: (identifier) @name) @reference.call
 
+(safe_method_call
+  method: (identifier) @name) @reference.call
+
 (function_reference
   name: (identifier) @name) @reference.call
 

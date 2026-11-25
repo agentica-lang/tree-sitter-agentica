@@ -239,3 +239,15 @@ def screens(s: TUI.Raw.Screen) -> TUI.Raw.Cell = 1
 #                                 ^ type
 #                                     ^ type
 #                                         ^ type
+
+city = user&.address&.city
+#          ^ operator
+#            ^ property
+#                   ^ operator
+#                      ^ property
+user&.save(1)
+#   ^ operator
+#     ^ function.method.call
+done = list&.empty?
+#          ^ operator
+#            ^ property
