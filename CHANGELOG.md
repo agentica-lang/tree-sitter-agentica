@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Safe navigation, `o&.name` and `o&.name(args)`, parses as `safe_field_access` and `safe_method_call`, with the same precedence as `.`. A line that starts with `&.name` continues the line before. CI validates the grammar against Agentica 0.38.0.
+
 ## [0.9.0] - 2026-11-20
 
 Agentica 0.35.1 syntax. CI validates the grammar against that release.

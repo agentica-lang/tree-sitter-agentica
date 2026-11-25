@@ -84,6 +84,14 @@
         "named": true
       },
       {
+        "type": "safe_field_access",
+        "named": true
+      },
+      {
+        "type": "safe_method_call",
+        "named": true
+      },
+      {
         "type": "string",
         "named": true
       },
@@ -1080,6 +1088,14 @@
             "named": true
           },
           {
+            "type": "safe_field_access",
+            "named": true
+          },
+          {
+            "type": "safe_method_call",
+            "named": true
+          },
+          {
             "type": "string",
             "named": true
           },
@@ -1541,6 +1557,14 @@
             "named": true
           },
           {
+            "type": "safe_field_access",
+            "named": true
+          },
+          {
+            "type": "safe_method_call",
+            "named": true
+          },
+          {
             "type": "string",
             "named": true
           },
@@ -1758,6 +1782,14 @@
           },
           {
             "type": "regex",
+            "named": true
+          },
+          {
+            "type": "safe_field_access",
+            "named": true
+          },
+          {
+            "type": "safe_method_call",
             "named": true
           },
           {
@@ -2205,6 +2237,266 @@
           },
           {
             "type": "case",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "safe_field_access",
+    "named": true,
+    "fields": {
+      "field": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "receiver": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "call",
+            "named": true
+          },
+          {
+            "type": "construct",
+            "named": true
+          },
+          {
+            "type": "false",
+            "named": true
+          },
+          {
+            "type": "field_access",
+            "named": true
+          },
+          {
+            "type": "float",
+            "named": true
+          },
+          {
+            "type": "function_reference",
+            "named": true
+          },
+          {
+            "type": "heredoc_beginning",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index",
+            "named": true
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "lambda",
+            "named": true
+          },
+          {
+            "type": "list",
+            "named": true
+          },
+          {
+            "type": "map",
+            "named": true
+          },
+          {
+            "type": "method_call",
+            "named": true
+          },
+          {
+            "type": "nil",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "regex",
+            "named": true
+          },
+          {
+            "type": "safe_field_access",
+            "named": true
+          },
+          {
+            "type": "safe_method_call",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "true",
+            "named": true
+          },
+          {
+            "type": "type_application",
+            "named": true
+          },
+          {
+            "type": "type_identifier",
+            "named": true
+          },
+          {
+            "type": "type_path",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "safe_method_call",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "argument_list",
+            "named": true
+          }
+        ]
+      },
+      "block": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          },
+          {
+            "type": "brace_block",
+            "named": true
+          }
+        ]
+      },
+      "method": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "receiver": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "call",
+            "named": true
+          },
+          {
+            "type": "construct",
+            "named": true
+          },
+          {
+            "type": "false",
+            "named": true
+          },
+          {
+            "type": "field_access",
+            "named": true
+          },
+          {
+            "type": "float",
+            "named": true
+          },
+          {
+            "type": "function_reference",
+            "named": true
+          },
+          {
+            "type": "heredoc_beginning",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index",
+            "named": true
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "lambda",
+            "named": true
+          },
+          {
+            "type": "list",
+            "named": true
+          },
+          {
+            "type": "map",
+            "named": true
+          },
+          {
+            "type": "method_call",
+            "named": true
+          },
+          {
+            "type": "nil",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "regex",
+            "named": true
+          },
+          {
+            "type": "safe_field_access",
+            "named": true
+          },
+          {
+            "type": "safe_method_call",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "true",
+            "named": true
+          },
+          {
+            "type": "type_application",
+            "named": true
+          },
+          {
+            "type": "type_identifier",
+            "named": true
+          },
+          {
+            "type": "type_path",
             "named": true
           }
         ]
@@ -2667,6 +2959,10 @@
   },
   {
     "type": "&&",
+    "named": false
+  },
+  {
+    "type": "&.",
     "named": false
   },
   {

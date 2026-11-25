@@ -545,6 +545,8 @@ module.exports = grammar({
       $.call,
       $.method_call,
       $.field_access,
+      $.safe_method_call,
+      $.safe_field_access,
       $.index,
       $.function_reference,
       $.construct,
@@ -614,6 +616,28 @@ module.exports = grammar({
     field_access: $ => prec.left(PREC.postfix, seq(
       field('receiver', $._primary),
       '.',
+      field('field', $._name),
+    )),
+
+    safe_method_call: $ => prec.left(PREC.postfix, choice(
+      seq(
+        field('receiver', $._primary),
+        '&.',
+        field('method', $.identifier),
+        field('arguments', $.argument_list),
+        optional(field('block', $._block)),
+      ),
+      seq(
+        field('receiver', $._primary),
+        '&.',
+        field('method', $.identifier),
+        field('block', $._block),
+      ),
+    )),
+
+    safe_field_access: $ => prec.left(PREC.postfix, seq(
+      field('receiver', $._primary),
+      '&.',
       field('field', $._name),
     )),
 

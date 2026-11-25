@@ -97,8 +97,9 @@ static bool at_line_end(TSLexer *lexer) {
   return lexer->eof(lexer) || !is_word_char(lexer->lookahead);
 }
 
-// Called just after a line break. A line whose first token is `.name`
-// continues the expression of the line before: its break is not a NEWLINE.
+// Called just after a line break. A line whose first token is `.name` or
+// `&.name` continues the expression of the line before: its break is not a
+// NEWLINE.
 // Comment lines between the two are skipped; a blank line, a `##` doc line
 // and `..` / `...` (ranges) end the statement.
 //
@@ -118,6 +119,10 @@ static bool next_line_continues(TSLexer *lexer) {
       if (lexer->eof(lexer)) return false;
       lexer->advance(lexer, false);
       continue;
+    }
+    if (lexer->lookahead == '&') {
+      lexer->advance(lexer, false);
+      if (lexer->lookahead != '.') return false;
     }
     if (lexer->lookahead != '.') return false;
     lexer->advance(lexer, false);

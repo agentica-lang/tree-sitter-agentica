@@ -803,3 +803,238 @@ z = TUI.Raw.screen(1)
       (identifier)
       (argument_list
         (integer)))))
+
+==================
+Safe navigation
+==================
+
+a = user&.name
+b = user&.greet("hi")
+c = user&.each do |x| puts(x) end
+d = a&.b&.c
+e = a.address&.city.unwrap_or("?")
+f = some("abc")&.size
+g = a&.b(1).c&.d
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (safe_field_access
+      (identifier)
+      (identifier)))
+  (assignment
+    (identifier)
+    (safe_method_call
+      (identifier)
+      (identifier)
+      (argument_list
+        (string
+          (string_content)))))
+  (assignment
+    (identifier)
+    (safe_method_call
+      (identifier)
+      (identifier)
+      (block
+        (block_parameters
+          (block_parameter
+            (identifier)))
+        (body
+          (call
+            (identifier)
+            (argument_list
+              (identifier)))))))
+  (assignment
+    (identifier)
+    (safe_field_access
+      (safe_field_access
+        (identifier)
+        (identifier))
+      (identifier)))
+  (assignment
+    (identifier)
+    (method_call
+      (safe_field_access
+        (field_access
+          (identifier)
+          (identifier))
+        (identifier))
+      (identifier)
+      (argument_list
+        (string
+          (string_content)))))
+  (assignment
+    (identifier)
+    (safe_field_access
+      (call
+        (identifier)
+        (argument_list
+          (string
+            (string_content))))
+      (identifier)))
+  (assignment
+    (identifier)
+    (safe_field_access
+      (field_access
+        (safe_method_call
+          (identifier)
+          (identifier)
+          (argument_list
+            (integer)))
+        (identifier))
+      (identifier))))
+
+==================
+Safe navigation continued on the next line
+==================
+
+city = user
+  &.address
+  # a comment line between
+  &.city
+  .unwrap_or("?")
+puts(city)
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (method_call
+      (safe_field_access
+        (safe_field_access
+          (identifier)
+          (identifier))
+        (comment)
+        (identifier))
+      (identifier)
+      (argument_list
+        (string
+          (string_content)))))
+  (call
+    (identifier)
+    (argument_list
+      (identifier))))
+
+==================
+Function references stay next to safe navigation
+==================
+
+f = &double
+g = &Util.helper
+h = xs.map(&big?)
+i = a &&b
+j = a&.b != c
+k = &f!=x
+
+---
+
+(source_file
+  (assignment
+    (identifier)
+    (function_reference
+      (identifier)))
+  (assignment
+    (identifier)
+    (function_reference
+      (type_identifier)
+      (identifier)))
+  (assignment
+    (identifier)
+    (method_call
+      (identifier)
+      (identifier)
+      (argument_list
+        (function_reference
+          (identifier)))))
+  (assignment
+    (identifier)
+    (binary
+      (identifier)
+      (identifier)))
+  (assignment
+    (identifier)
+    (binary
+      (safe_field_access
+        (identifier)
+        (identifier))
+      (identifier)))
+  (assignment
+    (identifier)
+    (binary
+      (function_reference
+        (identifier))
+      (identifier))))
+
+==================
+Sized types and a brace block in a condition
+==================
+
+def widen(a: UInt8, b: Float32) -> UInt64
+  x: UInt16 = 1
+  if xs.any? { |v| v > 1 }
+    puts(x)
+  end
+  while xs.any? { |v| v > 1 }
+    puts(b)
+  end
+end
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (type_identifier)))
+      (parameter
+        (identifier)
+        (type
+          (type_identifier))))
+    (type
+      (type_identifier))
+    (body
+      (assignment
+        (identifier)
+        (type
+          (type_identifier))
+        (integer))
+      (if
+        (method_call
+          (identifier)
+          (identifier)
+          (brace_block
+            (block_parameters
+              (block_parameter
+                (identifier)))
+            (body
+              (binary
+                (identifier)
+                (integer)))))
+        (body
+          (call
+            (identifier)
+            (argument_list
+              (identifier)))))
+      (while
+        (method_call
+          (identifier)
+          (identifier)
+          (brace_block
+            (block_parameters
+              (block_parameter
+                (identifier)))
+            (body
+              (binary
+                (identifier)
+                (integer)))))
+        (body
+          (call
+            (identifier)
+            (argument_list
+              (identifier))))))))
